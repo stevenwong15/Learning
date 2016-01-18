@@ -15,8 +15,10 @@ git config --global user.email "YOUR EMAIL ADDRESS"
 # https://help.github.com/articles/caching-your-github-password-in-git/
 
 # hub is a command-line wrapper for git that makes you better at GitHub
-# https://hub.github.com/
+# https://github.com/github/hub#readme/
 # first, install homebrew: http://brew.sh/
+# in .bash_profile, make hub the same as git
+eval "$(hub alias -s)"
 
 #---------------------------------------------------------------------------------
 # workflow
@@ -47,5 +49,6 @@ git remote -v
 # upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
 # upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
 
+git 
+
 #---------------------------------------------------------------------------------
-# 
