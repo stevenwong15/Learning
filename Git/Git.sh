@@ -98,10 +98,3 @@ git merge origin/master  # to merge changes to the master of the origin
 
 # push to remote
 git push origin new_branch_name  # create changes in a branch, and push to remote as a new branch
-
-#---------------------------------------------------------------------------------
-# Github
-#---------------------------------------------------------------------------------
-
-
-

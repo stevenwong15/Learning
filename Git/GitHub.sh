@@ -14,6 +14,10 @@ git config --global user.email "YOUR EMAIL ADDRESS"
 # Caching your GitHub password in Git
 # https://help.github.com/articles/caching-your-github-password-in-git/
 
+# hub is a command-line wrapper for git that makes you better at GitHub
+# https://hub.github.com/
+# first, install homebrew: http://brew.sh/
+
 #---------------------------------------------------------------------------------
 # workflow
 #---------------------------------------------------------------------------------
@@ -26,7 +30,7 @@ git config --global user.email "YOUR EMAIL ADDRESS"
 # - branch names should be descriptive, so that others can see what is being worked on
 # - each commit has to have a reason, and being on Github, it creates transparency
 # - pull requests start the review of the changes, before merging with the master
-
+# all of the workflow can be done on github.com and GithHb Desktop
 
 # fork
 git clone https://...  # clone in the cd the GitHub files (URL found on Github)
@@ -41,5 +45,7 @@ git remote -v
 # origin    https://github.com/YOUR_USERNAME/YOUR_FORK.git (push)
 # upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (fetch)
 # upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
+# upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
 
-# fork
+#---------------------------------------------------------------------------------
+# 
