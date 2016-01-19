@@ -1,0 +1,692 @@
+pcr.pred <- predict(pcr.fit, x.test, ncomp = 5)
+mean((pcr.pred - y.test)^2)
+dataset <- scale(cbind(y, x))
+pcr.fit <- pcr(y ~ ., data = dataset, validation = 'CV')
+dataset <- data.frame(scale(cbind(y, x)))
+pcr.fit <- pcr(y ~ ., data = dataset, validation = 'CV')
+pcr.pred <- predict(pcr.fit, x.test, ncomp = 5)
+mean((pcr.pred - y.test)^2)
+dataset <- data.frame(scale(cbind(y, x)))
+pcr.fit <- pcr(y ~ ., data = dataset)
+pcr.pred <- predict(pcr.fit, x.test, ncomp = 5)
+mean((pcr.pred - y.test)^2)
+dataset <- data.frame(scale(cbind(y, x)))
+pcr.fit <- pcr(y ~ ., data = dataset, scale = TRUE)
+pcr.pred <- predict(pcr.fit, x.test, ncomp = 5)
+mean((pcr.pred - y.test)^2)
+dataset <- cbind(y, x)
+pcr.fit <- pcr(y ~ ., data = dataset, scale = TRUE)
+pcr.pred <- predict(pcr.fit, x.test, ncomp = 5)
+mean((pcr.pred - y.test)^2)
+y.text
+y.test
+head(x.test)
+pcr.fit
+summary(pcr.fit)
+sum(13.736 ,24.53, 32.29, 36.09, 37.32)
+dataset <- cbind(y, x)
+pcr.fit <- pcr(y ~ ., data = dataset, scale = TRUE)
+pcr.pred <- predict(pcr.fit, x.test, ncomp = 5)
+mean((pcr.pred - y.test)^2)
+dataset <- cbind(y, x)
+pcr.fit <- lm(y ~ ., data = dataset)
+pcr.pred <- predict(pcr.fit, x.test, ncomp = 5)
+mean((pcr.pred - y.test)^2)
+head(pcr.pred)
+?predict
+dataset <- cbind(y, x)
+pcr.fit <- lm(y ~ ., data = dataset)
+pcr.pred <- predict(pcr.fit, x.test)
+mean((pcr.pred - y.test)^2)
+pcr.pred <- predict(pcr.fit, x.test, type = 'response')
+mean((pcr.pred - y.test)^2)
+3.90714/3.65197
+dataset <- cbind(y, x)
+pcr.fit <- pcr(y ~ ., data = dataset, scale = TRUE)
+pcr.pred <- predict(pcr.fit, x.test, ncomp = 5)
+pcr.pred <- predict(pcr.fit, x.test, ncomp = 5, type = 'response')
+mean((pcr.pred - y.test)^2)
+summary(pcr.pred)
+pcr.pred
+X <- rbind(x, x.test)
+pr.out <- prcomp(X, scale = T)
+pr.out
+names(pr.out)
+pr.var <- pr.out$sdev^2
+sum(pr.var[1:5]) / sum(pr.var)
+head(pr.out)
+summary(pr.out)
+dim(pr.out)
+summary(prout)
+summary(pr.out)
+head(pr.out)
+names(pr.out)
+pr.out$center %>% head(20)
+pr.out$center
+pr.out$scale
+pr.out$rotation
+dim(x)
+dim(pr.out$rotation)
+names(pr.out)
+Z <- X %*% pr.out$rotation
+head(X)
+dim(X)
+dim(x)
+dim(pr.out$rotation)
+Z <- X %*% pr.out$rotation
+str(X)
+search()
+install.packages()
+installed.packages()
+#================================================================================= #
+# - installs all the packages in R#
+#=================================================================================#
+#
+packagesList <- (#
+  c(#
+#
+#---------------------------------------------------------------------------------#
+# standard packages#
+'MASS',  # standard statistical package#
+'ElemStatLearn',  # functions and examples from 'ESL'#
+'ISLR',  # functions and examples from 'ISL'#
+'gcookbook',  # functions and examples from 'R Graphics Cookbook'#
+'pryr',  # tools to pry in to R, used with 'Advanced R Programming'#
+#
+#---------------------------------------------------------------------------------#
+# data processing#
+'foreign',  # .dbf (read.dbf, read.spss)#
+'xlsx',  # .xlsx (read.xlsx)#
+'gdata',  # .xls (read.xls)#
+'scales',  # allows for $, %, etc.#
+'lubridate',  # to allow easier parsing of dates#
+#
+#---------------------------------------------------------------------------------#
+# data manipulation#
+'magrittr',  # provides 'pipe'-like operator#
+'plyr',  # splitting, applying and combining data#
+'data.table',#
+'dplyr',  # splitting, applying and combining data, replacing plyr#
+'reshape2',  # alternative to reshape(); convert data between wide & long#
+'tidyr',  # alternative to reshape2()#
+'broom',  # installation: 'devtools); install_github('dgrtwo/broom')#
+'abind',  # combines arrays#
+#
+#---------------------------------------------------------------------------------#
+# statistical methods#
+#
+# math#
+'expm',  # matrix exponential#
+'Matrix',  # matrix#
+#
+# plot#
+'corrplot',  # correlation plot#
+'ROCR',  # # ROCR plot#
+#
+# methods#
+'lasso2',  # the lasso#
+'leaps',  # function to find the regression subset#
+'class',  # classification#
+'boot',  # cross-validation and bootstrap#
+'pls',  # PRC#
+'glmnet',  # the lasso or elastic-net regularization path#
+# 'spline',  # splines#
+'gam',  # generalized additive models#
+'tree',  # trees#
+'randomForest',  # bagging + random forest#
+'gbm',  # boosting#
+'e1071',  # SVM#
+'np',  # kernel smoothing / non-parametric regression#
+'PSCBS',  # circular binary segmentation, install the following before#
+# source("http://bioconductor.org/biocLite.R")#
+# biocLite("DNAcopy")#
+'nlme',  # generalized least square'#
+'bcp',  # bayesian changepoint model#
+#
+# distributions#
+'evd',  # extreme value distribution#
+'mnormt',  # multivariate t-distribution#
+'truncnorm',  # truncated normal distribution#
+'VGAM',  # Rayleigh distribution#
+#
+# time series#
+'astsa',  # applied statistical time series analysis#
+'forecast',  # forecasting functions for time series & linear models#
+#
+# bayesian#
+'bayesm',  # by Peter Rossi, from 'Bayesian Statistics and Marketing'#
+'MCMCpack',  # a variant#
+#
+#---------------------------------------------------------------------------------#
+# graphics#
+#
+# framework#
+'ggplot2',  # ggplot2.org/book#
+'ggsubplot',  # facilitate embedded plots through ggplot2#
+'ggvis',  # web-interactive graphics, used with shiny: ggvis.rstudio.com#
+'shiny',  # web-application framework for R: shiny.rstudio.com#
+'gridExtra',  # plot multiple ggplot2 plots in a grid#
+#
+# specific plots#
+'gplots',  # a variant#
+'igraph',  # network#
+'rgl',  # 3D graphics#
+'vcd',  # mosaic#
+#
+# fonts#
+'extrafont',#
+# load fonts: loadfonts()#
+# import all fonts: font_import()#
+# list all the fonts: fonts()#
+#
+#---------------------------------------------------------------------------------#
+# string manipulation#
+'stringr', #
+#
+#---------------------------------------------------------------------------------#
+# GIS#
+'maptools',  # reading and handling spatial objects#
+#
+#---------------------------------------------------------------------------------#
+# markdown#
+# 'pandoc#
+'knitr', #
+'rmarkdown',  # rmarkdown.rstudio.com#
+#
+#---------------------------------------------------------------------------------#
+# SQL#
+'DBI',#
+'RMySQL',#
+#
+#---------------------------------------------------------------------------------#
+# package development#
+'devtools',#
+'roxygen2'#
+#
+  )#
+)
+packagesList
+#================================================================================= #
+# - list of packages in R#
+#=================================================================================#
+#
+packagesList <- (#
+  c(#
+#
+#---------------------------------------------------------------------------------#
+# standard packages#
+'MASS',  # standard statistical package#
+'ElemStatLearn',  # functions and examples from 'ESL'#
+'ISLR',  # functions and examples from 'ISL'#
+'gcookbook',  # functions and examples from 'R Graphics Cookbook'#
+'pryr',  # tools to pry in to R, used with 'Advanced R Programming'#
+#
+#---------------------------------------------------------------------------------#
+# data processing#
+'foreign',  # .dbf (read.dbf, read.spss)#
+'xlsx',  # .xlsx (read.xlsx)#
+'gdata',  # .xls (read.xls)#
+'scales',  # allows for $, %, etc.#
+'lubridate',  # to allow easier parsing of dates#
+#
+#---------------------------------------------------------------------------------#
+# data manipulation#
+'magrittr',  # provides 'pipe'-like operator#
+'plyr',  # splitting, applying and combining data#
+'data.table',#
+'dplyr',  # splitting, applying and combining data, replacing plyr#
+'reshape2',  # alternative to reshape(); convert data between wide & long#
+'tidyr',  # alternative to reshape2()#
+'broom',  # installation: 'devtools); install_github('dgrtwo/broom')#
+'abind',  # combines arrays#
+#
+#---------------------------------------------------------------------------------#
+# statistical methods#
+#
+# math#
+'expm',  # matrix exponential#
+'Matrix',  # matrix#
+#
+# plot#
+'corrplot',  # correlation plot#
+'ROCR',  # # ROCR plot#
+#
+# methods#
+'lasso2',  # the lasso#
+'leaps',  # function to find the regression subset#
+'class',  # classification#
+'boot',  # cross-validation and bootstrap#
+'pls',  # PRC#
+'glmnet',  # the lasso or elastic-net regularization path#
+# 'spline',  # splines#
+'gam',  # generalized additive models#
+'tree',  # trees#
+'randomForest',  # bagging + random forest#
+'gbm',  # boosting#
+'e1071',  # SVM#
+'np',  # kernel smoothing / non-parametric regression#
+'PSCBS',  # circular binary segmentation, install the following before#
+# source("http://bioconductor.org/biocLite.R")#
+# biocLite("DNAcopy")#
+'nlme',  # generalized least square'#
+'bcp',  # bayesian changepoint model#
+#
+# distributions#
+'evd',  # extreme value distribution#
+'mnormt',  # multivariate t-distribution#
+'truncnorm',  # truncated normal distribution#
+'VGAM',  # Rayleigh distribution#
+#
+# time series#
+'astsa',  # applied statistical time series analysis#
+'forecast',  # forecasting functions for time series & linear models#
+#
+# bayesian#
+'bayesm',  # by Peter Rossi, from 'Bayesian Statistics and Marketing'#
+'MCMCpack',  # a variant#
+#
+#---------------------------------------------------------------------------------#
+# graphics#
+#
+# framework#
+'ggplot2',  # ggplot2.org/book#
+'ggsubplot',  # facilitate embedded plots through ggplot2#
+'ggvis',  # web-interactive graphics, used with shiny: ggvis.rstudio.com#
+'shiny',  # web-application framework for R: shiny.rstudio.com#
+'gridExtra',  # plot multiple ggplot2 plots in a grid#
+#
+# specific plots#
+'gplots',  # a variant#
+'igraph',  # network#
+'rgl',  # 3D graphics#
+'vcd',  # mosaic#
+#
+# fonts#
+'extrafont',#
+# load fonts: loadfonts()#
+# import all fonts: font_import()#
+# list all the fonts: fonts()#
+#
+#---------------------------------------------------------------------------------#
+# string manipulation#
+'stringr', #
+#
+#---------------------------------------------------------------------------------#
+# GIS#
+'maptools',  # reading and handling spatial objects#
+#
+#---------------------------------------------------------------------------------#
+# markdown#
+# 'pandoc#
+'knitr', #
+'rmarkdown',  # rmarkdown.rstudio.com#
+#
+#---------------------------------------------------------------------------------#
+# SQL#
+'DBI',#
+'RMySQL',#
+#
+#---------------------------------------------------------------------------------#
+# package development#
+'devtools',#
+'roxygen2'#
+#
+  )#
+)#
+#
+#================================================================================= #
+# - installs all of above in R#
+#=================================================================================#
+#
+for (i in 1:length(packagesList)) {#
+    if (!(packagesList[i] %in% rownames(installed.packages()))) { #
+        install.packages(packagesList[i]) #
+    }#
+}
+#================================================================================= #
+# - list of packages in R#
+#=================================================================================#
+#
+packagesList <- (#
+  c(#
+#
+#---------------------------------------------------------------------------------#
+# standard packages#
+'MASS',  # standard statistical package#
+'ElemStatLearn',  # functions and examples from 'ESL'#
+'ISLR',  # functions and examples from 'ISL'#
+'gcookbook',  # functions and examples from 'R Graphics Cookbook'#
+'pryr',  # tools to pry in to R, used with 'Advanced R Programming'#
+#
+#---------------------------------------------------------------------------------#
+# data processing#
+'foreign',  # .dbf (read.dbf, read.spss)#
+'xlsx',  # .xlsx (read.xlsx)#
+'gdata',  # .xls (read.xls)#
+'scales',  # allows for $, %, etc.#
+'lubridate',  # to allow easier parsing of dates#
+#
+#---------------------------------------------------------------------------------#
+# data manipulation#
+'magrittr',  # provides 'pipe'-like operator#
+'plyr',  # splitting, applying and combining data#
+'data.table',#
+'dplyr',  # splitting, applying and combining data, replacing plyr#
+'reshape2',  # alternative to reshape(); convert data between wide & long#
+'tidyr',  # alternative to reshape2()#
+'broom',  # installation: 'devtools); install_github('dgrtwo/broom')#
+'abind',  # combines arrays#
+#
+#---------------------------------------------------------------------------------#
+# statistical methods#
+#
+# math#
+'expm',  # matrix exponential#
+'Matrix',  # matrix#
+#
+# plot#
+'corrplot',  # correlation plot#
+'ROCR',  # # ROCR plot#
+#
+# methods#
+'lasso2',  # the lasso#
+'leaps',  # function to find the regression subset#
+'class',  # classification#
+'boot',  # cross-validation and bootstrap#
+'pls',  # PRC#
+'glmnet',  # the lasso or elastic-net regularization path#
+# 'spline',  # splines#
+'gam',  # generalized additive models#
+'tree',  # trees#
+'randomForest',  # bagging + random forest#
+'gbm',  # boosting#
+'e1071',  # SVM#
+'np',  # kernel smoothing / non-parametric regression#
+'PSCBS',  # circular binary segmentation, install the following before#
+# source("http://bioconductor.org/biocLite.R")#
+# biocLite("DNAcopy")#
+'nlme',  # generalized least square'#
+'bcp',  # bayesian changepoint model#
+#
+# distributions#
+'evd',  # extreme value distribution#
+'mnormt',  # multivariate t-distribution#
+'truncnorm',  # truncated normal distribution#
+'VGAM',  # Rayleigh distribution#
+#
+# time series#
+'astsa',  # applied statistical time series analysis#
+'forecast',  # forecasting functions for time series & linear models#
+#
+# bayesian#
+'bayesm',  # by Peter Rossi, from 'Bayesian Statistics and Marketing'#
+'MCMCpack',  # a variant#
+#
+# h2o#
+'h2o',#
+#
+#---------------------------------------------------------------------------------#
+# graphics#
+#
+# framework#
+'ggplot2',  # ggplot2.org/book#
+'ggsubplot',  # facilitate embedded plots through ggplot2#
+'ggvis',  # web-interactive graphics, used with shiny: ggvis.rstudio.com#
+'shiny',  # web-application framework for R: shiny.rstudio.com#
+'gridExtra',  # plot multiple ggplot2 plots in a grid#
+#
+# specific plots#
+'gplots',  # a variant#
+'igraph',  # network#
+'rgl',  # 3D graphics#
+'vcd',  # mosaic#
+#
+# fonts#
+'extrafont',#
+# load fonts: loadfonts()#
+# import all fonts: font_import()#
+# list all the fonts: fonts()#
+#
+#---------------------------------------------------------------------------------#
+# string manipulation#
+'stringr', #
+#
+#---------------------------------------------------------------------------------#
+# GIS#
+'maptools',  # reading and handling spatial objects#
+#
+#---------------------------------------------------------------------------------#
+# markdown#
+# 'pandoc#
+'knitr', #
+'rmarkdown',  # rmarkdown.rstudio.com#
+#
+#---------------------------------------------------------------------------------#
+# SQL#
+'DBI',#
+'RMySQL',#
+#
+#---------------------------------------------------------------------------------#
+# package development#
+'devtools',#
+'roxygen2'#
+#
+  )#
+)#
+#
+#================================================================================= #
+# - installs all of above in R#
+#=================================================================================#
+#
+for (i in 1:length(packagesList)) {#
+    if (!(packagesList[i] %in% rownames(installed.packages()))) { #
+        install.packages(packagesList[i]) #
+    }#
+}
+quite
+quit
+?str_split_fixed()
+werasdf
+asdf
+sadf
+asd
+f
+asdf
+d
+fa
+sdf
+a
+sdf
+as
+f
+asd
+f
+asdf
+library('stringr')
+?str_split_fixed()
+library('stringr')
+fruits <- c(#
+  "apples and oranges and pears and bananas",#
+  "pineapples and mangos and guavas"#
+)#
+str_split_fixed(fruits, " and ", 3)#
+str_split_fixed(fruits, " and ", 4)
+fruits <- c(#
+  "apples and oranges and pears and bananas",#
+  "pineapples and mangos and guavas"#
+)#
+str_split(fruits, " and ", 3)#
+str_split(fruits, " and ", 4)
+fruits <- c(#
+  "apples and oranges and pears and bananas",#
+  "pineapples and mangos and guavas"#
+)#
+str_split(fruits, " and ")#
+str_split(fruits, " and ")
+260*.74
+260*.74/1164
+(260*.74 - 10)/1164
+(260*.74 - 50)/1164
+110/(1.0875^3)
+81*1.0875
+81*1.0875^2
+81*1.1^2
+81*1.15^2
+update.packages('ggplot2')
+#=================================================================================#
+# preloads essential libraries to the current directory#
+#=================================================================================#
+#
+library(MASS)  # standard statistical package
+library(scales)  # allows for $, %, etc.
+library(readr)  # alternative ways to load data
+install.packages(readr)
+install.packages('readr')
+install.packages('tidry')
+install.packages('tidyr')
+install.packages('dplyr')
+install.packages('ggplot2')
+install.packages('stringr')
+install.packages('caret')
+setwd('~/Documents/Data/R/rmarkdown-examples')
+setwd('~/Documents/Data/Notes/R/rmarkdown-examples')
+dir()
+render('R_rmarkdown.rmd')
+library("rmarkdown")
+render('R_rmarkdown.rmd')
+render('R_rmarkdown.rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.,d')
+render('R_rmarkdown.md')
+update.packages('rmarkdown')
+update.packages('rmarkdown')
+update.packages('rmarkdown')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render(R_rmarkdown.Rmd)
+render(R_rmarkdown.Rmd)
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+library(ggplot2)#
+imdb <- read_csv('Documents/Projects/IMDB/ratings_list_short_151120.csv')
+library(ggplot2)#
+library(readr)#
+imdb <- read_csv('Documents/Projects/IMDB/ratings_list_short_151120.csv')
+library(ggplot2)#
+library(readr)#
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+imdb
+head(imdb)
+library(dplyr)#
+library(ggplot2)#
+library(readr)#
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+imdb
+render('R_rmarkdown.Rmd')
+imdb
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+imdb
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')#
+imdb#
+#
+ggplot(imdb, aes(x = Rating)) + #
+  geom_histogram()
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+imdb
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+install.packages('shiny')
+render('R_rmarkdown.Rmd')
+selectInput("threshold", "Choose a Threshold", #
+            c("9", "8.5", "8"))#
+renderPlot({#
+    t <- get(input$threshold)#
+    imdb_temp <- imdb %>% filter(Ratings > t)#
+    ggplot(imdb_temp, aes(x = Rating)) + #
+      geom_histogram(binwidth = 0.2)    #
+})
+selectInput("threshold", "Choose a Threshold", #
+            c("9", "8.5", "8"))
+render('R_rmarkdown.Rmd')
+render('R_rmarkdown.Rmd')
+run('R_rmarkdown.Rmd')
+run('R_rmarkdown.Rmd')
+run('R_rmarkdown.Rmd')
+imdb %>% filter(Ratings > t)
+t = 9
+imdb %>% filter(Ratings > t)
+imdb
+run('R_rmarkdown.Rmd')
+imdb %>% filter(Rating > t)
+ggplot(imdb_temp, aes(x = Rating)) + #
+	  geom_histogram(binwidth = 0.2)
+imdb_temp <- imdb %>% filter(Rating > t)
+ggplot(imdb_temp, aes(x = Rating)) + #
+	  geom_histogram(binwidth = 0.2)
+run('R_rmarkdown.Rmd')
+run('R_rmarkdown.Rmd')
+t
+str(t)
+str(t)
+run('R_rmarkdown.Rmd')
+runApp('R_rmarkdown.Rmd')
+run('R_rmarkdown.Rmd')
+run('R_rmarkdown.Rmd')
+run('R_rmarkdown.Rmd')
