@@ -54,6 +54,11 @@ git remote -v
 # upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
 # upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
 
-git push origin  # to push changes to origin/masters on GitHub
+git push origin  # push changes to masters on GitHub
+
+git pull origin  # pull changes from masters on Github
+# same as
+git fetch origin
+git merge origin/master
 
 #---------------------------------------------------------------------------------
