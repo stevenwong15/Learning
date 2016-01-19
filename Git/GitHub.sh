@@ -20,6 +20,11 @@ git config --global user.email "YOUR EMAIL ADDRESS"
 # in .bash_profile, make hub the same as git
 eval "$(hub alias -s)"
 
+# editor (not nano)
+# esc first
+# :w to save
+# :q to quit
+
 #---------------------------------------------------------------------------------
 # workflow
 #---------------------------------------------------------------------------------
@@ -49,6 +54,6 @@ git remote -v
 # upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
 # upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
 
-git push  # to push changes to masters on GitHub
+git push origin  # to push changes to origin/masters on GitHub
 
 #---------------------------------------------------------------------------------
