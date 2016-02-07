@@ -51,7 +51,7 @@ text = element_text(
 		vjust 		= 0.5,
 		angle 		= 0,
 		lineheight 	= 0.9,
-		margin      = margin(),
+		margin      = margin(4, 4, 4, 4),
 		debug 		= FALSE
 	),
 
@@ -65,7 +65,7 @@ axis.text = element_text(
 		family 		= NULL,
 		face 		= NULL,
 		colour 		= "grey25",
-		size 		= rel(3/4),
+		size 		= NULL,
 		hjust 		= NULL,
 		vjust 		= NULL,
 		angle 		= NULL,
@@ -98,7 +98,7 @@ plot.title = element_text(
 		family 		= NULL,
 		face 		= NULL,
 		colour 		= NULL,
-		size 		= rel(5/4),
+		size 		= NULL,
 		hjust 		= NULL,
 		vjust 		= NULL,
 		angle 		= NULL,
@@ -145,7 +145,6 @@ strip.text = element_text(
 		hjust 		= NULL,
 		vjust 		= NULL,
 		angle 		= NULL,
-		margin 		= unit(1/4, "lines"),
 		lineheight 	= NULL
 	),
 	strip.text.x = element_text(
@@ -224,7 +223,7 @@ strip.background = element_rect(
 panel.border = element_rect(
 		fill 		= NA,
 		colour 		= "grey90",
-		size 		= 0.25,
+		size 		= NULL,
 		linetype 	= NULL,
 	),
 axis.ticks = element_line(
@@ -291,15 +290,7 @@ legend.key = element_rect(
 	),
 legend.key.size 	= unit(1, "lines"),
 legend.key.height   = NULL,
- legend.key.width    = NULL,
- legend.box          = NULL,
-
-#---------------------------------------------------------------------------------
-# margins
-plot.margin			= unit(c(1/4,1/4,1/4,1/4), "lines"),
-panel.margin     	= unit(1/4, "lines"),
-panel.margin.x      = NULL,
-panel.margin.y      = NULL,
-legend.margin     	= unit(1/4, "lines")
+legend.key.width    = NULL,
+legend.box          = NULL
 
 )
