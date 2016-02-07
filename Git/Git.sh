@@ -30,6 +30,9 @@ git commmit -m "message"  # optional message should be <50 characters
 # see log of changes
 git log  # stored chronologically
 
+# untrack files: http://git-scm.com/docs/gitignore
+nano .gitignore  # to get a hidden list going
+
 #---------------------------------------------------------------------------------
 # how to backtrack in Git
 #---------------------------------------------------------------------------------

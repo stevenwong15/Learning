@@ -50,7 +50,9 @@ text = element_text(
 		hjust 		= 0.5,
 		vjust 		= 0.5,
 		angle 		= 0,
-		lineheight 	= 0.9
+		lineheight 	= 0.9,
+		margin      = margin(),
+		debug 		= FALSE
 	),
 
 #=================================================================================
@@ -143,6 +145,7 @@ strip.text = element_text(
 		hjust 		= NULL,
 		vjust 		= NULL,
 		angle 		= NULL,
+		margin 		= unit(1/4, "lines"),
 		lineheight 	= NULL
 	),
 	strip.text.x = element_text(
@@ -297,7 +300,6 @@ plot.margin			= unit(c(1/4,1/4,1/4,1/4), "lines"),
 panel.margin     	= unit(1/4, "lines"),
 panel.margin.x      = NULL,
 panel.margin.y      = NULL,
-axis.ticks.margin 	= unit(1/4, "lines"),
 legend.margin     	= unit(1/4, "lines")
 
 )
