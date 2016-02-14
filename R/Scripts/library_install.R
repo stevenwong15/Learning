@@ -96,6 +96,7 @@ packagesList <- (
 'shinythemes',  # themes for shiny
 'shinydashboard',  # dashboards for shiny
 'gridExtra',  # plot multiple ggplot2 plots in a grid
+'dygraphs',  # htmlwidget for time series
 
 # specific plots
 'gplots',  # a variant

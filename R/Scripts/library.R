@@ -108,6 +108,7 @@ library(shiny)  # web-application framework for R: shiny.rstudio.com
 library(shinythemes)  # themes for shiny
 library(shinydashboard)  # dashboards for shiny
 library(gridExtra)  # plot multiple ggplot2 plots in a grid
+library(dygraphs)  # htmlwidget for time series
 
 # specific plots
 library(gplots)  # a variant
