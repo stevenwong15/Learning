@@ -33,6 +33,7 @@ library(xlsx)  # .xlsx (read.xlsx)
 library(gdata)  # .xls (read.xls)
 library(scales)  # allows for $, %, etc.
 library(lubridate)  # to allow easier parsing of dates
+library(xts)  #  uniform handling of different time-based data classes by extending zoo
 
 #---------------------------------------------------------------------------------
 # data manipulation

@@ -21,6 +21,7 @@ packagesList <- (
 'gdata',  # .xls (read.xls)
 'scales',  # allows for $, %, etc.
 'lubridate',  # to allow easier parsing of dates
+'xts',  #  uniform handling of different time-based data classes by extending zoo
 
 #---------------------------------------------------------------------------------
 # data manipulation
