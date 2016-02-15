@@ -98,6 +98,7 @@ packagesList <- (
 'shinydashboard',  # dashboards for shiny
 'gridExtra',  # plot multiple ggplot2 plots in a grid
 'dygraphs',  # htmlwidget for time series
+'RColorBrewer',  # sensible colour schemes
 
 # specific plots
 'gplots',  # a variant

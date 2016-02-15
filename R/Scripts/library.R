@@ -110,6 +110,7 @@ library(shinythemes)  # themes for shiny
 library(shinydashboard)  # dashboards for shiny
 library(gridExtra)  # plot multiple ggplot2 plots in a grid
 library(dygraphs)  # htmlwidget for time series
+library(RColorBrewer)  # sensible colour schemes
 
 # specific plots
 library(gplots)  # a variant

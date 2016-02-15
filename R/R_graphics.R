@@ -14,6 +14,7 @@
 # 		- output
 # 	- ggvis
 # 	- shiny
+# 	- RColorBrewer
 #=================================================================================
 
 #=================================================================================
@@ -785,3 +786,10 @@ ggsave("myplot.eps", width = x, height = y, units = "cm")  # print
 # it is meant not to replace JavaScript/HTML, but to empower R users to expand 
 # the dimensions of data analysis
 # see R_graphics_interactive.R for more info
+
+#=================================================================================
+# RColorBrewer
+#=================================================================================
+# sensible colour schemes for R
+
+display.brewer.all()  # to show all schemes

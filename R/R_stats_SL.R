@@ -153,7 +153,7 @@ table(predictedResponse, actualResponse)
 model.matrix(y ~., data = dataset)
 
 # library(caret) = w/t intercept
-dummies <- dummaryVars(y ~., data = dataset)
+dummies <- dummyVars(y ~., data = dataset)
 predict(dummies, newdata = dataset)
 
 #---------------------------------------------------------------------------------

@@ -25,6 +25,7 @@ git add file_1.txt  # add file_1.txt to the staging area
 git add file_1.txt file_2.txt  # add both files to the staging area
 
 # commit changes
+git commmit -a -m "message"  # commit all changes, without having to "add" first
 git commmit -m "message"  # optional message should be <50 characters
 
 # see log of changes
@@ -32,6 +33,8 @@ git log  # stored chronologically
 
 # untrack files: http://git-scm.com/docs/gitignore
 nano .gitignore  # to get a hidden list going
+# to make git to forget what's already being tracked
+git rm --cached <file>
 
 #---------------------------------------------------------------------------------
 # how to backtrack in Git
