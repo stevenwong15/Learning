@@ -592,7 +592,7 @@ output$oVar1 <- render*({
 # fileshares, for people with R and library(Shiny) on their computer
 
 runUrl("<the weblink>")  # if you have your own webpage to host the files
-runGitHub( "<your repository name>", "<your user name>")  # host from Github
+runGitHub("<your repository name>", "<your user name>", subdir = "<sub dir name>")  # host from Github
 runGist("<gist number>")  # host anonymously at gist.github.com
 
 #---------------------------------------------------------------------------------

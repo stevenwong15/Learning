@@ -19,13 +19,13 @@
 git init  # sets up all the tools Git needs to begin tracking changes made
 git status  # check the status of changes (untracked = Git sees, but not yet track)
 
-# add changes
+# add changes (i.e. if there's a new file!)
 git diff file_1.txt  # changes marked with "+"; press "q" to quit
 git add file_1.txt  # add file_1.txt to the staging area
 git add file_1.txt file_2.txt  # add both files to the staging area
 
 # commit changes
-git commmit -a -m "message"  # commit all changes, without having to "add" first
+git commmit -a -m "message"  # commit all changes in existing files
 git commmit -m "message"  # optional message should be <50 characters
 
 # see log of changes
