@@ -355,7 +355,8 @@ LDA.model <-lda(y ~ x1 + x2, data = dataset)  # LDA
 # class = predicted class
 # posterior = posterior probabilities
 # x = discrimanants
-pred <- predict(model, data, type = 'response')
+pred <- predict(model, data)
+pred$class  # predicted class
 # to alter the threshold as other than 0.5, filter the posterior probabilities
 sum(pred$posterior[, 1] >= T)
 sum(pred$posterior[, 1] < T)

@@ -146,11 +146,3 @@ echo $PATH  # display the list of directories with scripts for command line to e
 # example:
 /bin/pwd  # excutes "pwd", which is stored in /bin
 open -a Finder /ABOVEPATH  # to see in Finder these hidden folders
-
-
-
-
-
-
-
-
