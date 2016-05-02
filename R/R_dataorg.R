@@ -288,6 +288,7 @@ union(y, z)  # rows that appear in either or oboth y and z
 setdiff(y, z)  # rows that appear in y but not
 
 bind_rows(y, z)  # append z to y as new rows
+bind_rows(y, z, .id='source')  # append z to y as new rows, with new id
 bind_cols(y, z)  # append z to y as new cols
 
 #---------------------------------------------------------------------------------

@@ -26,14 +26,20 @@ library(h2o)
 #---------------------------------------------------------------------------------
 # starting and ending an instance
 
+# workflow
 # starts
 localH2O <- h2o.init(nthreads = -1)
+# cluster information
+h2o.clusterInfo()
 
+# 1) from file to h2o object
 pathToFolder <- '/users/swong/Documents/...'
 data.hex <- h2o.importFile(localH2O, path = pathToFolder, key = 'data.hex')
 
 DB.hex %>%
 summary()
+
+# 1) from R object to h2o object
 
 # shuts down
 h2o.shutdown()
