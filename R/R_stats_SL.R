@@ -576,7 +576,7 @@ rf.model
 # - total decrease in impurity that results in splits over that variable, averaged
 #   over all trees; in regression, node impurity is measured by train RSS; in 
 #   classification, deviance
-important(rf.model)
+importance(rf.model)
 varImpPlot(rf.model)
 
 # random forest

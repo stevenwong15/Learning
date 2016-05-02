@@ -18,6 +18,12 @@
 #=================================================================================
 
 #---------------------------------------------------------------------------------
+# terminal
+
+# install: devtools::install_github("jalvesaq/colorout")
+library(colorout)  # color for terminal
+
+#---------------------------------------------------------------------------------
 # standard packages
 library(MASS)  # standard statistical package
 library(ElemStatLearn)  # functions and examples from "ESL"
@@ -142,6 +148,11 @@ library(rmarkdown)  # rmarkdown.rstudio.com
 # SQL
 library('DBI')
 library('RMySQL')
+
+#---------------------------------------------------------------------------------
+# parallel
+library(parallel)
+library(multidplyr)
 
 #---------------------------------------------------------------------------------
 # package control

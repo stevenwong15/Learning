@@ -146,3 +146,19 @@ echo $PATH  # display the list of directories with scripts for command line to e
 # example:
 /bin/pwd  # excutes "pwd", which is stored in /bin
 open -a Finder /ABOVEPATH  # to see in Finder these hidden folders
+
+#---------------------------------------------------------------------------------
+# in .bash_profile
+#---------------------------------------------------------------------------------
+
+# make ls display colors, reinforce with CLICOLOR and LSCOLORS
+export CLICOLOR=1
+
+# LSCOLORS order: DIR, SYM_LINK, SOCKET, PIPE, EXE, BLOCK_SP
+# CHAR_SP, EXE_SUID, EXE_GUID, DIR_STICKY, DIR_WO_STICKY
+# a = black, b = red, c = green, d = brown, e = blue,
+# f = magenta g = cyan, h = light gray, x = default
+# lowercase is bold
+# solarized 
+export LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
+
