@@ -8,7 +8,7 @@
 # setup
 #---------------------------------------------------------------------------------
 
-git config --global user.name "YOUR NAME"
+git config --global user.name "stevenwong15"
 git config --global user.email "YOUR EMAIL ADDRESS"
 
 # Caching your GitHub password in Git

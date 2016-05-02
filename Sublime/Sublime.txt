@@ -1,0 +1,42 @@
+#=================================================================================
+# sublime
+# - basics
+# - packages
+#=================================================================================
+
+#---------------------------------------------------------------------------------
+# basics
+
+# shorcuts
+Preferences > Key Bindings - Default
+
+# settings
+Preferences > Settings - Users
+{
+	"font_face": "Hack",
+	"font_size": 10
+}
+
+# console
+ctrl + `
+
+#---------------------------------------------------------------------------------
+# packages
+
+# package control
+https://packagecontrol.io/
+
+# Print to HTML
+- allows printing from Sublime, via HTML
+
+# SendTextPlus
+https://github.com/randy3k/SendTextPlus
+- cmd + enter to text to terminal or other program
+
+# R-Box
+https://github.com/randy3k/R-Box
+- better support of R-syntax
+
+# SublimeREPL
+https://github.com/wuub/SublimeREPL
+- send code to Sublime line command interface
