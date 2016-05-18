@@ -1,24 +1,68 @@
 #=================================================================================
 # sublime
 # - basics
+# - text edits
+# - selection
 # - packages
 #=================================================================================
+# tutorial: https://sublimetutor.com/
 
 #---------------------------------------------------------------------------------
 # basics
 
-# shorcuts
-Preferences > Key Bindings - Default
-
-# settings
-Preferences > Settings - Users
+# shorcuts: Preferences > Key Bindings - Default
+# packages: Preferences > Browse Packages ...
+# settings: Preferences > Settings - Users
 {
 	"font_face": "Hack",
 	"font_size": 10
 }
 
-# console
-ctrl + `
+# Goto Console - ctrl + `
+# Goto Anywhere - `Cmd + T`
+# Goto Anything - `Cmd + P`
+# Goto Symbol - `Cmd + R`
+# Goto Line number - `Ctrl + G`
+
+#---------------------------------------------------------------------------------
+# text edits
+
+* Undo - `Cmd + Z`
+* Redo - `Cmd + Shift + Z`
+* Soft undo - `Cmd + U`
+* Soft redo - `Cmd + Shift + U`
+
+* Delete the word backward - `Option + Delete` 
+* Delete the word forward - `fn + Option + Delete` or `Option + Small Delete`
+
+* Delete to beginning of the line - `Cmd + Delete`
+* Delete to end of the line - `Ctrl + K` or `fn + Cmd + Delete` or `Cmd + Small Delete`
+* Delete a line - `Ctrl + Shift + K`
+* Cut a line - `Cmd + X`
+
+* Insert line before - `Cmd + Shift + Return`
+* Insert line after - `Cmd + Return`
+
+* Bubble the line up - `Ctrl + Cmd + up`
+* Bubble the line down - `Ctrl + Cmd + down`
+* Sort selected lines - `F5`
+
+* Join two lines - `Cmd + J`
+* Duplicate a line - `Cmd + Shift + D`
+* Wrap lines at ruler position - `Cmd + Option + Q`
+
+* Toggle comments - `Cmd + /`
+* Lower case - `Cmd + K, Cmd + L`
+* Upper case - `Cmd + K, Cmd + U`
+* Transpose (flip ) - `Ctrl + T`
+
+#---------------------------------------------------------------------------------
+# selection
+
+* Multiple cursors - `Cmd key with left mouse button`
+
+* Column selection using mouse - `Option + click and drag`
+* Keyboard shortcut (OSX conflict...) - `Ctrl + Shift + up|down`
 
 #---------------------------------------------------------------------------------
 # packages
