@@ -103,11 +103,6 @@ git merge branch_2  # merge branch_2 onto branch_1
 
 # merge, with conflict (i.e. both branches has had new commits)
 # when you merge, Git uses the following to indicate conflicts
-# <<<<<<< HEAD
-# what it says in HEAD
-# =======
-# head it says in branch
-# >>>>>>> branch
 # to resolve the conflict, preserve the one you want, and remove all else
 git add file_1.txt  # to re-add to the staging area
 git commit -m "merge conflict resolved"

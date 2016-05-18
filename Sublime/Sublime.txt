@@ -1,6 +1,7 @@
 #=================================================================================
 # sublime
 # - basics
+# - navigation
 # - text edits
 # - selection
 # - packages
@@ -15,14 +16,35 @@
 # settings: Preferences > Settings - Users
 {
 	"font_face": "Hack",
-	"font_size": 10
+	"font_size": 10,
+	"spell_check": true
 }
 
-# Goto Console - ctrl + `
-# Goto Anywhere - `Cmd + T`
-# Goto Anything - `Cmd + P`
-# Goto Symbol - `Cmd + R`
-# Goto Line number - `Ctrl + G`
+* Python console - `Ctrl + ``
+* Example: `sublime.log_commands(True)` to spit out command name
+
+* Preferences -> Settings Users - `Cmd + ,`
+
+#---------------------------------------------------------------------------------
+# navigation
+
+* Goto anywhere - `Cmd + T` or `Cmd + P`
+* Goto symbol - `Cmd + R`
+* Goto line number - `Ctrl + G`
+
+* Search symbol in project - `Cmd + Shift + R`
+* Goto symbol definition, if project indexed - `Goto definition` (in menu bar)
+
+* Goto beginning of line - `Ctrl + A` or `Cmd + left`
+* Goto end of line - `Ctrl + E` or `Cmd + right`
+
+* Goto matching bracket - `Ctrl + M`
+
+* Goto previous cursor position - `Ctrl + -`
+* Goto next cursor position - `Ctrl + Shift + -`
+
+* Fold one level - `Cmd + Option + [`
+* Unfold code one level - `Cmd + Option + ]`
 
 #---------------------------------------------------------------------------------
 # text edits
@@ -54,15 +76,44 @@
 * Toggle comments - `Cmd + /`
 * Lower case - `Cmd + K, Cmd + L`
 * Upper case - `Cmd + K, Cmd + U`
-* Transpose (flip ) - `Ctrl + T`
+* Transpose (flip) - `Ctrl + T`
 
 #---------------------------------------------------------------------------------
 # selection
 
 * Multiple cursors - `Cmd key with left mouse button`
-
 * Column selection using mouse - `Option + click and drag`
 * Keyboard shortcut (OSX conflict...) - `Ctrl + Shift + up|down`
+* Column selection: select whole block, then - `Cmd + Shift + L`
+
+* Select word once - `Cmd + D`
+* Select occurrences of this word - Press `Cmd + D` multiple times for each occurrence
+* If there's word that you don't want to select – `Cmd + K, by Cmd + D` 
+
+* Select line; pressing again for consecutive line - `Cmd + L`
+* Deselect using soft undo - `Cmd + U`
+
+* Select content within brackets - `Ctrl + Shift + M`
+
+* Select text below the same indentation level - `Cmd + Shift + J`
+
+* Expand selection to scope - `Cmd + Shift + Space`
+
+#---------------------------------------------------------------------------------
+# find
+
+* Find - `Cmd + F`
+* Add selection to find - `Cmd + E`
+
+* Find next - `Cmd + G`
+* Find previous - `Cmd + Shift + G`
+* Find all - `Option + Return` (while find panel is open)
+
+* Quick find (added selection to find, then find next) - `Option + Cmd + G`
+* Quick find previous - `Option + Cmd + Shift + G`
+* Quick find all - `Ctrl + Cmd + G`
+
+* Find in project - `Cmd + Shift + F`
 
 #---------------------------------------------------------------------------------
 # packages

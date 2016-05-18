@@ -12,6 +12,7 @@
 # 		- graph appearance
 # 		- colours and shapes
 # 		- output
+# 	- library(GGally)
 # 	- ggvis
 # 	- shiny
 # 	- RColorBrewer
@@ -772,6 +773,12 @@ muted("colour") # return a less-saturated version of the color chosen
 ggsave("myplot.pdf", width = x, height = y, units = "cm")
 ggsave("myplot.svg", width = x, height = y, units = "cm")  # web
 ggsave("myplot.eps", width = x, height = y, units = "cm")  # print
+
+#=================================================================================
+# library(GGally)
+#=================================================================================
+# better correlation matrices, pairwise plots, etc.
+# https://ggobi.github.io/ggally/
 
 #=================================================================================
 # ggvis

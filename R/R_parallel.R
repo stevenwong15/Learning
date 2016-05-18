@@ -57,6 +57,4 @@ cluster_assign_each(cluster, "filename",
 )
 cluster_assign_expr(cluster, "my_data", readr::read_csv(filename))
 
-<<<<<<< HEAD
 my_data <- src_cluster(cluster) %>% tbl("my_data")
->>>>>>> f4da381c0963dc137fe4ac09e2ac25be471a7c9f
