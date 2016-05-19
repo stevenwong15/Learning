@@ -1,8 +1,10 @@
 ---
 title: "rmarkdown notes"
 author: "Steven Wong"
-output: html_document
+output: pdf_document
 ---
+
+# Install
 
 # Resources
 

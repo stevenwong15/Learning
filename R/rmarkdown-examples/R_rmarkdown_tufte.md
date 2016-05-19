@@ -1,8 +1,10 @@
 ---
 title: "rmarkdown notes"
 author: "Steven Wong"
-output: html_document
+output: pdf_document
 ---
+
+# Install
 
 # Resources
 
@@ -26,12 +28,14 @@ A YAML is header is a set of key. Output can also be:
 * ioslides_document
 
 To knitr the .Rmd file to the output, in R, execute:
-```{r eval=F}
+
+```r
 render("file.rmd")
 ```
 
 To knitr the .Rmd file as `shiny` output, in R, execute:
-```{r eval=F}
+
+```r
 run("file.rmd")
 ```
 
@@ -113,34 +117,38 @@ horizontal rule (or slide break; 3 or more is good):
 # Embedding R Codes
 
 Default:
-```{r}
+
+```r
 paste("Hello, World!")
 ```
 
-Include code: 2 + 2 = `r 2+2`
+```
+## [1] "Hello, World!"
+```
+
+Include code: 2 + 2 = 4
 
 #### Chuck Options (inside {r})
 
 To only show the codes:
-```{r eval=F}
+
+```r
 paste("Hello, World!")
 ```
 To only show the evaluation:
-```{r echo=F}
-paste("Hello, World!")
+
+```
+## [1] "Hello, World!"
 ```
 #### Example: 
-```{r echo=F, message=F}
-library(dplyr)
-library(ggplot2)
-library(shiny)
-library(rmarkdown)
-library(readr)
-```
+
 
 With ggplot2:
-```{r fig.height=2.5, fig.width=5, fig.align='center'}
+
+```r
 imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
 ggplot(imdb, aes(x = Rating)) + 
   geom_histogram(binwidth = 0.2)
 ```
+
+<img src="figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
