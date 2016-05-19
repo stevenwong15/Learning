@@ -1,3 +1,10 @@
+dataset <- cbind(y, scale(x))
+pcr.fit <- lm(y ~ ., data = dataset)
+dadtaset
+dataset
+head(dataset)
+dataset <- data.frame(cbind(y, scale(x)))
+pcr.fit <- pcr(y ~ ., data = dataset, scale = T, validation = 'CV')
 pcr.pred <- predict(pcr.fit, x.test, ncomp = 5)
 mean((pcr.pred - y.test)^2)
 dataset <- scale(cbind(y, x))
@@ -548,145 +555,186 @@ install.packages('dplyr')
 install.packages('ggplot2')
 install.packages('stringr')
 install.packages('caret')
-setwd('~/Documents/Data/R/rmarkdown-examples')
-setwd('~/Documents/Data/Notes/R/rmarkdown-examples')
-dir()
-render('R_rmarkdown.rmd')
-library("rmarkdown")
-render('R_rmarkdown.rmd')
-render('R_rmarkdown.rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.,d')
-render('R_rmarkdown.md')
-update.packages('rmarkdown')
-update.packages('rmarkdown')
-update.packages('rmarkdown')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render(R_rmarkdown.Rmd)
-render(R_rmarkdown.Rmd)
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-library(ggplot2)#
-imdb <- read_csv('Documents/Projects/IMDB/ratings_list_short_151120.csv')
-library(ggplot2)#
-library(readr)#
-imdb <- read_csv('Documents/Projects/IMDB/ratings_list_short_151120.csv')
-library(ggplot2)#
-library(readr)#
-imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
-imdb
-head(imdb)
-library(dplyr)#
-library(ggplot2)#
-library(readr)#
-imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
-imdb
-render('R_rmarkdown.Rmd')
-imdb
-imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
-imdb
-imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')#
-imdb#
+if (nchar(Sys.getenv('SPARK_HOME')) < 1) {#
+  Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0')#
+}#
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+sc <- sparkR.init(master = 'local')
+sqlContext <- sparkRSQL.init(sc)
+DF <- createDataFrame(sqlContext, faithful)
+head(DF)
+if (nchar(Sys.getenv('SPARK_HOME')) < 1) {#
+  Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0')#
+}#
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))#
 #
-ggplot(imdb, aes(x = Rating)) + #
-  geom_histogram()
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-imdb
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-install.packages('shiny')
-render('R_rmarkdown.Rmd')
-selectInput("threshold", "Choose a Threshold", #
-            c("9", "8.5", "8"))#
-renderPlot({#
-    t <- get(input$threshold)#
-    imdb_temp <- imdb %>% filter(Ratings > t)#
-    ggplot(imdb_temp, aes(x = Rating)) + #
-      geom_histogram(binwidth = 0.2)    #
-})
-selectInput("threshold", "Choose a Threshold", #
-            c("9", "8.5", "8"))
-render('R_rmarkdown.Rmd')
-render('R_rmarkdown.Rmd')
-run('R_rmarkdown.Rmd')
-run('R_rmarkdown.Rmd')
-run('R_rmarkdown.Rmd')
-imdb %>% filter(Ratings > t)
-t = 9
-imdb %>% filter(Ratings > t)
-imdb
-run('R_rmarkdown.Rmd')
-imdb %>% filter(Rating > t)
-ggplot(imdb_temp, aes(x = Rating)) + #
-	  geom_histogram(binwidth = 0.2)
-imdb_temp <- imdb %>% filter(Rating > t)
-ggplot(imdb_temp, aes(x = Rating)) + #
-	  geom_histogram(binwidth = 0.2)
-run('R_rmarkdown.Rmd')
-run('R_rmarkdown.Rmd')
-t
-str(t)
-str(t)
-run('R_rmarkdown.Rmd')
-runApp('R_rmarkdown.Rmd')
-run('R_rmarkdown.Rmd')
-run('R_rmarkdown.Rmd')
-run('R_rmarkdown.Rmd')
+# create Spark context#
+sc <- sparkR.init(master = 'local')#
+# create Spark's SQL DataFrames context#
+sqlContext <- sparkRSQL.init(sc)
+if (nchar(Sys.getenv('SPARK_HOME')) < 1) {#
+  Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0')#
+}#
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib'))
+if (nchar(Sys.getenv('SPARK_HOME')) < 1) {#
+  Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0-bin-without-hadoop')#
+}#
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0-bin-without-hadoop')
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+sc <- sparkR.init(master = 'local')
+Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0')
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+sc <- sparkR.init(master = 'local')
+Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0-bin-without-hadoop')
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+sc <- sparkR.init(master = 'local')
+Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0-bin-hadoop2.6')
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+SPARK_HOME
+Sys.getenv('SPARK_HOME')
+if (nchar(Sys.getenv('SPARK_HOME')) < 1) {#
+  Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0-bin-hadoop2.6')#
+}
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+sc <- sparkR.init(master = 'local')
+sqlContext <- sparkRSQL.init(sc)
+DF <- createDataFrame(sqlContext, faithful)
+head(DF)
+installed.packages()
+library(roxygen)
+library(roxygen2)
+install.packages('roxygen2')
+if (nchar(Sys.getenv('SPARK_HOME')) < 1) {#
+  Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0-bin-hadoop2.6')#
+}#
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+sc <- sparkR.init(master = 'local')
+sqlContext <- sparkRSQL.init(sc)
+DF <- createDataFrame(sqlContext, faithful)
+head(DF)
+if (nchar(Sys.getenv('SPARK_HOME')) < 1) {#
+  Sys.setenv(SPARK_HOME = '/Users/steven/spark-1.6.0-bin-hadoop2.6')#
+}#
+library(SparkR, lib.loc = c(file.path(Sys.getenv('SPARK_HOME'), 'R', 'lib')))
+sc <- sparkR.init(master = 'local')
+sqlContext <- sparkRSQL.init(sc)
+DF <- createDataFrame(sqlContext, faithful)
+head(DF)
+N <- 1e6#
+k <- 1e4#
+df <- data.frame(V_int = sample(N, N, replace = T), #
+                 V_num_1 = sample(N, N, replace = T) + 0.1,#
+                 V_num_2 = sample(N, N, replace = T) + 0.2, #
+                 V_char_1 = rep(paste0('factor_1_', 1:k), each = N/k),#
+                 V_char_2 = rep(paste0('factor_2_', 1:k), each = N/k)#
+                 )#
+format(object.size(df), 'Mb')
+?sample
+detach(SparkR)
+detach('SparkR')
+detach('package:SparkR')
+N <- 1e6#
+k <- 1e4#
+df <- data.frame(V_int = sample(N, N, replace = T), #
+                 V_num_1 = sample(N, N, replace = T) + 0.1,#
+                 V_num_2 = sample(N, N, replace = T) + 0.2, #
+                 V_char_1 = rep(paste0('factor_1_', 1:k), each = N/k),#
+                 V_char_2 = rep(paste0('factor_2_', 1:k), each = N/k)#
+                 )#
+format(object.size(df), 'Mb')
+getwd()
+write.table(df, 'test_spark.csv', sep = ',', row.names = F, col.names = F)
+?read.df
+?sparkR.init()
+?h2o.init
+if ("package:h2o" %in% search()) { detach("package:h2o", unload = TRUE) }
+search()
+if ("h2o" %in% rownames(installed.packages())) { remove.packages("h2o") }
+install.packages("h2o", #
+                 repos = (c("http://s3.amazonaws.com/h2o-release/h2o/master/1497/R", #
+                 getOption("repos"))))#
+library(h2o)
+?h2o.init
+localH2O <- h2o.init(ip = 'localhost')
+h2o.shutdown()
+h2o.init(nthreads = -1)
+h2o.shutdown(localH2O)
+h2o.shutdown()
+# The following two commands remove any previously installed H2O packages for R.#
+if ("package:h2o" %in% search()) { detach("package:h2o", unload=TRUE) }#
+if ("h2o" %in% rownames(installed.packages())) { remove.packages("h2o") }#
+#
+# Next, we download packages that H2O depends on.#
+pkgs <- c("methods","statmod","stats","graphics","RCurl","jsonlite","tools","utils")#
+for (pkg in pkgs) {#
+    if (! (pkg %in% rownames(installed.packages()))) { install.packages(pkg) }#
+}#
+#
+# Now we download, install and initialize the H2O package for R.#
+install.packages("h2o", type="source", repos=(c("http://h2o-release.s3.amazonaws.com/h2o/rel-tukey/4/R")))#
+library(h2o)
+library(h2o)
+#---------------------------------------------------------------------------------#
+# The following two commands remove any previously installed H2O packages for R.#
+if ("package:h2o" %in% search()) { detach("package:h2o", unload=TRUE) }#
+if ("h2o" %in% rownames(installed.packages())) { remove.packages("h2o") }#
+#
+# Next, we download packages that H2O depends on.#
+pkgs <- c("methods","statmod","stats","graphics","RCurl","jsonlite","tools","utils")#
+for (pkg in pkgs) {#
+    if (! (pkg %in% rownames(installed.packages()))) { install.packages(pkg) }#
+}#
+#
+# Now we download, install and initialize the H2O package for R.#
+install.packages("h2o", type="source", repos=(c("http://h2o-release.s3.amazonaws.com/h2o/rel-tukey/4/R")))#
+library(h2o)
+localH2O <- h2o.init()
+h2o.shutdown(localH2O)
+h2o.shutdown()
+localH2O
+localH2O <- h2o.init(nthreads = -1)
+localH2O
+h2o.clusterInfo(localH2O)
+h2o.shutdown()
+if(!require(installr)) {#
+install.packages("installr"); require(installr)}
+updateR()
+d = 1
+library(dplyr)
+seq(99, 301)
+?seq
+seq(99, 301, 2)
+seq(100, 300, 2)
+sum(seq(100, 300, 2))
+ls()
+a <- rnrom(10)
+a <- dnrom(10)
+?dnorm
+a <- stats::dnrom(10)
+?rnorm
+rnorm(20)
+a <- rnorm(20)
+a
+plot(a)
+install.packages('rmarkdown')
+setwd('/Users/steven/Documents/Data/Notes/R/rmarkdown-examples')
+rmarkdown::render('R_rmarkdown_ioslides.Rmd')
+rmarkdown::render('R_rmarkdown_ioslides.Rmd')
+devtools::install_github("rstudio/rmarkdown")
+rmarkdown::render('R_rmarkdown_ioslides.Rmd')
+library(rmarkdown)
+render('R_rmarkdown_ioslides.Rmd')
+render('R_rmarkdown_ioslides.Rmd')
+install.packages('tufte')
+draft("R_rmarkdown.Rmd", template = "tufte_handout", package = "tufte")
+library('tufte')
+draft("R_rmarkdown.Rmd", template = "tufte_handout", package = "tufte")
+draft("R_rmarkdown.Rmd")
+draft("R_rmarkdown.Rmd", template = "tufte_handout")
+draft("R_rmarkdown_tufte.Rmd", template = "tufte_handout")
+run("R_rmarkdown_tufte.Rmd")
+remder("R_rmarkdown_tufte.Rmd")
+render("R_rmarkdown_tufte.Rmd")
+render("R_rmarkdown_tufte.Rmd")

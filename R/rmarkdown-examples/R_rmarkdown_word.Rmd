@@ -1,7 +1,11 @@
 ---
 title: "rmarkdown notes"
 author: "Steven Wong"
-output: html_document
+output: 
+  word_document:
+    fig_width: 5
+    fig_height: 5
+    fig_caption: true
 ---
 
 # Resources
@@ -92,13 +96,13 @@ Display equation: $$ equation $$
 
 * unordered list
 * item 2
-	+ sub-item 1
-	+ sub-item 2
+  + sub-item 1
+  + sub-item 2
 
 1. ordered list
 2. item 2
-	+ sub-item 1
-	+ sub-item 2
+  + sub-item 1
+  + sub-item 2
 
 Table Header | Second Header
 ------------ | -------------
