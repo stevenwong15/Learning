@@ -143,6 +143,7 @@ library(maptools)  # reading and handling spatial objects
 # library(pandoc)
 library(knitr)
 library(rmarkdown)  # rmarkdown.rstudio.com
+library(flexdashboard)  # http://rmarkdown.rstudio.com/flexdashboard/
 
 #---------------------------------------------------------------------------------
 # SQL

@@ -1,22 +1,14 @@
 ---
 title: "rmarkdown notes"
 author: "Steven Wong"
-output: pdf_document
+output: 
+  tufte::tufte_html: default
 ---
 
-# Install
+# More on Tufte
 
-# Resources
-
-[RStudio R Markdown][1]  
-[R Markdown Cheat Sheet][2]  
-[R Markdown Reference Guide][3]
-[Bookdown: Books with R Markdown][4]
-
-[1]: http://rmarkdown.rstudio.com/
-[2]: https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
-[3]: https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf
-[4]: https://bookdown.org/yihui/bookdown/
+* [Tufte Handout](http://rmarkdown.rstudio.com/tufte_handout_format.html)
+* [Tufte in R](http://motioninsocial.com/tufte/)
 
 # Basics
 
@@ -141,7 +133,7 @@ library(readr)
 ```
 
 With ggplot2:
-```{r fig.height=2.5, fig.width=5, fig.align='center'}
+```{r fig.height=2.5, fig.width=5, fig.margin = TRUE}
 imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
 ggplot(imdb, aes(x = Rating)) + 
   geom_histogram(binwidth = 0.2)

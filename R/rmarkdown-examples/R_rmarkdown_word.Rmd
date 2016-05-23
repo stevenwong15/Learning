@@ -8,18 +8,6 @@ output:
     fig_caption: true
 ---
 
-# Resources
-
-[RStudio R Markdown][1]  
-[R Markdown Cheat Sheet][2]  
-[R Markdown Reference Guide][3]
-[Bookdown: Books with R Markdown][4]
-
-[1]: http://rmarkdown.rstudio.com/
-[2]: https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
-[3]: https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf
-[4]: https://bookdown.org/yihui/bookdown/
-
 # Basics
 
 A YAML is header is a set of key. Output can also be:  

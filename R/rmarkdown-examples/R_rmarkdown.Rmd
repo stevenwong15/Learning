@@ -1,6 +1,7 @@
 ---
 title: "rmarkdown notes"
 author: "Steven Wong"
+date: May 22, 2016
 output: html_document
 ---
 
@@ -10,17 +11,19 @@ output: html_document
 [R Markdown Cheat Sheet][2]  
 [R Markdown Reference Guide][3]
 [Bookdown: Books with R Markdown][4]
+[flexdashboard][5]
 
 [1]: http://rmarkdown.rstudio.com/
 [2]: https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
 [3]: https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf
 [4]: https://bookdown.org/yihui/bookdown/
+[5]: http://rmarkdown.rstudio.com/flexdashboard/
 
 # Basics
 
 A YAML is header is a set of key. Output can also be:  
 
-* pdf_document
+* pdf_document: for whatever reason, only works in `terminal`
 * word_document
 * beamer_document
 * ioslides_document
