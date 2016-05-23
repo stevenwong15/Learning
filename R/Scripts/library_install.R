@@ -125,6 +125,7 @@ packagesList <- (
 # 'pandoc
 'knitr', 
 'rmarkdown',  # rmarkdown.rstudio.com
+'flexdashboard',  # http://rmarkdown.rstudio.com/flexdashboard/
 
 #---------------------------------------------------------------------------------
 # SQL

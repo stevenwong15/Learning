@@ -26,7 +26,7 @@ output: ioslides_presentation
 
 ----
 
-![picture of spaghetti](images/spaghetti.jpg)
+![picture of spaghetti](https://www.r-project.org/Rlogo.png)
 
 ## Going to sleep
 

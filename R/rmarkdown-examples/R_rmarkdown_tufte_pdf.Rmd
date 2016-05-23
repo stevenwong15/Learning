@@ -2,11 +2,15 @@
 title: "rmarkdown notes"
 author: "Steven Wong"
 output: 
-  word_document:
-    fig_width: 5
-    fig_height: 5
-    fig_caption: true
+  tufte::tufte_handout: default
 ---
+
+For `pdf` format need to render with `output_format=pdf_document(latex_engine='xelatex')`
+
+# More on Tufte
+
+* [Tufte Handout](http://rmarkdown.rstudio.com/tufte_handout_format.html)
+* [Tufte in R](http://motioninsocial.com/tufte/)
 
 # Basics
 
@@ -84,13 +88,13 @@ Display equation: $$ equation $$
 
 * unordered list
 * item 2
-  + sub-item 1
-  + sub-item 2
+	+ sub-item 1
+	+ sub-item 2
 
 1. ordered list
 2. item 2
-  + sub-item 1
-  + sub-item 2
+	+ sub-item 1
+	+ sub-item 2
 
 Table Header | Second Header
 ------------ | -------------
@@ -131,7 +135,7 @@ library(readr)
 ```
 
 With ggplot2:
-```{r fig.height=2.5, fig.width=5, fig.align='center'}
+```{r fig.height=2.5, fig.width=5, fig.margin = TRUE}
 imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
 ggplot(imdb, aes(x = Rating)) + 
   geom_histogram(binwidth = 0.2)
