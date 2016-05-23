@@ -1,0 +1,107 @@
+---
+title: "rmarkdown notes"
+author: "Steven Wong"
+date: May 22, 2016
+output: 
+  flexdashboard::flex_dashboard
+---
+
+#### Example: 
+```{r echo=F, message=F}
+library(dplyr)
+library(ggplot2)
+library(shiny)
+library(rmarkdown)
+library(readr)
+```
+
+Page 1
+=====================================  
+
+Column {data-width=400}
+-------------------------------------
+
+Layout
+
+* Rows: `orientation: rows`
+* Scrolling: `vertical_layout: scroll`
+* Storyboard: `storyboard: true`
+
+Much more at [RStudio's flexdashboard page](http://rmarkdown.rstudio.com/flexdashboard/)
+
+### Chart 1
+
+With ggplot2:
+```{r fig.height=2.5, fig.width=5, fig.align='center'}
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+ggplot(imdb, aes(x = Rating)) + 
+  geom_histogram(binwidth = 0.2)
+```
+
+### Chart 2
+
+With ggplot2:
+```{r fig.height=2.5, fig.width=5, fig.align='center'}
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+ggplot(imdb, aes(x = Rating)) + 
+  geom_histogram(binwidth = 0.2)
+```
+
+Column {.tabset .tabset-fade}
+-------------------------------------
+
+### Chart 3
+
+With ggplot2:
+```{r fig.height=2.5, fig.width=5, fig.align='center'}
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+ggplot(imdb, aes(x = Rating)) + 
+  geom_histogram(binwidth = 0.1)
+```
+
+### Chart 4
+
+With ggplot2:
+```{r fig.height=2.5, fig.width=5, fig.align='center'}
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+ggplot(imdb, aes(x = Rating)) + 
+  geom_histogram(binwidth = 0.2)
+```
+
+### Chart 5
+
+With ggplot2:
+```{r fig.height=2.5, fig.width=5, fig.align='center'}
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+ggplot(imdb, aes(x = Rating)) + 
+  geom_histogram(binwidth = 0.3)
+```
+
+Page 2
+=====================================  
+
+### Chart 3
+
+With ggplot2:
+```{r fig.height=2.5, fig.width=5, fig.align='center'}
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+ggplot(imdb, aes(x = Rating)) + 
+  geom_histogram(binwidth = 0.1)
+```
+
+### Chart 4
+
+With ggplot2:
+```{r fig.height=2.5, fig.width=5, fig.align='center'}
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+ggplot(imdb, aes(x = Rating)) + 
+  geom_histogram(binwidth = 0.2)
+```
+
+### Chart 5
+
+With ggplot2:
+```{r fig.height=2.5, fig.width=5, fig.align='center'}
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+ggplot(imdb, aes(x = Rating)) + 
+  geom_histogram(binwidth = 0.3)

@@ -1,0 +1,137 @@
+---
+title: "rmarkdown notes"
+author: "Steven Wong"
+date: May 22, 2016
+output: pdf_document
+fontsize: 11pt
+geometry: margin=1in
+---
+
+# Basics
+
+A YAML is header is a set of key. Output can also be:  
+
+* pdf_document
+* word_document
+* beamer_document
+* ioslides_document
+
+To knitr the .Rmd file to the output, in R, execute:
+```{r eval=F}
+render("file.rmd")
+```
+
+To knitr the .Rmd file as `shiny` output, in R, execute:
+```{r eval=F}
+run("file.rmd")
+```
+
+***
+
+# Basic Syntax
+
+Plain text  
+End a line with two spaces
+to start a new paragraph.  
+
+Or\
+End a line with a `\`. This is useful in tables.
+
+Put an empty line between two line 
+to start a new paragraph, with a gap.
+
+*italics* and _italics_  
+**bold** and __bold__  
+superscript^2^  
+~~strikethrough~~  
+[link](www.rstudio.com)  
+
+Header 1
+========
+
+Header 2
+--------
+
+# Header 1  
+
+## Header 2  
+
+### Header 3
+
+#### Header 4
+
+##### Header 5
+
+###### Header 6
+
+endash: --  
+emdash: ---  
+ellipsis: ...  
+inline equation: $A = \pi*r^{2}$  
+
+> block quote
+
+```
+plain code blocks
+```
+
+Inline `code block`. 
+
+LaTeX Equations:  
+Inline: $equation$  
+Display equation: $$ equation $$
+
+* unordered list
+* item 2
+	+ sub-item 1
+	+ sub-item 2
+
+1. ordered list
+2. item 2
+	+ sub-item 1
+	+ sub-item 2
+
+Table Header | Second Header
+------------ | -------------
+Table Cell   | Cell 2
+Cell 3       | Cell 4 
+
+horizontal rule (or slide break; 3 or more is good):  
+
+---
+***
+
+# Embedding R Codes
+
+Default:
+```{r}
+paste("Hello, World!")
+```
+
+Include code: 2 + 2 = `r 2+2`
+
+#### Chuck Options (inside {r})
+
+To only show the codes:
+```{r eval=F}
+paste("Hello, World!")
+```
+To only show the evaluation:
+```{r echo=F}
+paste("Hello, World!")
+```
+#### Example: 
+```{r echo=F, message=F}
+library(dplyr)
+library(ggplot2)
+library(shiny)
+library(rmarkdown)
+library(readr)
+```
+
+With ggplot2:
+```{r fig.height=2.5, fig.width=5, fig.align='center'}
+imdb <- read_csv('~/Documents/Projects/IMDB/ratings_list_short_151120.csv')
+ggplot(imdb, aes(x = Rating)) + 
+  geom_histogram(binwidth = 0.2)
+```
