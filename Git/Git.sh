@@ -1,10 +1,44 @@
 #---------------------------------------------------------------------------------
 # [table of contents]
+#	- basic Git structure
 #	- basic Git workflow
 #	- how to backtrack in Git
 #   - Git branching
 #   - Git team work
 #---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+# basic Git structure
+#---------------------------------------------------------------------------------
+
+# after git init, a .git folder is created
+# ├── head - a pointer to the tip of the branch you're working on
+# ├── branches
+# ├── config - settings: every-time yo uuse 'git config...', it ends here
+# ├── description
+# ├── hooks - set of scripts that can be run at every meaningful git phase (e.g. some pre-push hook)
+# │ ├── pre-commit.sample
+# │ ├── pre-push.sample
+# │ └── ...
+# ├── info
+# │ └── exclude - same as .gitignore, but won't be shared
+# ├── objects - see below
+# │ ├── info
+# │ └── pack
+# └── refs
+#  ├── heads
+#  └── tags
+# everytime a file is created + tracked, git compresses and stores it into its own 
+# data structure, under the object directory; a simplified version of commit:
+# - if the file didn't change, git just adds the name of the compressed file
+# - if the file changed, git compresses it, stores the compressed file in the object folder,
+#   and adds the name (the hash) into the snapshot
+# A commit is made of 4 things :
+# - The name (a hash) of the working directory’s snapshot
+# - A comment
+# - Commiter information
+# - Hash of the parent commit
+
 
 #---------------------------------------------------------------------------------
 # basic Git workflow
@@ -69,11 +103,6 @@ git merge branch_2  # merge branch_2 onto branch_1
 
 # merge, with conflict (i.e. both branches has had new commits)
 # when you merge, Git uses the following to indicate conflicts
-# <<<<<<< HEAD
-# what it says in HEAD
-# =======
-# head it says in branch
-# >>>>>>> branch
 # to resolve the conflict, preserve the one you want, and remove all else
 git add file_1.txt  # to re-add to the staging area
 git commit -m "merge conflict resolved"
