@@ -1,11 +1,37 @@
 #---------------------------------------------------------------------------------
 # [table of contents]
+#	- shortcuts
 #	- general concepts
 #	- navigate
 #	- copy, move and remove files
 #	- redirection
 #	- environment
 #---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+# dotfiles
+#--------------------------------------------------------------------------------- 
+
+# https://github.com/robbyrussell/oh-my-zsh
+# https://github.com/mathiasbynens/dotfiles
+
+#---------------------------------------------------------------------------------
+# shortcuts
+#--------------------------------------------------------------------------------- 
+
+Ctrl + a  # go to front
+Ctrl + e  # go to end
+Ctrl + u  # delete all prior
+Ctrl + k  # delete all after
+Opt + arrow  # skip by word
+Opt + click  # go to word
+tab  # auto-complete
+drag folder to terminal  # get directory
+history  # get history of commands  
+!  # run last command starting with w/e comes after !, or use ID shown by history
+Ctrl + r  # search for commands
+Ctrl + l  # clear by adding space
+Cmd + k  # clear all
 
 #---------------------------------------------------------------------------------
 # general concepts
@@ -113,6 +139,10 @@ sed 's/text_1/text_2/g' file_1.txt  # replace all instances of text_1 with text_
 #---------------------------------------------------------------------------------
 # environment
 #---------------------------------------------------------------------------------
+
+# iTerm2: https://www.iterm2.com/
+
+# learn more about .files here: https://dotfiles.github.io/
 
 # command line text editor
 nano file_1.txt  # opens a few .txt file named hello.txt in the text editor

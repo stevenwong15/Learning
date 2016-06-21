@@ -135,3 +135,18 @@ https://github.com/randy3k/R-Box
 # SublimeREPL
 https://github.com/wuub/SublimeREPL
 - send code to Sublime line command interface
+
+# Anaconda
+https://packagecontrol.io/packages/Anaconda
+- turns sublime text to a full featured python development IDE
+
+# BracketHighlighter
+https://packagecontrol.io/packages/BracketHighlighter
+- bracket and tag highlighter for sublime text
+
+# Side​Bar​Enhancements
+https://packagecontrol.io/packages/SideBarEnhancements
+- enhancement to sublime text sidebar
+
+# Theme - Spacegray
+https://packagecontrol.io/packages/Theme%20-%20Spacegray

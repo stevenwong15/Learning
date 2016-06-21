@@ -137,7 +137,7 @@ auto.arima(dataset, max.p = 10,max.q = 10)  # expand search range
 sarima(dataset, p, d, q)
 
 # Ljung-Box-Pierce test statistics
-# fitdf = teh number df lost when fitting hte ARMA/ARIMA model: fitdf = p + q
+# fitdf = the number df lost when fitting hte ARMA/ARIMA model: fitdf = p + q
 # lag > fitdf
 Box.test(arima.model$resid, lag = l, fitdf = df)
 
