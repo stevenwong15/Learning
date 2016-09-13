@@ -124,17 +124,13 @@ https://packagecontrol.io/
 # Print to HTML
 - allows printing from Sublime, via HTML
 
-# SendTextPlus
-https://github.com/randy3k/SendTextPlus
-- cmd + enter to text to terminal or other program
+# SendREPL
+https://github.com/randy3k/SendREPL
+- send code from Sublime to 
 
 # R-Box
 https://github.com/randy3k/R-Box
 - better support of R-syntax
-
-# SublimeREPL
-https://github.com/wuub/SublimeREPL
-- send code to Sublime line command interface
 
 # Anaconda
 https://packagecontrol.io/packages/Anaconda

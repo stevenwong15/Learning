@@ -154,6 +154,9 @@ data.ix[:, 2]  # column by index
 
 
 
+
+
+
 # drop 
 
 data_df.mean(axis = 0)  # by column (along row)
