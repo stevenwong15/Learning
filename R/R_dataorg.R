@@ -3,15 +3,15 @@
 # 	- base package
 # 	- tidy: library(reshape2) => upgrade to library(tidyr)
 # 	- tidy: library(tidyr)
-#   - data.frame manipulation: library(plyr) => upgrade to library(dplyr)
+#   - manipulation: library(plyr)
 #   - data.frame manipulation: library(dplyr)
-# 	- data.table: library(data.table), faster version of data.frame
 #=================================================================================
 
 #=================================================================================
 # base package
 #=================================================================================
 # identify
+
 str()  # the strutcure of the data & more
 mode()  # the strutcure of the data (how R is storing it)
 class()  # the object type of the data
@@ -74,37 +74,33 @@ which(x == "value")  # index of the value in vector x
 
 #---------------------------------------------------------------------------------
 # apply
-apply(X, margin, FUN = function)  # apply function to the margin of array or matrix
+
+# apply function to the margin of array or matrix
+apply(X, margin, FUN = function)  # 1 = rowwise
 
 # list
 lapply(X, FUN = function)  # apply function to list X
-sapply(X, FUN = function)  # same as lapply, but returning a vector or matrix
+sapply(X, FUN = function)  # same, but return a vector/matrix (i.e. simplify)
 vapply(X, FUN = function, type)  # ibid, but tells R what the output looks like 
 replicate(n, function)  # replicate a (random) function n times
-# notice that apply() is essentially a for-loop, whereby R creates an empty array
-# first (before running through the for-loop) to speed up the application; we note
-# that there is a sunk cost everytime R makes a call to its .primitive C codes, and
-# thus to speed up the R, the best practice is to pass items between R and C (
-# or FORTRAN) as infreqent as possible. Such practices involves 'vectorizing' item -
-# making a constant number of function calls irrespective of the input length
-# parallel computing in R: 
-# there are packages that allow us to take advantage of the fact that most computers
-# have multiple cores, allowing R to run multiple scripts at once; examples of
-# tasks that can be easily split in the parallels are: bootstrap, cross-validation
 
-# catagorical (index lists one or more factors, each of same length as X)
-tapply(X, index, FUN = function)  # apply function to each cell of a ragged array
-by(X, index, funciton)  # apply function to data.frame by index
+# apply by catagory (index lists 1/+ groups, each of same length as X)
+tapply(X, index, FUN = function)  # combines split() and sapply()
+by(X, index, function)  # apply function to data.frame by index
 aggregate(Y ~ X, data = data, FUN)  # apply function to Y by groups in X
 
 #=================================================================================
 # tidy: library(reshape2) => upgrade to library(tidyr)
 #=================================================================================
 # ID = row (ids), variable = column (values), value = inputs
+
+# # "wide" to "long" (gather)
 # melt(data, id.vars = c("row1", "row2"), measure.vars=c("value1","value2"), 
-# 	 variable.name="name1", value.name="name2")  # "wide" to "long"
+# 	 variable.name="name1", value.name="name2")
+
+# # "long" to "wide" (spread); NOTE: unsack() also works
 # dcast(data, id1 + id2 ~ row1 + row2, 
-# 	  value.var = "value")  # "long" to "wide"; NOTE: unsack() also works
+# 	  value.var = "value")
 
 #=================================================================================
 # tidy: library(tidyr)
@@ -120,58 +116,58 @@ separate(data, col, c("newColName1", ...), regex)  # turn single char to >1 cols
 unite(data, newColName, col1, ..., sep = "_", remove = T)  # unite cols together
 
 #=================================================================================
-# data.frame manipulation: library(plyr) => upgrade to library(dplyr) 
+# manipulation: library(plyr)
 #=================================================================================
-# # variations of __ply(): 
-# # a = array 
-# # l = list
-# # d = data.frame
-# # m = multiple inputs
-# # r = repeat multiple times
-# # _ = nothing (outputs discarded; useful for displaying plots, saving outputs, etc.)
+# variations of __ply(): 
+# a = array 
+# l = list
+# d = data.frame
+# m = multiple inputs
+# r = repeat multiple times
+# _ = nothing (outputs discarded; useful for displaying plots, saving outputs, etc.)
 
-# # sample:
-# # ddply() = split data.frame by field(s), apply function, & return results as a d
-# # dlply() = split data.frame by field(s), apply function, & return results as a l
-# # ldply() = split list by field(s), apply function, and return results in a d
+# sample:
+# ddply() = split data.frame by field(s), apply function, & return results as a d
+# dlply() = split data.frame by field(s), apply function, & return results as a l
+# ldply() = split list by field(s), apply function, and return results in a d
 
-# # examples:
-# # sum cumulatively field2, grouped by field1
-# ddply(data, "field1", transform, newColName = cumsum(field2))
-# # compute the means for field 3, grouped by (field1, field2)
-# ddply(data, c("field1","field2"), summarise, newColName = mean(field3))
-# # NOTE: .() allows usage without quotes: 
-# ddply(data, .(field1, field2), summarise, newColName=mean(field3))
+# examples:
+# sum cumulatively field2, grouped by field1
+ddply(data, "field1", transform, newColName = cumsum(field2))
+# compute the means for field 3, grouped by (field1, field2)
+ddply(data, c("field1","field2"), summarise, newColName = mean(field3))
+# NOTE: .() allows usage without quotes: 
+ddply(data, .(field1, field2), summarise, newColName=mean(field3))
 
-# #---------------------------------------------------------------------------------
-# # helper function:
+#---------------------------------------------------------------------------------
+# helper function:
 
-# arrange(data, col1, col2, ...)  # rearrange rows by specified columns
+arrange(data, col1, col2, ...)  # rearrange rows by specified columns
 
-# mutate(data, col1 = ..., newCol = ..., ...)  # altering columns
+mutate(data, col1 = ..., newCol = ..., ...)  # altering columns
 
-# summarise(data, col1=..., newCol=..., ...) # same as mutate(), but creates new d
-# # example
-# ddply(data, "field1", summarise, newCol = function, ... )  # summarizes by field1
+summarise(data, col1=..., newCol=..., ...) # same as mutate(), but creates new d
+# example
+ddply(data, "field1", summarise, newCol = function, ... )  # summarizes by field1
 
-# join(x, y, by = ..., type = ..., match = ...)  # capable of all types of SQL joins
+join(x, y, by = ..., type = ..., match = ...)  # capable of all types of SQL joins
 
-# match_df(x, y, on = ...) # join, but returns matching rows from x, with summary
+match_df(x, y, on = ...) # join, but returns matching rows from x, with summary
 
-# colwise(function)  # operates on a vector into a function, for all columns
-# # examples:
-# # apply to all columns that are numerical, catagorical, etc.
-# ddply(data, .(col1, col2), colwise(function1, function2))
-# # same as ddply(data, .(col1, col2), colwise(function1, is.numeric))
-# ddply(data, .(col1, col2), numcolwise(function1)) 
-# # same as ddply(data, .(col1, col2), colwise(function1, is.discrete))
-# ddply(data, .(col1, col2), catcolwise(function1)) 
+colwise(function)  # operates on a vector into a function, for all columns
+# examples:
+# apply to all columns that are numerical, catagorical, etc.
+ddply(data, .(col1, col2), colwise(function1, function2))
+# same as ddply(data, .(col1, col2), colwise(function1, is.numeric))
+ddply(data, .(col1, col2), numcolwise(function1)) 
+# same as ddply(data, .(col1, col2), colwise(function1, is.discrete))
+ddply(data, .(col1, col2), catcolwise(function1)) 
 
-# rename(data, replace = c(colname1 = colname2))  # replaces column names
+rename(data, replace = c(colname1 = colname2))  # replaces column names
 
-# round_any(x, accuracy = value, f = round)  # can be round, floor or ceiling
+round_any(x, accuracy = value, f = round)  # can be round, floor or ceiling
 
-# count(data, vars = "field1", wt_var = "field2")  # count by 1, weighted by 2
+count(data, vars = "field1", wt_var = "field2")  # count by 1, weighted by 2
 
 #=================================================================================
 # data.frame manipulation: library(dplyr)
@@ -292,11 +288,23 @@ bind_rows(y, z, .id='source')  # append z to y as new rows, with new id
 bind_cols(y, z)  # append z to y as new cols
 
 #---------------------------------------------------------------------------------
-# do: do arbitrary operations on a tbl - particularly useful working with models
+# do: do arbitrary operations on a tbl - particularly useful working with groups
 # NOTE: "." is used to represent the data in the pipeline, for functions that are
 # note part of library(dplyr)
 
 # example:
+set.seed(100)
+ds <- data_frame(
+  group=c(rep("a",100), rep("b",100), rep("c",100)), 
+  x=rnorm(n=300, mean=3, sd=2), y=rnorm(n=300, mean=2, sd=2))
+my_fun <- function(x, y){
+  res_x = mean(x) + 2
+  res_y = mean(y) * 5 
+  return(data.frame(res_x, res_y))
+}
+ds %>% group_by(group) %>% do(my_fun(x=.$x, y=.$y))
+
+# example: buildling models by group (more elegant if created a f() like above)
 models <- 
   data %>% 
   filter(...) %>%
@@ -365,16 +373,3 @@ data <- compute(query)  # forces computation, but leaves data in the remote sour
 # doesn't force computation, but collapses a complex tbl into a form that 
 # additional restrictions can be placed on.
 data <- collapse(query)  
-
-#=================================================================================
-# data.table: library(data.table), faster version of data.frame
-#=================================================================================
-# From library(dplyr) vignette: data.tables already lets you use dplyr syntax 
-# for data manipulation, and data.table for everything else.
-# For multiple operations, data.table can be faster because you usually use it
-# with multiple verbs at the same time. For example, with data table you can do a 
-# mutate and a select in a single step, and it's smart enough to know that there's 
-# no point in computing the new variable for the rows you're about to throw away.
-data.table()  # create a datatable the same way you would create a data.table
-tables()  # show a list of tables in memory
-

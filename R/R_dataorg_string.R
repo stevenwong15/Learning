@@ -99,5 +99,3 @@ str_replace(string, pattern, replacement)  # replaces first
 str_replace_all(string, pattern, replacement)  # replaces all
 str_split_fixed(string, pattern, n)  # split based on first n pieces of pattern
 str_split(string, pattern)  # split based on variable number of pieces
-
-

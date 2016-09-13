@@ -1,13 +1,13 @@
 #================================================================================= 
 # [table of contents]
-# 	- library(DBI) & library(RMySQL)
+# 	- library(DBI)
 #=================================================================================
 
 #=================================================================================
-# library(DBI) & library(RMySQL)
+# library(DBI) 
 #=================================================================================
 
-# connect to database
+# connect to MySQL database
 con <- dbConnect(RMySQL::MySQL(), user = 'root', password = 'pwd', dbname = 'dbname')
 dbDisconnect(con)  # Disconnect from the database
 
@@ -18,7 +18,7 @@ dbListFields(con, 'table')  # list fields
 # fetch results
 
 output <- dbSendQuery(con, 'SELECT * FROM table WHERE field = 4')
-dbFetch(output)
+dbFetch(output, n = 10)  # fetch top 10 of the results
 dbClearResult(output)  # clear the result
 
 # a chunk at a time

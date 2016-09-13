@@ -17,7 +17,7 @@
 cmd + shift + n  # new .r file
 cmd + enter  # run line
 cmd + shift + enter  # run entire script
-esc  # exit current command
+esc  # exit current commands
 cmd + c  # catches current run
 cmd + opt + l  # clears consoles
 ctrl + p  # reprints the previously ran code
@@ -41,15 +41,30 @@ q()  # quits the current R session
 # packages
 # - the most packages loaded package will take precedence, in the event of conflict
 library(package)  # needs to specify packages everytime, same as require()
+detach('package:name')  # detach package
 library(help="package")  # to receive help on a specific function
 install.packages("package")  # installs packages: cloest CRAN mirror is USA(CA1)
 update.packages()  # to update packages
+download.packages()  # to copmare versions, and update outdated packages on the fly
+remove.packages()  
 search()  # show all packages loaded
 library()  # show all packages installed
 citation("package")  # show the citation of the package
 demo("TOPIC", "package")  # show demos of a package; use demo() for availabilities
 example("TOPIC", "package")  # show examples of a package
 vignette("TOPIC", "package")  # show vignettes of a package
+
+# installed stuff
+x <- installed.packages()
+str(x)
+
+# where packaegs are installed
+.libPaths()
+
+# available stuff
+options(repose='https://cran.rstudio.com')
+x <- available.packages()
+dim(x)
 
 #---------------------------------------------------------------------------------
 # help
@@ -65,7 +80,9 @@ RSiteSearch("TOPIC")  # search for key words in help pages, vignettes or task vi
 # assignment
 <-  # for assignment (-> is the other way)
 =  # for use inside brackets
-<<-  # for use inside functions
+<<-  # changes an existing variable in a parent.env() (if none, create one in globalenv())
+# `name <<- value` is the same as `assign('name', value, inherits = TRUE)`
+
 with(data, expression, ...)  # expression to evaluate
 assign("x", value)  # value to be assigned to character string "x"
 get("x")  # get the value of "x"
@@ -102,6 +119,7 @@ system.time()  # include in the bracket items you wish to time
 # - indent with 2 spaces, instead of tab or a mixture of tabs and spaces
 # - "<-", and not "=" for assignment
 # - do not use ";"
+# - use TRUE and FALSE, instead of T and F
 
 #---------------------------------------------------------------------------------
 # functions
@@ -125,6 +143,7 @@ system.time()  # include in the bracket items you wish to time
 
 #---------------------------------------------------------------------------------
 # operation
+
 x %% y  # return the remainder of the division x / y
 x %/% y  # integer division of x / y
 abs(x)  # absolute value
@@ -144,8 +163,12 @@ ceiling(x / y)  # round up
 trunc(x)  # return the integer portion of a numerical object
 fft(x)  # fast fourier transform
 
+# sweep() example: often used with apply
+x <- matrix(rnorm(20, 0, 10), nrow=4)
+sweep(x, 1, apply(x, 1, min), '-')  # subtract min of each row, from each row
 #---------------------------------------------------------------------------------
 # vector operation
+
 rep(x, n)  # repeat x, n times
 rep_len(x, n)  # repeat x, until the vector has a length of n
 seq(l, h, by = increment)
@@ -224,6 +247,10 @@ which(logicalArguement)  # return the index of TRUE
 # characteristics
 (is, as).(character, numeric, logical, ...)  # lots of combo, too many to list all
 is.na(x); is.null(x)
+any(is.na(x))  # is at least one of them is true (i.e. missing?)?
+
+# how many missing values in a data.frame
+sapply(df, function(x)sum(is.na(x)))
 
 #---------------------------------------------------------------------------------
 # catagorical

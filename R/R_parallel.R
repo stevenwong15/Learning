@@ -13,16 +13,27 @@
 # snow clusters (works everywhere where socket communication works)
 # to find out how many cores are in the processor
 detectCores()
-# workflow:
+
+#---------------------------------------------------------------------------------
+# snow workflow:
+
+# 1: fire up clusters
 # 'PSOCK' = uses Rscript to launch further copies of R
-# 'FOR' = forks the workers on the current host (i.e. current host R already has stuff)
-cl <- makeCluster(<size of pool>, 'PSOCK')
-# one or more par_pply
-# parLapply, parSapply, and parApply are parallel versions of lapply, sapply and apply
+# 'FORK' = forks the workers on the current host (i.e. current host R already has stuff)
+cl <- makeCluster(8, 'PSOCK')  # using all 8 cores
+
+# 2
+# use one or more par[La, Sa, A]pply: parallel versions of [la, sa, a]pply
+unlist(parLapply(cl, 1:10, sqrt))  # e.g.
+
+# 3: free up clusters
 stopCluster(cl) 
 
-# multicore clusters
-# for more information, read the pdf
+#---------------------------------------------------------------------------------
+# multicore wokflow: 
+# relies on forking 
+
+unlist(mclapply(1:10, sqrt, mc.cores=4))  # using 4 cores
 
 #=================================================================================
 # library(multidplyr)
