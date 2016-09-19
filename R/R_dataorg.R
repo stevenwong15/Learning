@@ -5,6 +5,7 @@
 # 	- tidy: library(tidyr)
 #   - manipulation: library(plyr)
 #   - data.frame manipulation: library(dplyr)
+#   - factor: library(forcats)
 #=================================================================================
 
 #=================================================================================
@@ -105,15 +106,43 @@ aggregate(Y ~ X, data = data, FUN)  # apply function to Y by groups in X
 #=================================================================================
 # tidy: library(tidyr)
 #=================================================================================
+
+# can remove with na.rm = TRUE while at it
 gather(data, keyColName, valueColName, firstCol:lastCol) # "wide" to "long"
 gather(data, keyColName, valueColName, -(firstCol:lastCol)) # all but said cols
 spread(data, keyColName, valueColName)  # "long" to "wide"
 
-# using regular expression
+# using regular expression to searpate/unit columns
 extract(data, col, c("newColName1", ...), regex)  # extract groups into new cols
 extract_numeric(stringWithNumbers)  # extract numeric component of a variable
 separate(data, col, c("newColName1", ...), regex)  # turn single char to >1 cols
 unite(data, newColName, col1, ..., sep = "_", remove = T)  # unite cols together
+
+# handling missing values
+df <- tibble(x = c(1, 2, NA), y = c("a", NA, "b"))
+df %>% drop_na()
+df %>% drop_na(x)
+
+# complete by combinations
+df <- data_frame(
+  group = c(1:2, 1),
+  item_id = c(1:2, 2),
+  item_name = c("a", "b", "b"),
+  value1 = 1:3,
+  value2 = 4:6
+)
+# nesting() considers those inside as the same combination
+df %>% complete(group, nesting(item_id, item_name))
+
+# fill() carries last observations forward
+treatment <- frame_data(
+  ~ person,           ~ treatment, ~response,
+  "Derrick Whitmore", 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  "Katherine Burke",  1,           4
+)
+treatment %>% fill(person)
 
 #=================================================================================
 # manipulation: library(plyr)
@@ -373,3 +402,18 @@ data <- compute(query)  # forces computation, but leaves data in the remote sour
 # doesn't force computation, but collapses a complex tbl into a form that 
 # additional restrictions can be placed on.
 data <- collapse(query)  
+
+#---------------------------------------------------------------------------------
+# data.frame structure: library(tibble)
+# dplyr is more for data manipulation; data structure is moving to tibble
+
+as_tibble(mtcars)
+
+df <- tibble(x = 1:3, y = 3:1)
+df %>% add_row(x = 0, y = 0, .before = 2)
+df %>% add_column(z = -1:1, .after = "x")
+
+#=================================================================================
+# factor: library(forcats)
+#=================================================================================
+# for more information: https://hadley.github.io/forcats/

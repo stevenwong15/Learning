@@ -148,6 +148,13 @@ sed 's/text_1/text_2/g' file_1.txt  # replace all instances of text_1 with text_
 nano file_1.txt  # opens a few .txt file named hello.txt in the text editor
 # ^ key means Ctrl (more on the bottum of the nano editor)
 
+less file_1.txt  # reads but not edits
+
+# other editors (many)
+# esc first
+# :w to save
+# :q to quit
+
 # bash_profile (in ~/. directory - i.e. hidden) runs in every new terminal session
 nano ~/.bash_profile  # opens up; can type in
 # echo "Hello, Steven Wong!"

@@ -30,6 +30,9 @@
 -- - shortcut: http://msdn.microsoft.com/en-us/library/ms174205(v=sql.110).aspx
 
 -----------------------------------------------------------------------------------
+-- style guide: http://www.sqlstyle.guide/
+
+-----------------------------------------------------------------------------------
 -- helpful terminal operations:
 
 -- starting / stopping server:

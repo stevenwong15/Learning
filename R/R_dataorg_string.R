@@ -71,6 +71,11 @@ regexec(pattern, text)  # return the position of the 1st match, or -1 if none (l
 # {n,} 	= the preceding item is matched n or more times
 # {n,m} = the preceding item is matched n times, but not more than m times
 
+#---------------------------------------------------------------------------------
+# string <-> variable
+
+get("variable")  # convert string to variable name
+
 #=================================================================================
 # library(stringr)
 #=================================================================================

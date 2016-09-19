@@ -19,11 +19,11 @@
 		"remember_open_files": true,
 		"rulers":
 		[
-			90
+			100
 		],
 		"tab_size": 2,
 		"translate_tabs_to_spaces": true,
 		"word_wrap": true,
-		"wrap_width": 90
+		"wrap_width": 100
 	}
 }
