@@ -108,6 +108,9 @@ git clone https://github.com/stevenwong15/Notes.git
 # show information
 git remote show origin
 
+# instead, if want to conenct to a remote server
+git remote add origin https://github.com/stevenwong15/Notes.git
+
 # workflow: 
 # very similar to the branch, checkout, commit, merge in Git
 # - Fork the repository.
@@ -128,6 +131,13 @@ git branch -vv
 # if osxkeychain installed:
 git push -u origin master  # first time
 git push  # subsequent time
+git push origin branch  # pushing to a branch intead
+
+# pulling from origin
+git pull origin
+# same as 
+git fetch origin
+git merge origin/master
 
 #---------------------------------------------------------------------------------
 # ignoring and deleting
@@ -156,15 +166,18 @@ git reset 5d69206  # where "5d69206" is the first 7-characters of last commit to
 # Git branching
 # to experiment with versions of a project, without affecting the master branch
 
-git branch  # to check out which branch you are currently on (marked with *)
+# to check out which branch you are currently on (marked with *)
+git branch  
+# to get a new branch
+git branch new_branch  
+# to be on branch_1
+git checkout new_branch  
 
-git branch new_branch  # to get a new branch
-
-git checkout branch_1  # to be on branch_1
+# make changes, then commit
 
 # merge
-git checkout branch_1  # the branch to be merged onto
-git merge branch_2  # merge branch_2 onto branch_1
+git checkout master  # the branch to be merged onto
+git merge new_branch # merge new_branch onto master
 
 # merge, with conflict (i.e. both branches has had new commits)
 # when you merge, Git uses the following to indicate conflicts
@@ -173,7 +186,7 @@ git add file_1.txt  # to re-add to the staging area
 git commit -m "merge conflict resolved"
 
 # since branches are usually a means to an end, you delete them after their purpose
-git branch -d branch_name
+git branch -d new_branch
 
 #---------------------------------------------------------------------------------
 # Git team work
