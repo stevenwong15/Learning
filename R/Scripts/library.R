@@ -149,6 +149,7 @@ library(flexdashboard)  # http://rmarkdown.rstudio.com/flexdashboard/
 # SQL
 library('DBI')
 library('RMySQL')
+library('RPostgreSQL')
 
 #---------------------------------------------------------------------------------
 # parallel

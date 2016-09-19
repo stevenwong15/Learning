@@ -11,15 +11,13 @@
 # - data.table can be faster: can use multiple verbs at the same time within []
 # - data still needs to fit in memory
 # - reference: https://github.com/Rdatatable/data.table/wiki/Getting-started
+# - reference: http://brooksandrew.github.io/simpleblog/articles/advanced-data-table/
 
 #---------------------------------------------------------------------------------
 # basics:
 # - columns of character are never converted to factors by default
 # - idea: Take DT, subset rows using i, then calculate j, grouped by by
 # - DT[i , j, by]: i = where; j = select/update; by = group by
-
-# default number of rows printed = 100: getOption('datatable.print.nrows')
-options(datatable.print.nrows = 10)  
 
 flights <- fread('~/Downloads/flights14.csv')  # reads directly as a data.table
 DT <- data.table(a = letters, b = 1:length(letters))  # create a data.table 
@@ -110,8 +108,32 @@ DT[, .(value = list(c(a, b, c))), by=ID]
 # printing
 DT[, print(c(a, b, c)), by=ID]
 DT[, print(list(c(a, b, c))), by=ID]
+
+# .SD is essentially the same table: useful for nesting
+data.table(mtcars)[, mean(mpg), by = .(cyl, gear)]
+data.table(mtcars)[,  .SD[, mean(mpg), by = cyl], by = gear]  # same
+
 # multiple expression
 DT[, {print(a); plot(b, c)}]
+# surpressing intermediate output
+dt <- data.table(mtcars)
+dt[, {
+  tmp1 = mean(mpg); 
+  tmp2 = mean(abs(mpg-tmp1)); 
+  tmp3 = round(tmp2, 2);
+  list(tmp2 = tmp2, tmp3 = tmp3)}, 
+  by = cyl]
+# same, but altering the table, and keeping form
+dt[, 
+  tmp1 := mean(mpg), by = cyl][,
+  tmp2 := mean(abs(mpg-tmp1)), by = cyl][,
+  tmp3 := round(tmp2, 2)][, 
+  tmp1 := NULL]
+
+# shift (can add key and use by to do fast ordering/shifting by group)
+dt <- data.table(mtcars)[,.(mpg, cyl)]
+dt[, mpg_lag1 := shift(mpg, 1)]
+dt[, mpg_forward1 := shift(mpg, 1, type = 'lead')]
 
 #---------------------------------------------------------------------------------
 # add, remove and modify subsets of columns, by reference (i.e. not copies)

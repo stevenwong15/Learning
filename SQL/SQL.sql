@@ -30,6 +30,9 @@
 -- - shortcut: http://msdn.microsoft.com/en-us/library/ms174205(v=sql.110).aspx
 
 -----------------------------------------------------------------------------------
+-- style guide: http://www.sqlstyle.guide/
+
+-----------------------------------------------------------------------------------
 -- helpful terminal operations:
 
 -- starting / stopping server:
@@ -51,6 +54,11 @@ SHOW DATABASE -- shows databases
 SHOW TABLES in db -- shows tables in db
 SHOW COLUMNS in table -- shows columns in tables
 DESCRIBE table -- shows schema of table
+
+-- postgres
+\l -- list databases 
+\dn -- list schemas
+\dt *.* -- list tables (2nd *) in schema (1st *)
 
 SELECT -- extracts data from a database
 UPDATE -- updates data in a database

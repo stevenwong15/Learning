@@ -1,31 +1,4 @@
 #---------------------------------------------------------------------------------
-# [table of contents]
-#	- setup
-#---------------------------------------------------------------------------------
-# https://guides.github.com/
-
-#---------------------------------------------------------------------------------
-# setup
-#---------------------------------------------------------------------------------
-
-git config --global user.name "stevenwong15"
-git config --global user.email "YOUR EMAIL ADDRESS"
-
-# Caching your GitHub password in Git
-# https://help.github.com/articles/caching-your-github-password-in-git/
-
-# hub is a command-line wrapper for git that makes you better at GitHub
-# https://github.com/github/hub#readme/
-# first, install homebrew: http://brew.sh/
-# in .bash_profile, make hub the same as git
-eval "$(hub alias -s)"
-
-# editor (not nano)
-# esc first
-# :w to save
-# :q to quit
-
-#---------------------------------------------------------------------------------
 # workflow
 #---------------------------------------------------------------------------------
 # very similar to the branch, checkout, commit, merge in Git
@@ -61,4 +34,48 @@ git pull origin  # pull changes from masters on Github
 git fetch origin
 git merge origin/master
 
-#---------------------------------------------------------------------------------
+
+# 
+
+
+
+
+#--
+
+git remote add origin ... 
+
+
+# -u to remember the parameters
+git push -u origin master
+
+git pull origin master
+
+
+# differences of the most recent commit
+git diff HEAD
+# then add
+# then see changes that just staged (added)
+git diff --staged
+# unstage
+git reset file
+
+# changed back to last commit
+git checkout -- file
+git branch clean_up  # creat a branch
+
+# switch to new branch
+git checkout clean_up
+# do changes
+# then, commit
+
+
+# use the master
+git checkout master
+
+#  merge
+git merge clean_up
+# delete branch
+git branch -d clean_up
+
+# push 
+git push

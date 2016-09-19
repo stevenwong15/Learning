@@ -17,6 +17,8 @@ tolower(x); toupper(x)  # to lower / upper case
 # display
 cat(..., sep = " ")  # prints the argument after coercing to character
 paste(..., sep = " ")  # concatenate vectors into string, after coercing to character
+paste0()  # same, but no spaces
+sprintf()  # return characater string with variable (%; %% to use '%')
 format(x, ...)  # formats R object for pretty printing
 
 #---------------------------------------------------------------------------------
@@ -68,6 +70,11 @@ regexec(pattern, text)  # return the position of the 1st match, or -1 if none (l
 # {n} 	= the preceding item is matched exactly n times
 # {n,} 	= the preceding item is matched n or more times
 # {n,m} = the preceding item is matched n times, but not more than m times
+
+#---------------------------------------------------------------------------------
+# string <-> variable
+
+get("variable")  # convert string to variable name
 
 #=================================================================================
 # library(stringr)

@@ -587,9 +587,9 @@ lapply()
 
 # same patterns in lapply() form
 xs <- runif(1e3)
-lapply(xs, function(x) {})
-lapply(seq_along(xs), function(i) {})
-lapply(names(xs), function(nm) {})
+lapply(xs, function(x) {xs})  # access via
+lapply(seq_along(xs), function(i) {xs[i]})
+lapply(names(xs), function(nm) {xs[nm]})
 
 # e.g. models
 formulas <- list(

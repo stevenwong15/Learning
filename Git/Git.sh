@@ -1,22 +1,25 @@
-#---------------------------------------------------------------------------------
+#=================================================================================
 # [table of contents]
 #	- basic Git structure
 #	- basic Git workflow
 #	- how to backtrack in Git
 #   - Git branching
 #   - Git team work
-#---------------------------------------------------------------------------------
+#=================================================================================
+# references:
+# - https://guides.github.com/
+# - https://try.github.io/
+# - http://happygitwithr.com/
 
-#---------------------------------------------------------------------------------
+#=================================================================================
 # basic Git structure
-#---------------------------------------------------------------------------------
 
-# after git init, a .git folder is created
+# after `git init1, a .git folder is created
 # ├── head - a pointer to the tip of the branch you're working on
 # ├── branches
 # ├── config - settings: every-time yo uuse 'git config...', it ends here
 # ├── description
-# ├── hooks - set of scripts that can be run at every meaningful git phase (e.g. some pre-push hook)
+# ├── hooks - scripts that can be run at every meaningful git phase (e.g. some pre-push hook)
 # │ ├── pre-commit.sample
 # │ ├── pre-push.sample
 # │ └── ...
@@ -28,21 +31,24 @@
 # └── refs
 #  ├── heads
 #  └── tags
+
 # everytime a file is created + tracked, git compresses and stores it into its own 
 # data structure, under the object directory; a simplified version of commit:
 # - if the file didn't change, git just adds the name of the compressed file
 # - if the file changed, git compresses it, stores the compressed file in the object folder,
 #   and adds the name (the hash) into the snapshot
+
 # A commit is made of 4 things :
 # - The name (a hash) of the working directory’s snapshot
 # - A comment
 # - Commiter information
 # - Hash of the parent commit
 
-
-#---------------------------------------------------------------------------------
+#=================================================================================
 # basic Git workflow
-#---------------------------------------------------------------------------------
+
+git --version  # to see version
+
 # working directory: where you'll be doing your work
 # - make changes
 # staging area: where you'll see changes you make to the workign directory
@@ -57,22 +63,52 @@ git status  # check the status of changes (untracked = Git sees, but not yet tra
 git diff file_1.txt  # changes marked with "+"; press "q" to quit
 git add file_1.txt  # add file_1.txt to the staging area
 git add file_1.txt file_2.txt  # add both files to the staging area
+git add '*.txt'  # adding all text files
+git add *  # adding all
 
 # commit changes
-git commmit -a -m "message"  # commit all changes in existing files
 git commmit -m "message"  # optional message should be <50 characters
+git commmit -a -m "message"  # commit all changes in existing files
 
 # see log of changes
 git log  # stored chronologically
+
+#---------------------------------------------------------------------------------
+# remote repositories
+
+# name and email associated with remote repository
+git config --global user.name "stevenwong15"
+git config --global user.email "stevenwong15@gmail.com"
+git config --global --list  # all associations
+
+# Caching GitHub password in Git
+# https://help.github.com/articles/caching-your-github-password-in-git/
+
+# hub is a command-line wrapper for git that makes you better at GitHub
+# https://github.com/github/hub#readme/
+# first, install homebrew: http://brew.sh/
+# in .bash_profile, make hub the same as git
+eval "$(hub alias -s)"
+
+# setup: create a new remote repository
+# then, clone the repo to your local computer
+git clone https://github.com/stevenwong15/Notes.git
+# show information
+git remote show origin
+
+# workflow
+
+
+#---------------------------------------------------------------------------------
+# ignoring and deleting
 
 # untrack files: http://git-scm.com/docs/gitignore
 nano .gitignore  # to get a hidden list going
 # to make git to forget what's already being tracked
 git rm --cached <file>
 
-#---------------------------------------------------------------------------------
+#=================================================================================
 # how to backtrack in Git
-#---------------------------------------------------------------------------------
 
 # head commit = the commit you're currently on
 git show HEAD  # shows "git log" output, plus all the file changes
@@ -88,7 +124,6 @@ git reset 5d69206  # where "5d69206" is the first 7-characters of last commit to
 
 #---------------------------------------------------------------------------------
 # Git branching
-#---------------------------------------------------------------------------------
 # to experiment with versions of a project, without affecting the master branch
 
 git branch  # to check out which branch you are currently on (marked with *)
@@ -112,7 +147,6 @@ git branch -d branch_name
 
 #---------------------------------------------------------------------------------
 # Git team work
-#---------------------------------------------------------------------------------
 # origin: the original directory (which is remote)
 # typical team workflow:
 # - Fetch and merge changes from the remote

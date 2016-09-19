@@ -26,11 +26,23 @@ ls -l /Library/Frameworks/R.framework/Versions/  # check in terminal the version
 
 #---------------------------------------------------------------------------------
 # workspace
+
+sessionInfo()  # version information about R, the OS and attached or loaded packages
 ls()  # list of objects in directory
 ls.str()  # list of objects in directory, with str() shown
 dir()  # show files in current directory
 rm(object)  # remove object 
 rm(list = ls())  # remove all objects at once
+
+# garbage collection
+gc()
+
+# terminal
+system("open .")  # example of terminal command
+Rscript file.r  # run file.r in terminal in the background
+
+# object size
+format(object.size(df), units = 'Mb')
 
 # working directory
 getwd() 
@@ -40,13 +52,18 @@ q()  # quits the current R session
 #---------------------------------------------------------------------------------
 # packages
 # - the most packages loaded package will take precedence, in the event of conflict
+
 library(package)  # needs to specify packages everytime, same as require()
 detach('package:name')  # detach package
-library(help="package")  # to receive help on a specific function
+packageVersion('package')  # find out the version
+library(help = "package")  # to receive help on a specific function
+
 install.packages("package")  # installs packages: cloest CRAN mirror is USA(CA1)
-update.packages()  # to update packages
-download.packages()  # to copmare versions, and update outdated packages on the fly
+old.packages()  # see which packages needs an update
+update.packages()  # to update those old packages
+download.packages()  # to compare versions, and update outdated packages on the fly
 remove.packages()  
+
 search()  # show all packages loaded
 library()  # show all packages installed
 citation("package")  # show the citation of the package
@@ -68,16 +85,19 @@ dim(x)
 
 #---------------------------------------------------------------------------------
 # help
+
 ?TOPIC  # followed by a function to show help on the TOPIC
 help(TOPIC)  # same as ?
 help.search("TOPIC")  # search the help system, with all the TOPICs
 apropos("TOPIC")  # list all the functions with the string "TOPIC" in it
 methods(TOPIC)  # lists all the methods for a generic function / class
+
 # websearch
 RSiteSearch("TOPIC")  # search for key words in help pages, vignettes or task views
 
 #---------------------------------------------------------------------------------
 # assignment
+
 <-  # for assignment (-> is the other way)
 =  # for use inside brackets
 <<-  # changes an existing variable in a parent.env() (if none, create one in globalenv())
@@ -89,6 +109,7 @@ get("x")  # get the value of "x"
 
 #---------------------------------------------------------------------------------
 # display
+
 options(digits = x)  # prints x number of digits
 system.time()  # include in the bracket items you wish to time
 
@@ -144,6 +165,8 @@ system.time()  # include in the bracket items you wish to time
 #---------------------------------------------------------------------------------
 # operation
 
+1  # numeric
+1L  # integer
 x %% y  # return the remainder of the division x / y
 x %/% y  # integer division of x / y
 abs(x)  # absolute value
@@ -166,6 +189,7 @@ fft(x)  # fast fourier transform
 # sweep() example: often used with apply
 x <- matrix(rnorm(20, 0, 10), nrow=4)
 sweep(x, 1, apply(x, 1, min), '-')  # subtract min of each row, from each row
+
 #---------------------------------------------------------------------------------
 # vector operation
 
@@ -178,6 +202,7 @@ seq_along(x)  # sequence of the length(x)
 
 #---------------------------------------------------------------------------------
 # matrix operation
+
 %*%  # matrix multiplication
 %o%  # outer product
 outer(x, y, FUN = "*")  # outer product
@@ -196,6 +221,7 @@ nrow(); ncol(); rowSums(); colSums(); rowMeans(); colMeans()
 
 #---------------------------------------------------------------------------------
 # charateristics 
+
 mean(); median(); cor(); sd(); var()  # simple summarizing parameters
 range(x)  # return low and high end
 sum(x)  # return the sum of all elements in x
@@ -211,6 +237,7 @@ rle(x)  # compute the lengths and values of runs of equal values in a vector
 
 #---------------------------------------------------------------------------------
 # condition
+
 !=; ==; >; >=; <; <=;
 all.equal(x, y, tolerance = 0)  # show the degree of approximate equality
 identical(x, y)  # return true iff x and y are exactly equal
@@ -245,6 +272,7 @@ which(logicalArguement)  # return the index of TRUE
 
 #---------------------------------------------------------------------------------
 # characteristics
+
 (is, as).(character, numeric, logical, ...)  # lots of combo, too many to list all
 is.na(x); is.null(x)
 any(is.na(x))  # is at least one of them is true (i.e. missing?)?
@@ -254,6 +282,7 @@ sapply(df, function(x)sum(is.na(x)))
 
 #---------------------------------------------------------------------------------
 # catagorical
+
 factor(x)  # make x catagorical, instead of continuous
 levels(x)  # get the catagories for the catagorical random variable
 nlevels(x)  # get number of levels
@@ -274,11 +303,13 @@ findInterval(data, v)  # where v is a vector of interval breakpoints
 
 #---------------------------------------------------------------------------------
 # time series object
+
 as.numeric(time(timeData))  # to get the time 
 as.numeric(timeData)  # to get the data
 
 #---------------------------------------------------------------------------------
 # date
+
 date()  # gives the currend date
 as.Date("string", format = "formatecode")  # see below for format code
 ISOdatetime(year, month, day, hour, min, sec, tz = "")  # date-times numeric rep
@@ -381,6 +412,7 @@ fread(data_path, sep = 'auto')
 
 #---------------------------------------------------------------------------------
 # output
+
 save(data, file = "Example.Rdata")  # save an object
 save(list = ls(all=TRUE), file = "Workspace.Rdata")  # save the entire workspace
 save.image(file = "Workspace.Rdata")  # id.
