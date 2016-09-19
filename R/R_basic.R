@@ -24,13 +24,22 @@ ctrl + p  # reprints the previously ran code
 ;  # separates > 1 commands in one line: this is a bad habbit
 ls -l /Library/Frameworks/R.framework/Versions/  # check in terminal the version of R
 
-#---------------------------------------------------------------------------------
+#----------------------------------------------------------------------w-----------
 # workspace
 ls()  # list of objects in directory
 ls.str()  # list of objects in directory, with str() shown
 dir()  # show files in current directory
 rm(object)  # remove object 
 rm(list = ls())  # remove all objects at once
+
+# garbage collection
+gc()
+
+# terminal
+system("open .")  # example of terminal command
+
+# object size
+format(object.size(df), units = 'Mb')
 
 # working directory
 getwd() 

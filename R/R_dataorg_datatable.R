@@ -19,7 +19,7 @@
 # - DT[i , j, by]: i = where; j = select/update; by = group by
 
 # default number of rows printed = 100: getOption('datatable.print.nrows')
-options(datatable.print.nrows = 10)  
+options(datatable.print.nrows = 20)  
 
 flights <- fread('~/Downloads/flights14.csv')  # reads directly as a data.table
 DT <- data.table(a = letters, b = 1:length(letters))  # create a data.table 

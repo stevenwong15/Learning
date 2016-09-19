@@ -17,6 +17,8 @@ tolower(x); toupper(x)  # to lower / upper case
 # display
 cat(..., sep = " ")  # prints the argument after coercing to character
 paste(..., sep = " ")  # concatenate vectors into string, after coercing to character
+paste0()  # same, but no spaces
+sprintf()  # return characater string with variable (%; %% to use '%')
 format(x, ...)  # formats R object for pretty printing
 
 #---------------------------------------------------------------------------------

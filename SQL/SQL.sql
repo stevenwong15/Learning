@@ -52,6 +52,11 @@ SHOW TABLES in db -- shows tables in db
 SHOW COLUMNS in table -- shows columns in tables
 DESCRIBE table -- shows schema of table
 
+-- postgres
+\l -- list databases 
+\dn -- list schemas
+\dt *.* -- list tables (2nd *) in schema (1st *)
+
 SELECT -- extracts data from a database
 UPDATE -- updates data in a database
 DELETE -- deletes data from a database
