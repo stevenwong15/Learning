@@ -11,6 +11,7 @@
 # - https://try.github.io/
 # - http://happygitwithr.com/
 # - http://r-pkgs.had.co.nz/git.html
+# - https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud
 
 #=================================================================================
 # basic Git structure
