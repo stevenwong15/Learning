@@ -9,6 +9,14 @@
 # tutorial: https://sublimetutor.com/
 
 #---------------------------------------------------------------------------------
+# command line
+# http://stackoverflow.com/questions/16199581/opening-sublime-text-on-command-line-as-subl-on-mac-os
+
+# in .bash_profile 
+export PATH="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin:$PATH"
+export EDITOR='subl -w'  # set default
+
+#---------------------------------------------------------------------------------
 # basics
 
 # shorcuts: Preferences > Key Bindings - Default

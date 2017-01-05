@@ -24,7 +24,7 @@ ctrl + p  # reprints the previously ran code
 ;  # separates > 1 commands in one line: this is a bad habbit
 ls -l /Library/Frameworks/R.framework/Versions/  # check in terminal the version of R
 
-#---------------------------------------------------------------------------------
+#----------------------------------------------------------------------w-----------
 # workspace
 
 sessionInfo()  # version information about R, the OS and attached or loaded packages
@@ -82,6 +82,44 @@ str(x)
 options(repose='https://cran.rstudio.com')
 x <- available.packages()
 dim(x)
+
+#---------------------------------------------------------------------------------
+# install packages, if missing
+
+ipak <- function(pkg) {
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if(length(new.pkg)) install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+ipak(c("packrat"))
+
+#---------------------------------------------------------------------------------
+# package control: https://rstudio.github.io/packrat/
+# less flexiable but easier alternative: https://github.com/RevolutionAnalytics/checkpoint/wiki
+
+# initialize packrat in the directory (~/Documents/project/code)
+packrat::init("~/Documents/project/code")  # snapshot() + restore
+
+# finds the packages use in the project and stores: list, versions and source code
+packrat::snapshot()
+# restore latest snapshotted state (building from source code as necessary)
+packrat::restore()
+
+packrat::status()  # check status
+packrat::unused_packages()  # get a list of unused packages
+packrat::clean()  # remove unused packages
+
+# Toggle packrat mode on/off, for navigating b/w projects within a single session
+packrat::on()
+packrat::off()
+
+# sharing code and packrat private library
+packrat::bundle()  # tar
+packrat::unbundle()  # untar
+open -a R .  # packrat will restore() from source code
+
+# Rscript will only use packrat lib, if it exists (i.e. after unbundle())
+Rscript -e ".libPaths()"  # see which library is being used
 
 #---------------------------------------------------------------------------------
 # help

@@ -292,6 +292,9 @@ ggplot(BOD, aes(x = x, y = y, fill = z)) + geom_bar(stat = 'identity') # stacked
 ggplot(BOD, aes(x = x, y = y, fill = z)) + 
   geom_bar(stat = 'identity', position = 'dodge') # side-by-side
 
+# same
++ geom_col(stat = 'identity')
+
 # adjustments
 + geom_bar(binwidth = n, origin = xvalue)  # adjust starting point
 + geom_bar(width = 0.9)  # default bar width is 0.9 (0 < width ≤ 1)
@@ -576,6 +579,8 @@ lm_labels <- function(dat) {
 #---------------------------------------------------------------------------------
 # axes
 + scale_x_continuous(expand = c(0, 0))  # get rid of padding on the left/right
++ scale_x_continuous(position = "top")  # axis on top
++ scale_y_continuous(position = "right")  # axis on the right
 + coord_flip()  # swaps x- and y-axes
 + coord_fixed(ratio = 1)  # fix aspect ratio
 + coord_polar()  # circular
@@ -602,6 +607,9 @@ lm_labels <- function(dat) {
 # label
 labs(x = "", y = "")  # or xlab(), ylab(); in this case, the labels are blank
 scale_x_continuous(name = "line1\nline2")  # id., with two lines
+
+# secondary axis: one-to-one transformation 
++ scale_y_continuous("primary", sec.axis = sec_axis(~ . * 1.2, name = "secondary"))
 
 # sqrt scale
 + scale_x_sqrt()
@@ -675,7 +683,7 @@ theme_update() # update the current theme
 + theme_dark()  # dark, to make colours pop out
 
 # title
-+ ggtitle("title") # same as labs(title = "title")
++ labs(title = "title", subtitle = "subtitle", caption = "caption")  # same as ggtitle()
 + theme(plot.title = element_text(...)) # to change the plot title's text format
 + annotate("text", x=mean(range(xValues)), y=Inf,label="Title", vjust=1.5, size=6,
 		   fontface="bold.italic", family="Times") # use annotate() instead
@@ -733,14 +741,19 @@ ggplot(data, aes(x=x, y=y, fill=group))
 + facet_grid(field1 ~ field2) # field1 vs. field2
 
 # format
-# 'switch' to display the labels near an axis (x, y, or both)
-+ facet_wrap(~ field1, nrow = y, ncol = x, switch = 'x')
++ facet_wrap(~ field1, nrow = y, ncol = x, strip.position = 'bottom')  # position
++ theme(strip.placement = "outside")  # position with respect to the entire plot
 + facet_grid(field1 ~ field2, scales = 'free', space = 'free') # or free_y, free_x
 
 # labeling both variables, in each facet; more info: http://docs.ggplot2.org/dev/labellers.html
 + facet_grid(field1 ~ ., labeller = label_both)  # both variable and value
 + facet_grid(field1 ~ ., labeller = label_parsed)  # if label is a mathematical exp.
 + facet_grid(field1 ~ ., labeller = label_bquote(alpha.^(X)))  # math
+
+# add expressions to cut continuous r.v. into discrete r.v. that's facet-able
++ facet_warp(~cut_interval(x, n))  # cut x into n equal range 
++ facet_warp(~cut_number(x, n))  # cut x into n groups of roughly equal observations
++ facet_warp(~cut_width(x, width))  # cut x into groups of certain width
 
 #=================================================================================
 # colors and shapes

@@ -103,6 +103,9 @@ nano .gitignore  # to get a hidden list going
 # - first, include that file .gitignore; then
 git rm --cached file_1.txt  # removes from index ("cached")
 
+git clean -n # untracked files to be cleaned
+git clean -n # clean
+
 #=================================================================================
 # how to backtrack in Git
 
