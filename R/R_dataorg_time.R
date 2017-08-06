@@ -48,3 +48,10 @@ int_aligns(auckland, jsm)  # FALSE (true if begins/end on the same moment)
 setdiff(auckland, jsm)  # 2011-06-04 12:00:00 NZST--2011-07-20 NZST
 union(auckland, jsm)  # 2011-06-04 12:00:00 NZST--2011-08-31 NZST
 intersect(auckland, jsm)  # 2011-07-20 NZST--2011-08-10 14:00:00 NZST
+
+#---------------------------------------------------------------------------------
+# time arithmetic
+
+minutes(2)
+dminutes(2)  # duration in seconds
+

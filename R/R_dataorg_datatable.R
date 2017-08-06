@@ -23,6 +23,10 @@ flights <- fread('~/Downloads/flights14.csv')  # reads directly as a data.table
 DT <- data.table(a = letters, b = 1:length(letters))  # create a data.table 
 DT <- as.data.table(df)  # create a data.table from a data.frame
 
+# faster version of read/write: library(fst) (www.fstpackage.org)
+write.fs(DT, "DT.fst")
+read.fst("DT.fst", as.data.table = TRUE)
+
 # i = row slices: no need for '$' and ','
 flights[1:2]  # first 2 rows
 flights[origin == 'JFK' & month == 6L]
@@ -245,6 +249,16 @@ system.time(DT[x == 'g' & y == 500L])  # vector scan
 system.time(DT[.('g', 500L)])  # binary search: much faster
 # vector scan = goes through all the element, O(N)
 # binary search = O(log N)
+
+#---------------------------------------------------------------------------------
+# filter by group
+
+# .I is an integer vector equal to seq_len(nrow(x))
+DT[, .I[1], by = x]  # row number in DT corresponding to each group x
+DT[DT[, .I[1], by = x]$V1]  # top 1 in each group 
+
+# .GRP is an integer, length 1, containing a simple group counter
+DT[, grp := .GRP, by = x]
 
 #---------------------------------------------------------------------------------
 # reshaping: library(data.table) uses an extension of library(reshape2)
