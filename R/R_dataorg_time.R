@@ -8,6 +8,9 @@
 #=================================================================================
 # https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html
 
+today()
+now()
+
 #---------------------------------------------------------------------------------
 # better parsing
 
@@ -17,10 +20,25 @@ ymd("06-04-2011")  # "2011-06-04"
 dmy("04/06/2011")  # "2011-06-04"
 ymd_hms("2011-06-04 12:00:00", tz = "Pacific/Auckland")  # "2011-06-04 12:00:00 NZST"
 
+# generate time
+make_datetime()
+
 # extract with second, minute, hour, day, wday, yday, week, month, year, and tz
 # wday and month have an optional label argument, alternative for numeric output
 wday(arrive)
 wday(arrive, label = TRUE)
+
+# rounding
+floor_date(arrive, "week")  
+
+# setting components, such as:
+(arrive <- ymd_hms("2016-07-08 12:34:56"))
+year(arrive) <- 2020
+month(arrive) <- 01
+day(arrive) <- 01
+hour(arrive) <- hour(arrive) + 1
+# or
+update(arrive, year = 2020, month = 1, mday = 1, hour = hour(arrive) + 1)
 
 # time zone
 meeting <- ymd_hms("2011-07-01 09:00:00", tz = "Pacific/Auckland")
@@ -34,6 +52,8 @@ mistake <- force_tz(meeting, "America/Chicago")
 arrive <- ymd_hms("2011-06-04 12:00:00", tz="Pacific/Auckland")
 leave <- ymd_hms("2011-08-10 14:00:00", tz="Pacific/Auckland")
 auckland <- interval(arrive, leave) 
+auckland <- arrive %--% leave
+auckland / ddays(1)  # number of days
 
 int_start(auckland)
 int_end(auckland)
@@ -52,6 +72,22 @@ intersect(auckland, jsm)  # 2011-07-20 NZST--2011-08-10 14:00:00 NZST
 #---------------------------------------------------------------------------------
 # time arithmetic
 
-minutes(2)
-dminutes(2)  # duration in seconds
+# periods
+minutes(2)  
+hours(c(12, 24))
+days(0:5)
+weeks(3)
+years(1)
 
+tomorrow <- today() + days(1)
+last_year <- today() - years(1)
+
+# duration in seconds (doesn't take into account of leap year, daylight savings, etc.)
+dminutes(2)  
+dhours(c(12, 24))
+ddays(0:5)
+dweeks(3)
+dyears(1)
+
+tomorrow <- today() + ddays(1)
+last_year <- today() - dyears(1)

@@ -82,6 +82,7 @@ get("variable")  # convert string to variable name
 # regular expression reference: http://www.regular-expressions.info/reference.html
 # regular expression test: http://regexr.com/
 # build regular expression: http://www.txt2re.com/
+# excercise: http://r4ds.had.co.nz/strings.html
 
 #---------------------------------------------------------------------------------
 # basics
@@ -92,9 +93,16 @@ str_dub('xyx', n)  # duplicate the characters within a string n times
 str_trim(" sentences with excess white space in front and behind    ")
 str_pad()  # pad the string with extra spaces on the left, right or both sides
 
+# locals: different language has different rules
+str_to_upper(c("i", "1"))
+str_to_upper(c("i", "1"), locale = "tr")
+str_sort(c("apple", "eggplant", "banana"), locale = "en")  # english
+str_sort(c("apple", "eggplant", "banana"), locale = "haw")  # hawaiian
+
 #---------------------------------------------------------------------------------
 # pattern matching: detect, locate, extract, match, replace, and split
 str_detect(strings, pattern)  # detects the presence / absence
+str_count(strings, pattern)  # count the number present
 str_subset(strings, pattern)  # returns elements that matches a regular expression
 (str_locate(strings, pattern))  # returns first position; () for matrix form
 str_locate_all(strings, pattern)  # returns all matches, in a list form
@@ -106,3 +114,15 @@ str_replace(string, pattern, replacement)  # replaces first
 str_replace_all(string, pattern, replacement)  # replaces all
 str_split_fixed(string, pattern, n)  # split based on first n pieces of pattern
 str_split(string, pattern)  # split based on variable number of pieces
+
+# view how stringr matches
+x <- c("apple", "banana", "pear", "a", "b", "c", "color", "colour", "gray sky", "grey sea")
+str_view(x, "an")
+str_view(x, ".a.")
+str_view(x, "^a")  # starting with 
+str_view(x, "a$")  # ending with
+str_view(x, "^a$")  # starting and ending with
+str_view(x, "[abc]")  # any
+str_view(x, "[^abc]")  # all except
+str_view(x, "col(o|ou)r")  # either
+str_view(x, "(gr(a|e)y) ([^ ]+)") 

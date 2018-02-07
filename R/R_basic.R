@@ -442,6 +442,25 @@ read_csv("iris.csv", col_types = list(
   Species = col_factor(c("setosa", "versicolor", "virginica"))
 ))
 
+# parse vector
+parse_logical(c("TRUE", "FALSE", "NA"))
+parse_integer(c("1", "2", "3"))
+parse_number("It cost $123.45")
+parse_double(c("1", "2", "3"))
+parse_date(c("2010-01-01", "1979-10-14"))
+parse_datetime("20101010")
+parse_time("01:10 am")
+
+# guess which parser to use
+guess_parser("2010-10-01")
+
+#---------------------------------------------------------------------------------
+# import: library(feather)
+# a fast binary file format that can be shared across programming languages
+
+write_feather(data, "data.feather")
+read_feather("data.feather")
+
 #---------------------------------------------------------------------------------
 # import: library(data.table)
 # faster than readr, and automatically detects delimiter
