@@ -83,6 +83,7 @@ DROP INDEX -- deletes an index
 <=	-- less than or equal
 BETWEEN	-- between an inclusive range: between lower AND upper
 LIKE -- search for a pattern
+ILIKE -- search for a pattern, case insensitive
 IN -- to specify multiple possible values for a column
 IS NULLL -- contains no data
 
@@ -157,6 +158,19 @@ INNER JOIN -- returns all rows when there is at least one match in BOTH tables (
 LEFT JOIN -- return all rows FROM the left table, and the matched rows FROM the right table (Left AND)
 RIGHT JOIN -- return all rows FROM the right table, and the matched rows FROM the left table (Right AND)
 FULL Outer JOIN -- return all rows when there is a match in ONE of the tables (OR)
+
+-- comma join (same as inner join, or simple join)
+
+SELECT * 
+FROM Person 
+JOIN Worker 
+ON Person.id = Worker.id;
+
+-- simpler to read what is the condition each join is using (with multiple joins)
+SELECT * 
+FROM Person, 
+     Worker 
+WHERE Person.id = Worker.id;
 
 -----------------------------------------------------------------------------------
 -- WITH alias creation:

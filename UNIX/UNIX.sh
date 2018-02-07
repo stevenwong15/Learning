@@ -48,6 +48,7 @@ Cmd + k  # clear all
 clear  # clear the terminal
 open file_1.txt  # opens the file
 open -a APP_NAME  # opens the application
+open -a APP_NAME .  # opens the application & set to the current working directory
 open -a APP_NAME file_1.txt  # opens the file with the application
 
 #---------------------------------------------------------------------------------

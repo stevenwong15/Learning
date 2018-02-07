@@ -23,6 +23,14 @@ flights <- fread('~/Downloads/flights14.csv')  # reads directly as a data.table
 DT <- data.table(a = letters, b = 1:length(letters))  # create a data.table 
 DT <- as.data.table(df)  # create a data.table from a data.frame
 
+# faster version of read/write: library(fst) (www.fstpackage.org)
+write.fs(DT, "DT.fst")
+read.fst("DT.fst", as.data.table = TRUE)
+
+# remove duplicate
+flights[!duplicated(flights)]  # on every column
+flights[!duplicated(air_time)]  # on specific column
+
 # i = row slices: no need for '$' and ','
 flights[1:2]  # first 2 rows
 flights[origin == 'JFK' & month == 6L]
@@ -34,6 +42,7 @@ flights[day == 1, with=TRUE]  # same: with=TRUE by default
 
 # DT's order() uses '-' for desc and forder(), which is faster than base::order 
 flights[order(origin, -dest)]  # order 'origin' in asc order, 'dest' in desc order
+setorder(flights, origin, -dest)  # same, but by reference
 
 # j = column slices: 
 flights[, arr_delay] %>% head()  # output in array
@@ -51,6 +60,7 @@ flights[, -(year:month), with=FALSE]  # select everything but
 # compute on columns
 flights[, sum(distance)]
 flights[, sum((arr_delay + arr_delay) < 0)]  # conditional count
+flights[, .N, by = .(is_arr_delay = arr_delay > 0)]  # conditional count
 
 # update column names by reference
 setnames(flights, 'year', 'Year')
@@ -63,6 +73,8 @@ flights[
   origin == 'JFK' & month == 6L,
   .(m_arr = mean(arr_delay), m_dep = mean(dep_delay), .N)
 ]
+flights[.N]  # last row
+flights[sample(.N, 4)]  # sample 4 rows
 
 #---------------------------------------------------------------------------------
 # aggregation: i, j and by
@@ -96,8 +108,14 @@ flights[,
 
 # slicing
 flights[, head(.SD, 2), by=month]  # first 2 rows for each month
+flights[flights[, .I[1:2], by=month]$V1]  # same, but can do more with .I[]
 flights[, .SD[1:2], by=month]  # same
 flights[, .SD[.N], by=month]  # last row
+flights[, .SD[sample(.N, 10)], by=month]  # sample 10 for month
+
+# unique
+flights[, unique(.SD), .SDcols = "origin"]  # unique by a column
+flights[, unique(.SD), .SDcols = "origin", by = "month"]  # same, but by group
 
 # j is evaluated = can pretty much do everything (useful for debugging)
 DT <- data.table(ID = c("b","b","b","a","a","c"), a = 1:6, b = 7:12, c = 13:18)
@@ -130,6 +148,8 @@ dt[,
   tmp3 := round(tmp2, 2)][, 
   tmp1 := NULL]
 
+# 
+
 # shift (can add key and use by to do fast ordering/shifting by group)
 dt <- data.table(mtcars)[,.(mpg, cyl)]
 dt[, mpg_lag1 := shift(mpg, 1)]
@@ -142,6 +162,11 @@ dt[, mpg_forward1 := shift(mpg, 1, type = 'lead')]
 flights[, `:=`(speed = distance / (air_time/60), delay = arr_delay + dep_delay)]
 # same as
 flights[, c('speed', 'delay') := .(distance / (air_time/60), arr_delay + dep_delay)]
+
+# conditional add 
+flights[origin == "JFK", temp := 1]
+# multiple conditions
+flights[origin == "JFK", temp := 1][origin == "LGA", temp := 2][origin == "EWR", temp := 3]
 
 # remove
 flights[, c('delay') := NULL]
@@ -245,6 +270,31 @@ system.time(DT[x == 'g' & y == 500L])  # vector scan
 system.time(DT[.('g', 500L)])  # binary search: much faster
 # vector scan = goes through all the element, O(N)
 # binary search = O(log N)
+
+#---------------------------------------------------------------------------------
+# filter 
+
+# by group
+# .I is an integer vector equal to seq_len(nrow(x))
+DT[, .I[1], by = x]  # row number in DT corresponding to each group x
+DT[DT[, .I[1], by = x]$V1]  # top 1 in each group 
+
+# row number
+DT[, .(seq_len(.N)), by = x]  # row number in DT to each element in each group x
+DT[, .(rowid(x))]  # same
+
+# .GRP is an integer, length 1, containing a simple group counter
+DT[, grp := .GRP, by = x]
+
+# by another table - like join
+DT1[DT2, on = .(col1)]  # filter DT1 by values in DT2; like DT2 left join DT1
+DT1[!DT2, on = .(col1)]  # filter DT1 by values NOIT in DT2
+DT1[DT2, on = .(col1, val1>val2)]  # filter DT1 by values in DT2, and where val1>val2
+DT1[DT2, on = .(col1), nomatch = 0L]  # same, but remove no match; like inner join
+DT1[DT2, on = .(col1), mult = "first", nomatch = 0L]  # same, but show first match
+DT1[DT2, on = .(col1), .(col1, val1, val2, i.val2)]  # return val2 from both DT1 and DT2
+DT1[DT2, on = .(col1), val3 := val2*i.val2]  # given match, val3 = val2 of DT1 * val2 of DT2
+DT1[DT2, on = .(col1), min(val1), by = .EACHI]  # min of each match type
 
 #---------------------------------------------------------------------------------
 # reshaping: library(data.table) uses an extension of library(reshape2)

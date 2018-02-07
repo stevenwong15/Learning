@@ -6,6 +6,7 @@
 #   - manipulation: library(plyr)
 #   - data.frame manipulation: library(dplyr)
 #   - factor: library(forcats)
+#   - mapping: library(purrr)
 #=================================================================================
 
 #=================================================================================
@@ -116,12 +117,14 @@ spread(data, keyColName, valueColName)  # "long" to "wide"
 extract(data, col, c("newColName1", ...), regex)  # extract groups into new cols
 extract_numeric(stringWithNumbers)  # extract numeric component of a variable
 separate(data, col, c("newColName1", ...), regex)  # turn single char to >1 cols
+separate_row()  # similar, but separate into >1 rows
 unite(data, newColName, col1, ..., sep = "_", remove = T)  # unite cols together
 
 # handling missing values
 df <- tibble(x = c(1, 2, NA), y = c("a", NA, "b"))
 df %>% drop_na()
 df %>% drop_na(x)
+df %>% replace_na(list(x = 0))
 
 # complete by combinations
 df <- data_frame(
@@ -131,6 +134,9 @@ df <- data_frame(
   value1 = 1:3,
   value2 = 4:6
 )
+# takes a set of columns, and finds all unique combinations, ensures the original 
+# dataset contains all those values, filling in explicit NAs where necessary.
+df %>% complete(group, item_name)
 # nesting() considers those inside as the same combination
 df %>% complete(group, nesting(item_id, item_name))
 
@@ -223,6 +229,16 @@ rename(data, fieldNewName = fieldOldName)  # rename the column
 
 glimpse(data)  # information dense summary of tbl data
 
+rowname_to_column()  # move rowname into a column
+column_to_rowname()  # reverse
+has_rowname()  # does the data.frame have rownames?
+remove_rowname()  # remove rownames all together
+
+# same as summarise_* counterparts
+arrange_all()
+arrange_at()
+arrange_if()
+
 #---------------------------------------------------------------------------------
 # subset
 
@@ -235,7 +251,6 @@ sample_frac(data, frac)  # take a fixed fraction of rows
 # uses filter & min_rank to select the top n entries in each group, ordered by wt
 top_n(data, n, wt)  
 
-
 # by columns
 select(data, field1, specialCondition1, ...)  # select cols; to drop, use "-"
 # special conditions:
@@ -247,11 +262,27 @@ num_range("x", 1:5, width = 2)  # select all from x01 to x05
 one_of(var)  # select variables provided in a character vector, var
 everything()  # all variables
 
+# same as summarise_* counterparts
+filter_all()
+filter_at()
+filter_if()
+select_all()
+select_at()
+select_if()
+rename_all()
+rename_at()
+rename_if()
+
 #---------------------------------------------------------------------------------
 # summarize
 summarise(data, col1 = ..., newCol = ..., ...)  # same as in library(plyr)
 # summarise() previously only gives one row summary, but it becomes much more 
 # powerful when grouped by fields, summarise()-ing each group
+
+summarise_all(func)  # applies to every column
+summarise_at(c("var1", "var2"), func)  # applies to every column
+summarise_if(is.numeric, func)  # applies to every column, if true
+
 group_by(data, field1, field2, ...)  # direct other library(dplyr) to perform by group
 # example:
 data %>%
@@ -266,11 +297,24 @@ nth(field, n)  # first nth rows
 
 count(data, variable, wt)  # using n() to count, group_by() wt
 
+# same as summarise_* counterparts
+group_by_all()
+group_by_at()
+group_by_if()
+
 #---------------------------------------------------------------------------------
 # change
 mutate(data, col1 = ..., newCol = ..., ...)  # same as mutate() in library(plyr)
 # same as mutate(), returning listed cols only, and dropping original columns
 transmute(data, col1 = ..., newCol = ..., ...)  
+
+# same as summarise_* counterparts
+mutate_all()
+mutate_at()
+mutate_if()
+transmute_all()
+transmute_at()
+transmute_if()
 
 # helpers that look at the entire set, instead of by row (window functions)
 # ranking, with different ways of dealing with ties
@@ -291,13 +335,18 @@ lag(vector, n = 1, order_by = field1)  # offset value by 1 lag, order_by field1
 # example:
 mutate(x - lag(x), order_by = y)
 
-# accumulation
+# cumulation aggregates
 cumsum()
+cumprod()
+cummean()  
 cummax()
 cummin()
 cumany()
 cumall()
-cummean()  
+
+# other helper
+if_else()  # ifelse, but more strict
+case_when()  # multiple if else statements
 
 #---------------------------------------------------------------------------------
 # join
@@ -409,11 +458,37 @@ data <- collapse(query)
 
 as_tibble(mtcars)
 
+# column-wise
 df <- tibble(x = 1:3, y = 3:1)
 df %>% add_row(x = 0, y = 0, .before = 2)
 df %>% add_column(z = -1:1, .after = "x")
 
+# row-wise
+df <- tribble(
+  ~x, ~y, ~z,
+  #--|--|----
+  "a", 2, 3.6,
+  "b", 1, 8.5
+)
+df %>% .$x
+df %>% .[["x"]]
+
 #=================================================================================
 # factor: library(forcats)
 #=================================================================================
+# for more information: http://r4ds.had.co.nz/factors.html
+
+#=================================================================================
+# factor: library(purrr)
+#=================================================================================
 # for more information: https://hadley.github.io/forcats/
+# for more information: https://jennybc.github.io/purrr-tutorial/index.html
+
+map()  # makes a list
+map_lgl()  # makes a logical vector
+map_int()  # makes an integer vector
+map_dbl()  # makes a double vector
+map_chr()  # makes a character vector
+
+mtcars %>% map_dbl(mean)
+

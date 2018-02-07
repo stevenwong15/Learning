@@ -2,6 +2,7 @@
 # [table of contents]
 #   - htmlwidgets
 #   - time series
+#   - graph
 #   - heat maps
 #=================================================================================
 
@@ -93,6 +94,22 @@ dyLimit(value, color = "red")
 # (dygraphs will only include annotations that exactly match one of it’s x-axis values).
 dyAnnotation("1950-7-1", text = "A", tooltip = "Korea") %>%
 dyAnnotation("1965-1-1", text = "B", tooltip = "Vietnam")
+
+#=================================================================================
+# graph
+#=================================================================================
+
+#---------------------------------------------------------------------------------
+# library(DiagrammeR) http://rich-iannone.github.io/DiagrammeR/
+
+DiagrammeR(paste0("graph LR;", paste0(
+  sprintf("%s-->%s", edges$source_name, edges$target_name), 
+  collapse = ";")),
+  width = 2500, height = 2500)
+
+#---------------------------------------------------------------------------------
+# library(visNetwork) http://datastorm-open.github.io/visNetwork/
+
 
 #=================================================================================
 # heat maps

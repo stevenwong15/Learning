@@ -234,15 +234,48 @@ plot(rmse.cv, pch = 19, type = "b")
 
 #---------------------------------------------------------------------------------
 # method 1: library(glmnet)
+# - glment standardizes y to have unit variance before computing
+# - then, it unstandardizes the resulting coefficients
+# - to compare with other software, best to supply a standardized y first
 
 x <- model.matrix(Y ~ . - 1, data = dataset)  # '-1' to rid of interecept term
 y <- dataset$y
 fit.ridge <- glmnet(x, y, alpha = 0)
+# alpha = 1 for lasso (default), 0 for ridge
+# - in between: a mixture of lasso and ridge (say alpha = 0.5)
+# - if predictors are correlated in groups, tends to select groups in/out together
+# weights = 1 (default) for each observation
+# nlambda = 100 (default) for number of lambdas to compute (recommends 100/more)
+# - stopping criteria: % dev explained reaches 0.999 or marginal increase <0.00005
+# standardize = TRUE (default) for x covariate standardization
+# - coefficients are always returned on the original scale
+# lower, upper = lower (must be ≤0) and upper (must be ≥0) bound of coefficients
+# - e.g. if want coefficients to be positive
+# penalty.factor = 1 (default); if set to zero, no penalty for the coefficient
+# - e.g. if some variables may be so important that one wants to keep them all the time
+# intercept = TRUE (default); can be set to FALSE to force zero intercept
+
+# returns 1) # of nonzero coefficients, 2) % deviance explained, 3) lambda
+print(fit.ridge)
 plot(fit.ridge, xvar = "lambda", label = TRUE)
 plot(fit.ridge, xvar = "dev", label = TRUE)  # fraction of variance explained
 
-# predict
-# - same as for the lasso
+# adds variable name to plot
+vnat <- coef(fit)
+vnat <- vnat[-1, ncol(vnat)]  # removes intercept; get last set of coefficients
+plot(fit.ridge, xvar = "lambda", label = TRUE)
+axis(4, at = vnat, line = -0.5, label = names(vnat), las = 1, tick = FALSE, cex.axis = 0.5)
+
+# get coefficient where lambda = 0.1 or 0.05
+# - exact = FALSE for linear interpolation for values of s not in lambdas
+# - exact = TRUE reruns with specified lambdas
+coef(fit, s = c(0.1, 0.05), exact = FALSE)
+coef(fit, s = c(0.1, 0.05), exact = TRUE, x = x, y = y)
+
+# predict (same as for the lasso)
+# type = "link" (log-odds), "response" (probability); for regression, both same
+# e.g. predict where lambda = 0.1 or 0.05
+predict(fit.ridge, newx = x_new, s = c(0.1, 0.05))
 
 #---------------------------------------------------------------------------------
 # method 2: regular ridge regression
@@ -280,7 +313,7 @@ text(x, betas[, ncol(betas)], rownames(betas), cex = 0.6, adj = 0)
 
 x <- model.matrix(Y ~ . - 1, data = dataset)  # '-1' to rid of interecept term
 y <- dataset$y
-fit.ridge <- glmnet(x, y, alpha = 1)
+fit.ridge <- glmnet(x, y, alpha = 1) 
 plot(fit.ridge, xvar = "lambda", label = TRUE)
 plot(fit.ridge, xvar = "dev", label = TRUE)  # fraction of variance explained
 
@@ -354,8 +387,17 @@ cv.index <- sample(counts)
 
 # method 1: library('glmnet')
 cv.lasso <- cv.glmnet(x, y)
+# nfolds = number of folds
+# foldid = user-supplied folds
+# type.measure = "deviance", "mse" or "mae" (mean aboslute error)
+# - can also use "auc" (under ROC) for classification
 plot(cv.lasso)  # also shows the lowest + the least p w/in one stdev
 coef(cv.lasso)
+
+# lambda of min MSE
+cv.lasso$lambda.min
+cv.lasso$lambda.1se  # most regularized model where error is w/in 1 SE of the min
+coef(cv.lasso, s = "lambda.min")   # corresponding fit
 
 # to select the lambda with validation (instead of cross-validation)
 lasso.tr <- glment(x[train, ], y[train, ])
@@ -365,6 +407,16 @@ plot(log(lass.tr$lambda), rmse, type = 'b', xlab = 'Log(lambda)')
 
 lam.best <- lasso.tr$lambda[order(rmse)[1]]
 ceof(lasso.tr, s = lam.best)
+
+# parallel
+library(doMC)
+registerDoMC(cores = 2)
+# registerDoSEQ() = unregister
+# test
+X = matrix(rnorm(1e4 * 200), 1e4, 200)
+Y = rnorm(1e4)
+system.time(cv.glmnet(X, Y))
+system.time(cv.glmnet(X, Y, parallel = TRUE))
 
 # method 2: more control
 bounds <- seq(0.05, 1, by = 0.05) 

@@ -2,7 +2,6 @@
 # [table of contents]
 #   - general stats
 #   - general model commands
-#   - library(xgboost) - boosting
 #   - OLS
 #   - classification
 #   - count
@@ -134,63 +133,6 @@ contrast(data$value1)  # shows how qualitative predictors are treated
 table(predictedResponse, actualResponse)
 
 #=================================================================================
-# library(xgboost) - boosting
-#=================================================================================
-# https://xgboost.readthedocs.org/en/latest/
-# inputs: 
-# - matrix
-# - Matrix::dgCMatrix (sparse; 0 not stored so smaller in size)
-# - xgb.DMatrix (recommended)
-# only takes numerical inputs; need to convert catagorical to numerical
-
-# structure data (features and responses) to the xgb.DMatrix format
-data_train <- xgb.DMatrix(data = train$data, label = train$label)
-data_test <- xgb.DMatrix(data = test$data, label = test$label)
-
-#---------------------------------------------------------------------------------
-# basic: xgboost
-
-# traning (example: binary classification model)
-# - verbose {0, 1, 2} for different levels
-bst <- xgboost(data = data_train, verbose = 2, objective = 'binary:logistic',
-	           max.depth = 2, eta = 1, nthread = 2, nround = 2)
-# prediction
-pred <- predict(bst, test$data)
-# library(xgboost) does & returns regression response (need to convert to classes)
-prediction <- as.numeric(pred > 0.5)
-
-#---------------------------------------------------------------------------------
-# advanced: xgb.train
-# capacity to follow the progress of the learning after each round (for boosting,
-# these is a time when having too many rounds lead to an overfitting)
-
-# watchlist is a list of xgb.DMatrix, each with a tagged name
-watchlist <- list(train = data_train, test = data_test)
-
-# algorithm 1: boosting trees (i.e. decision trees, which is better at catching non-linearity)
-# nroound = 2 means doing it 2X
-# different eval.metric used
-bst <- xgb.train(data = data_train, watchlist = watchlist, objective = "binary:logistic",
-	             eval.metric = "error", eval.metric = "logloss",
-	             max.depth = 2, eta = 1, nthread  =  2, nround = 2)
-
-# algorithm 2: linear boosting
-bst <- xgb.train(data = data_train, watchlist = watchlist, objective = "binary:logistic",
-	             booster = 'gblinear',
-	             eval.metric = "error", eval.metric = "logloss",
-	             max.depth = 2, nthread  =  2, nround = 2)
-
-# view feature importance
-importance_matrix <- xgb.importance(model = bst)
-
-# view tree
-xgb.dump(bst, with.stats = T)
-
-# save / load model (i.e. when dataset is too large)
-xgb.save(bst, 'xgboost.model')
-bst_load <- xgb.load('xgboost.model')
-
-#=================================================================================
 # OLS
 #=================================================================================
 
@@ -207,6 +149,7 @@ l.model <- update(model, ~ . –x1 –x2)  # removing 2 predictors, keep same re
 #---------------------------------------------------------------------------------
 # extensions
 l.model <- lm(y ~ x1*x2, dataset)  # include the interaction variable, b/w x1 and x2
+# x1*x2 = x1 + x2 + x1:x2
 l.model <- lm(y ~ I(x1^2), dataset)  # include the quadratic term, w/ I() to inhibit lm() 
 # from understanding the quadratic term for other meanings (e.g. I(x1*x2) will multiple 
 # the two values, rather than including it as an interaction term)
@@ -467,10 +410,12 @@ rf.model <- randomForest(y ~ ., data = dataset, mtry = p, importance = TRUE)
 # mean sqaured residuals, and $ var explained are based on OOB estimates
 rf.model
 # importance of each variable
-# - mean decrease of accuracy in predictions on the OOB samples
-# - total decrease in impurity that results in splits over that variable, averaged
+# - increase in predictions error on the OOB samples, when the feature of interest 
+# 	is permuted vs. left as is; averaged over all trees, and normalized; in 
+# 	regression, error is MSE; in classification, error is error rate
+# - total decrease in node impurities from splitting on that variable, averaged
 #   over all trees; in regression, node impurity is measured by train RSS; in 
-#   classification, deviance
+#   classification, Gini index (deviance); (conversely, total increase in purities)
 importance(rf.model)
 varImpPlot(rf.model)
 
@@ -491,6 +436,13 @@ for (mtry in 1:p) {
 }
 
 #---------------------------------------------------------------------------------
+# random forest: library(ranger)
+# - faster implementation of random forest
+
+rf.model <- randomForest(y ~ ., data = dataset, mtry = m, num.trees = n, 
+	importance = "permutation", num.threads = k)
+
+#---------------------------------------------------------------------------------
 # boosting: library(gbm)
 
 # regression
@@ -507,6 +459,69 @@ predict(boost.model, newdata = dataset, n.trees = 5000)
 # classification
 boost.model <- gbm(y ~ ., data = dataset, distribution = 'bernoulli', 
 	               n.trees = 10000, shrinkage = 0.01, interaction.depth = 4)
+
+#---------------------------------------------------------------------------------
+# library(xgboost) - boosting
+# - faster implementation of boosting
+
+# inputs: 
+# - matrix
+# - Matrix::dgCMatrix (sparse; 0 not stored so smaller in size)
+# - xgb.DMatrix (recommended)
+# only takes numerical inputs; need to convert catagorical to numerical
+
+# structure data (features and responses) to the xgb.DMatrix format (a list)
+data_train <- xgb.DMatrix(data = train$data, label = train$label)
+data_test <- xgb.DMatrix(data = test$data, label = test$label)
+
+# basic: xgboost
+# traning (example: binary classification model)
+# - verbose {0, 1, 2} for different levels
+# - eta: controls learning rate
+# - nround = 2 means doing it 2X
+bst <- xgboost(data = data_train$data, label = data_train$label,
+	verbose = 2, objective = 'binary:logistic',
+	max.depth = 2, eta = 1, nthread = 2, nrounds = 2)
+
+# prediction
+pred <- predict(bst, data_test$data)
+# library(xgboost) does & returns regression response (need to convert to classes)
+prediction <- as.numeric(pred > 0.5)
+# error
+mean(as.numeric(pred > 0.5) != data_test$label)
+
+# advanced: xgb.train
+# capacity to follow the progress of the learning after each round
+# for boosting: having too many rounds can lead to an overfitting
+
+# watchlist is a list of xgb.DMatrix, each with a tagged name
+watchlist <- list(train = data_train, test = data_test)
+
+# algorithm 1: boosting trees (i.e. decision trees, which is better at catching non-linearity)
+# - multiple eval.metric used
+bst <- xgb.train(data = data_train, 
+	watchlist = watchlist, objective = "binary:logistic", booster = "gbtree",
+	eval.metric = "error", eval.metric = "logloss",
+	max.depth = 2, eta = 1, nthread = 2, nround = 2)
+# algorithm 2: linear boosting (result is similar to lasso)
+# - removed eta
+bst <- xgb.train(data = data_train, 
+	watchlist = watchlist, objective = "binary:logistic", booster = "gblinear",
+	eval.metric = "error", eval.metric = "logloss",
+	max.depth = 2, nthread = 2, nround = 2)
+
+# view feature importance
+importance_matrix <- xgb.importance(model = bst)
+print(importance_matrix)
+xgb.plot.importance(importance_matrix = importance_matrix)
+
+# view tree
+xgb.dump(bst, with.stats = T)  # to text file
+xgb.plot.tree(model = bst)
+
+# save / load model (i.e. when dataset is too large)
+xgb.save(bst, "xgboost.model")
+bst_load <- xgb.load("xgboost.model")
 
 #=================================================================================
 # SVM

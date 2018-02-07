@@ -12,7 +12,7 @@
 # - https://try.github.io/
 # - http://happygitwithr.com/
 # - http://r-pkgs.had.co.nz/git.html
-# - https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud
+# - https://www.atlassian.com/git/tutorials/
 
 #=================================================================================
 # basic Git structure
@@ -47,14 +47,13 @@
 # - Commiter information
 # - Hash of the parent commit
 
-#=================================================================================
-# basic Git workflow
-
 git --version  # to see version
 
+#=================================================================================
+# basic Git workflow
 # - working directory: where you'll be doing your work
 # - - make changes
-# - staging area: where you'll see changes you make to the workign directory
+# - staging area: where you'll see changes you make to the working directory
 # - - bring changes into the staging area
 # - repository: where Git permanently stores changes as different versions of the project
 # - - save changes to the respository as a 'commit'
@@ -77,28 +76,44 @@ git diff HEAD  # compared to the most recent commit – i.e. HEAD
 git add file_1.txt  # add file_1.txt to the staging area
 git add file_1.txt file_2.txt  # add both files to the staging area
 git add '*.txt'  # adding all text files
+git add -u  # adding files that are tracked, and are updated
 git add *  # adding all
 
 # commit changes
 git commmit -m "message"  # optional message should be <50 characters
 git commmit -a -m "message"  # commit all changes in existing files
 
-# change message
-git commit --amend -m "New commit message"
+# ammend - should never reset snapshots that have been shared with other developers
+git commit --ammend -m "New commit message"  # also change message
 
-# see log of changes
+#---------------------------------------------------------------------------------
+# seeing log of changes
+
 git log  # stored chronologically
 git log  -n 1 # only show 1 commit
+
+# more elaborate
 git log --stat  # to add additional statistics (how many "+", "-", etc.)
 git log --graph  # graph of current branch
 git log --graph --oneline  # graph, with just the commit message
 git log --graph --oneline master branch_1  # graph, with both master and branch1
+git log --oneline  # condense each commit to a single line
+git log -p  # display the patch representing each commit
+
+# searching
+git log --author="<pattern>"  # search for commits by a particular author
+git log --grep="<pattern>"  # search for a matching commit message
+git log <since>..<until>  # show only commits that occur between
+git log <file>  # show only display commits that include the specified file
+
+git log --graph --decorate --oneline  # combining into something useful
 
 #---------------------------------------------------------------------------------
 # ignoring
 
 # untrack files: http://git-scm.com/docs/gitignore
 nano .gitignore  # to get a hidden list going
+
 # to make git to forget a file that is already being tracked
 # - first, include that file .gitignore; then
 git rm --cached file_1.txt  # removes from index ("cached")
@@ -110,23 +125,42 @@ git show HEAD  # shows changes introduced by the latest commit, compared to pare
 git show commmit_n_1  # show changes introduced by a particular commit
 # merges are by time: `git show` will find parents; `git diff`, cannot
 
+#---------------------------------------------------------------------------------
 # to be on a previous commit
+
 git checkout HEAD file_1.txt  # to be on the last commit
-git checkout commit_n file_1.txt  # to be (temporarily) on a particular commit
+git checkout commit_n file_1.txt  # to be (temporarily) on a particular commit (n)
 # git will warn of being on a "detached HEAD" state: it's okay to rerun the program
-# to spot which commit introduced the "bug", but for changes use:
+# to spot which commit introduced the "bug"; it is read-only
+
+# for changes use:
 git checkout -b branch_1  # same as `git branch branch_1`, then `git checkout branch_1`
 # if changes is made w/t creating a new branch, git cannot relocate the change:
 # git points to the HEAD of each branch, and traverse back; thus no branch = no pointer
+
 git checkout master  # go back to master
 
-# unstage
-git reset HEAD file_1.txt  # unstage
+#---------------------------------------------------------------------------------
+# revert: undoes a single commit 
+# - figures out how to undo the changes introduced by the commit (useful for bugs)
+# - appends a new commit with the resulting content (safe; can undo)
+
+git revert commit_n  # better for public, published changes 
+
+#---------------------------------------------------------------------------------
+# reset: "revert" back to the previous state of a project 
+# - should only be used to undo local changes
+# - should never reset snapshots that have been shared with other developers
+
+# unstage 
+git reset file_1.txt 
 git reset --hard  # back to last commit (loosing any changes)
+git reset --hard commit_n  # back to commit n (loosing any changes)
 # be careful with `--hard`; only use after OK w/ `git diff` & `git diff --staged`
 
-# undo the last commit
-git reset HEAD^  # undo the commit, but leave the files in current state (but unstaged)
+# example: undo the last commit
+git reset HEAD^  # leave the files in current state (but unstaged)
+git reset --mixed HEAD^  # same (default)
 git reset --soft HEAD^  # undo the commit, but leave the files in the staging area
 git reset --hard HEAD^  # undo the commit completely (loosing any changes)
 
@@ -134,13 +168,22 @@ git reset --hard HEAD^  # undo the commit completely (loosing any changes)
 git reset 5d69206  # where "5d69206" is the first 7-characters of last commit to keep
 
 #---------------------------------------------------------------------------------
-# Git branching
-# to experiment with versions of a project, without affecting the master branch
+# clean up
+
+git clean -n # untracked files to be cleaned
+git clean -f # clean files
+git clean -fd # clean files and directories
+
+#=================================================================================
+# how to branch in Git
+# branching:  experiment with versions of a project, without affecting the master
 
 # make changes in a new branch, then commit
 git branch  # to check out which branch you are currently on (marked with *)
 git branch new_branch  # to get a new branch
 git checkout new_branch  # to be on new_branch
+
+#---------------------------------------------------------------------------------
 
 # merge: git compares the two HEADs, and the commit they last shared 
 # - when merging one's parent to itself, git changes pointer ("Fast-forward")
@@ -159,7 +202,9 @@ git add file_1.txt  # to re-add to the staging area
 git commit -m "merge conflict resolved"
 
 # since branches are usually a means to an end, you delete them after their purpose
-git branch -d new_branch  # deletes the label, but the commits, which is merged
+git branch -d new_branch  # deletes the branch (stopped if it has unmerged changes)
+git branch -d new_branch  # deletes the branch (even if it has unmerged changes)
+git branch -m new_branch_name  # rename branch
 
 #=================================================================================
 # remote repositories
@@ -220,15 +265,35 @@ git push -u origin master  # first time (if osxkeychain installed)
 git push  # subsequent time (if osxkeychain installed)
 git push origin branch  # pushing to a branch intead
 
-# GitHub `pull request` (not a feature of git, but of GitHub)
-# making a pull request (pull because you're asking the owner to pull and merge): 
+# 1. centralized workflow
+# pulling via rebase: put my changes on top of what everybody else has done
+git checkout master
+git pull --rebase origin master
+# if conflict (say, file_1.txt):
+# - fix file_1.txt
+git add file_1.txt
+git rebase --continue
+# if you get to this point and realize and you have no idea what’s going on:
+git rebase --abort
+# finally
+git push origin master
+
+# 2. feature branch workflow
 git branch new_branch  # first, create a new branch
 git checkout new_branch  # check out the branch
-# then, make changes, add to staging area, and commmit
+# work on it; then:
+git push -u origin new_branch  # -u flag adds it as a remote tracking branch
+# then, make more changes, add to staging area, and commmit
 git push origin new_branch  # push to a branch first
-# then, on GitHub, make pull request (on to master, or some other repos)
-# owner can comment (whole, and/or in-line)
-# finally, if there are no conflicts, GitHub allows for automatic merge
+# make a pull request (pull because you're asking the owner to pull and merge)
+# once approved: 
+git checkout master
+git pull origin master  # make sure master is up to date (should be clean)
+git pull origin new_branch  # merges the central repository’s copy of new_branch
+# could also use a simple git merge marys-feature, 
+# but the command shown makes sure pulling latest version of the feature branch
+git push origin master
+# if there are no conflicts, GitHub allows for automatic merge
 # - if yes conflict, need to first pull master into local master (should be clean)
 # - then, merge local master to local branch and resolve conflict
 # - then, push, and make a new `pull request` (there should be no conflicts now)

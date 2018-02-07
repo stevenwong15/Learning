@@ -84,6 +84,44 @@ x <- available.packages()
 dim(x)
 
 #---------------------------------------------------------------------------------
+# install packages, if missing
+
+ipak <- function(pkg) {
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if(length(new.pkg)) install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+ipak(c("packrat"))
+
+#---------------------------------------------------------------------------------
+# package control: https://rstudio.github.io/packrat/
+# less flexiable but easier alternative: https://github.com/RevolutionAnalytics/checkpoint/wiki
+
+# initialize packrat in the directory (~/Documents/project/code)
+packrat::init("~/Documents/project/code")  # snapshot() + restore
+
+# finds the packages use in the project and stores: list, versions and source code
+packrat::snapshot()
+# restore latest snapshotted state (building from source code as necessary)
+packrat::restore()
+
+packrat::status()  # check status
+packrat::unused_packages()  # get a list of unused packages
+packrat::clean()  # remove unused packages
+
+# Toggle packrat mode on/off, for navigating b/w projects within a single session
+packrat::on()
+packrat::off()
+
+# sharing code and packrat private library
+packrat::bundle()  # tar
+packrat::unbundle()  # untar
+open -a R .  # packrat will restore() from source code
+
+# Rscript will only use packrat lib, if it exists (i.e. after unbundle())
+Rscript -e ".libPaths()"  # see which library is being used
+
+#---------------------------------------------------------------------------------
 # help
 
 ?TOPIC  # followed by a function to show help on the TOPIC
@@ -403,6 +441,25 @@ read_csv("iris.csv", col_types = list(
   Petal.Width = col_double(),
   Species = col_factor(c("setosa", "versicolor", "virginica"))
 ))
+
+# parse vector
+parse_logical(c("TRUE", "FALSE", "NA"))
+parse_integer(c("1", "2", "3"))
+parse_number("It cost $123.45")
+parse_double(c("1", "2", "3"))
+parse_date(c("2010-01-01", "1979-10-14"))
+parse_datetime("20101010")
+parse_time("01:10 am")
+
+# guess which parser to use
+guess_parser("2010-10-01")
+
+#---------------------------------------------------------------------------------
+# import: library(feather)
+# a fast binary file format that can be shared across programming languages
+
+write_feather(data, "data.feather")
+read_feather("data.feather")
 
 #---------------------------------------------------------------------------------
 # import: library(data.table)
