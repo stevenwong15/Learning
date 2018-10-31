@@ -9,6 +9,11 @@ theme_set(theme_minimal())
 #=================================================================================
 # NULL = as parent; NA = none
 
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
 theme_update(
 
 #=================================================================================

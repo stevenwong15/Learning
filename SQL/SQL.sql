@@ -86,6 +86,7 @@ LIKE -- search for a pattern
 ILIKE -- search for a pattern, case insensitive
 IN -- to specify multiple possible values for a column
 IS NULLL -- contains no data
+% -- Modulo operator (finds remainder)
 
 -----------------------------------------------------------------------------------
 -- functions:
@@ -150,7 +151,10 @@ SELECT
 	LOCALTIME AS localtime,
 	LOCALTIMESTAMP AS localtimestamp,
 	NOW() AS now
-	
+-- date arithmetics
+-- https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html
+DATEDIFF(today.Date, yesterday.Date) -- difference in date
+
 -----------------------------------------------------------------------------------
 -- joins:
 
@@ -160,17 +164,22 @@ RIGHT JOIN -- return all rows FROM the right table, and the matched rows FROM th
 FULL Outer JOIN -- return all rows when there is a match in ONE of the tables (OR)
 
 -- comma join (same as inner join, or simple join)
-
 SELECT * 
 FROM Person 
 JOIN Worker 
 ON Person.id = Worker.id;
-
 -- simpler to read what is the condition each join is using (with multiple joins)
 SELECT * 
 FROM Person, 
      Worker 
 WHERE Person.id = Worker.id;
+
+-- conditional join
+SELECT * 
+FROM Report 
+JOIN Boss 
+	ON Report.boss_id = Boss.id
+	AND Report.Salary > Boss.Salary;
 
 -----------------------------------------------------------------------------------
 -- WITH alias creation:
@@ -186,6 +195,16 @@ SELECT
 FROM alias_name_1 as a
 LEFT JOIN alias_name_2 as b
 ON a.id = b.id
+
+-----------------------------------------------------------------------------------
+-- CASE
+
+SELECT
+	CASE 
+		WHEN something = 'x' THEN '1'
+		WHEN something = 'y' THEN '2'
+	    ELSE '0' END AS binary
+FROM table;
 
 -----------------------------------------------------------------------------------
 -- window functions
@@ -252,6 +271,33 @@ SELECT
 FROM tutorial.dc_bikeshare_q1_2012
 WHERE start_time < '2012-01-08'
 ORDER BY start_terminal, duration_seconds
+
+-----------------------------------------------------------------------------------
+-- correlation subquery:
+-- - a subquery that uses values from the outer query
+-- - may be evaluated once for each row in the outer query: can be inefficient
+-- - useful for aggregation
+
+-- e.g. in the WHERE clause
+-- for each salary:
+-- - see if salary is above that of the department average
+SELECT employee_number, name
+FROM employees AS emp
+WHERE salary > (
+	SELECT AVG(salary)
+	FROM employees
+	WHERE department = emp.department);
+
+-- e.g. in the SELECT clause
+-- for each row
+-- - print out the average salary of the department
+SELECT
+	employee_number,
+	name,
+	(SELECT AVG(salary) 
+	FROM employees
+	WHERE department = emp.department) AS department_average
+FROM employees AS emp;
 
 -----------------------------------------------------------------------------------
 -- pivot table: need to do this with case
@@ -351,10 +397,10 @@ SELECT * FROM table_name ORDER BY column_name ASC
 SELECT * FROM table_name ORDER BY column_name DESC
 
 -- SELECT top rows - SQL Server
-SELECT top number_of_rows * FROM table_name
-SELECT top number_of_percentages percent * FROM table_name
+SELECT TOP number_of_rows * FROM table_name
+SELECT TOP number_of_percentages percent * FROM table_name
 -- SELECT top rows - MySQL
-SELECT * FROM table_name limit number_of_rows
+SELECT * FROM table_name LIMIT number_of_rows
 
 -- SELECT types of columns
 SELECT * FROM table_name WHERE column_name LIKE ''

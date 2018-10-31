@@ -707,6 +707,35 @@ v_add2 <- function(x, y, na.rm = FALSE) {
 # - difference b/w SE and NSE is quoting of input variables 
 # - NSE = good for interaction (reduce typing), but not for programming (functions)
 
+rm(list = ls())
+x <- 2; y <- 1
+library(data.table)
+df <- data.table(a = 2, b = 1)
+
+# quote() 
+# - simply returns its argument
+quote(x + y^2)  # returns x + y^2
+eval(quote(x + y^2))  # evaluates the quoted expression
+# won't work: quote() returns as is; instead, use substitute()
+do_math <- function(df2, x, y) {
+  call <- quote(df2[, .(x + y^2)]) 
+  eval(call) 
+}
+do_math(df, a, b)
+
+# substitute() 
+# - returns the parse tree for the (unevaluated) expression
+# - substitutes any variables bound in env 
+# - thus, useful for functions where inputs are not strings but variables
+substitute(x + y^2)  # returns x + y^2
+deparse(substitute(x + y^2))  # returns a character vector "x + y^2"
+do_math <- function(df2, x, y) {
+  call <- substitute(df2[, .(x + y^2)]) 
+  eval(call) 
+}
+do_math(df, a, b)  # 5
+do_math(df, b, a)  # 3
+
 # 3 ways to quote inputs that dplyr understands:
 # - With a formula, summarise_(mtcars, ~mean(mpg))
 # - With quote(), summarise_(mtcars, quote(mean(mpg)))

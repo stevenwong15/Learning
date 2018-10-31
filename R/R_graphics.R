@@ -62,6 +62,10 @@ geom_bar(stat = 'bin')
 # in general, stat_*() function has inputs of 1) variables in aes(), 2) geom = ..,
 # and 3) other parameters for stat
 
+# ggplot 3.0+
++ aes(y = stat(count))  # same as: aes(y = ..count..)
++ aes(y = stat(count / max(count)))  # same as aes(y = ..count.. / max(..count..))
+
 # 1D distribution
 + stat_bin(binwidth = 1, origin = 10)
 + stat_density(adjust = 1, kernel = 'gaussian')
@@ -303,6 +307,7 @@ ggplot(BOD, aes(x = x, y = y, fill = z)) +
 + geom_bar(position = 'fill')  # stack on top of each other, normalizing the height
 + geom_bar(position = position_dodge(0.5))  # mannually change the proximity of bars
 + geom_bar(position = position_dodge(width = 0.5, height = 0.5))  # more control
++ geom_bar(position = position_dodge2(preserve = "total"))  # more control of width
 + guides(fill = guide_legend(reverse = T))  # match bar and legend order
 
 #---------------------------------------------------------------------------------
@@ -581,6 +586,8 @@ lm_labels <- function(dat) {
 + scale_x_continuous(expand = c(0, 0))  # get rid of padding on the left/right
 + scale_x_continuous(position = "top")  # axis on top
 + scale_y_continuous(position = "right")  # axis on the right
++ scale_y_continuous(expand = expand_scale(mult = c(0, .1)))  # multiply padding
++ scale_y_continuous(expand = expand_scale(add = c(0, .1)))  # add padding
 + coord_flip()  # swaps x- and y-axes
 + coord_fixed(ratio = 1)  # fix aspect ratio
 + coord_polar()  # circular
@@ -606,6 +613,7 @@ lm_labels <- function(dat) {
 
 # label
 labs(x = "", y = "")  # or xlab(), ylab(); in this case, the labels are blank
+labs(tag = "")  # tag on top left corner
 scale_x_continuous(name = "line1\nline2")  # id., with two lines
 
 # secondary axis: one-to-one transformation 
@@ -735,10 +743,14 @@ ggplot(data, aes(x=x, y=y, fill=group))
 # groups (facets)
 
 # which fields
-+ facet_grid(field1 ~ .) # field1 vs. all
-+ facet_grid(. ~ field1) # all vs. field1 
-+ facet_grid( ~ field1) # each of the other fields vs. field2
-+ facet_grid(field1 ~ field2) # field1 vs. field2
++ facet_grid(field1 ~ .)  # field1 vs. all
++ facet_grid(. ~ field1)  # all vs. field1 
++ facet_grid( ~ field1)  # each of the other fields vs. field2
++ facet_grid(field1 ~ field2)  # field1 vs. field2
+
+# ggplot 3.0+
++ facet_grid(cols = vars(field1), rows = vars(field2))  # field1 vs. field2
++ facet_grid(cols = vars(naems = field1), labeller = label_both)  # names easily
 
 # format
 + facet_wrap(~ field1, nrow = y, ncol = x, strip.position = 'bottom')  # position
@@ -751,9 +763,12 @@ ggplot(data, aes(x=x, y=y, fill=group))
 + facet_grid(field1 ~ ., labeller = label_bquote(alpha.^(X)))  # math
 
 # add expressions to cut continuous r.v. into discrete r.v. that's facet-able
-+ facet_warp(~cut_interval(x, n))  # cut x into n equal range 
-+ facet_warp(~cut_number(x, n))  # cut x into n groups of roughly equal observations
-+ facet_warp(~cut_width(x, width))  # cut x into groups of certain width
++ facet_wrap(~cut_interval(x, n))  # cut x into n equal range 
++ facet_wrap(~cut_number(x, n))  # cut x into n groups of roughly equal observations
++ facet_wrap(~cut_width(x, width))  # cut x into groups of certain width
+
+# ggplot 3.0+
++ facet_wrap(vars(x))
 
 #=================================================================================
 # colors and shapes

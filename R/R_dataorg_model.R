@@ -85,9 +85,9 @@ data_normalized <- predict(normalized, data)
 # data splitting: based on the outcome
 
 # for data.table (w/t using library(caret))
-data[, .SD[sample(round(.N*.50))], by = c("category")]
+data[, .SD[sample(.N, round(.N*.50))], by = c("category")]
 # get the index
-data[, .I[sample(round(.N*.50))], by = c("category")]
+data[, .I[sample(.N, round(.N*.50))], by = c("category")]
 
 #---------------------------------------------------------------------------------
 # model training and parameter tuning
