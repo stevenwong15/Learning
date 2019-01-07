@@ -11,7 +11,7 @@
 #=================================================================================
 # basics
 
-# Ipython encourages execute-explore workflor, instead of edit-compile-run
+# Ipython encourages execute-explore workflow, instead of edit-compile-run
 # - has tab completion (for magic, or "private" methods with _, start with _)
 # - use ? before/after to display info about the object (?? for source, if possible)
 # - * is wildcard (like command line)

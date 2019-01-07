@@ -36,9 +36,9 @@ export EDITOR='subl -w'  # set default
 #---------------------------------------------------------------------------------
 # navigation
 
-* Goto anywhere - `Cmd + T` or `Cmd + P`
-* Goto symbol - `Cmd + R`
-* Goto line number - `Ctrl + G`
+* Goto anywhere - `Cmd + T`, or `Cmd + P`
+* Goto symbol - `Cmd + R`, or `Cmd + P` and `@`
+* Goto line number - `Ctrl + G`, or `Cmd + P` and `:`
 
 * Search symbol in project - `Cmd + Shift + R`
 * Goto symbol definition, if project indexed - `Goto definition` (in menu bar)
@@ -122,6 +122,12 @@ export EDITOR='subl -w'  # set default
 * Quick find all - `Ctrl + Cmd + G`
 
 * Find in project - `Cmd + Shift + F`
+
+#---------------------------------------------------------------------------------
+# IDE
+
+* # of split screens - `Option + Cmd + #`
+
 
 #---------------------------------------------------------------------------------
 # packages
