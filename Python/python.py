@@ -99,17 +99,12 @@ x = y = z = "foo"
 for i in (x, y, z):
     print(i)
 
-# swap two values
-foo = "Foo"
-bar = "Bar"
-(foo, bar) = (bar, foo)
-print(foo)  # Bar
-print(bar)  # Foo
-
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # everything is an object
 
 # object
+# "pass" used in blocks where no action is to be taken
+# "pass" only required because Python use whitespace to delimit blocks
 class Foo(): 
     pass
 
@@ -182,7 +177,7 @@ print(test_list)  # [10, 5, 5]
 #==============================================================================
 # string
 
-"He\'s going to do this"  # \ to escape
+print("He's going to do \"this\"")  # \ to escape
 
 len("string")  # length of string
 str(5)  # returns "5"
@@ -212,6 +207,10 @@ class user(object):
 bob = user("bob", 18, "m")
 print("Name: {user.name}, Age: {user.age}, Sex: {user.sex}".format(user = bob))
 
+# formatting: float with 2 decimal, string, integer
+template = "{0:.2f} {1:s} are worth US${2:d}"
+template.format(4.5560, "Argentine Pesos", 1)
+
 # datetime
 from datetime import datetime
 print(datetime.now())
@@ -230,6 +229,33 @@ print(book_info.strip().upper().replace(":", " by"))
 string_to_join = ["a", "b", "c"]
 "".join(string_to_join)  # abc
 ", ".join(string_to_join)  # a, b, c
+
+#==============================================================================
+# date
+# immutable; therefore, methods always produces new objects
+
+from datetime import datetime, date, time
+
+dt = datetime(2011, 10, 29, 20, 30, 21)
+dt.day
+dt.minute
+
+# extract equivalent
+dt.date()
+dt.time()
+dt.strftime("%m/%d/%y %H:%M")  # formats as string
+
+# parse
+datetime.strptime("20091031", "%Y%m%d")
+
+# replace (for easier aggregation)
+dt.replace(minute = 0 , second = 0)
+
+# difference between 2 datetime produces a datetime.timedelta type
+dt2 = datetime(2011, 11, 29, 15, 22, 30)
+delta = dt2 - dt
+delta
+type(delta)
 
 #==============================================================================
 # conditions
@@ -256,6 +282,7 @@ if name and pets and owners:
 # if all true
 all([True, True, False])  # False
 
+# ternary expressions
 # for simple if and else statments
 foo = True
 value = 1 if foo else 0 
@@ -277,9 +304,25 @@ print(greater_less_equal_5(6))
 
 #==============================================================================
 # functions
+# takes positional and keyword arguments, latter follows former
 
+# if no return found, returns None
 def function_name(input):
-	return something
+    return something
+
+# return multiple items
+# with tuples
+def f():
+    a = 5
+    b = 6
+    c = 7
+    return a, b, c
+# with dict
+def f():
+    a = 5
+    b = 6
+    c = 7
+    return {"a" : a, "b" : b, "c" : c}
 
 # modules: simply a file, such as some_module.py, with python code
 """
@@ -300,7 +343,7 @@ sm.g(2, 2)  # 4
 from module import function
 from module import *  # for all functions; avoid, b/c overwrite existing ones
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # immutable vs. mutable in a function
 # passed a function, Python evaluates default arguments *once*
 # calling the function does not re-evaluate; i.e. mutable objects does not reset
@@ -324,20 +367,28 @@ def f(a, L = None):
 print(f(1))  # [1]
 print(f(2))  # [2]
 
-#---------------------------------------------------------------------------------
-# anonymous functions
+# currying
+# derive new functions from existing ones by partial argument application
+from functools import partial
+def add_numbers(x, y):
+    return x + y
+add_five = partial(add_numbers, 5)
+add_five(5)  # 10 
+
+#------------------------------------------------------------------------------
+# anonymous (lambda) functions
+# anonymous because never given an explicit __name__ attribute
 
 # convenient, but harder to read/debug; ok for one-liners
 by_three = lambda x: x % 3 == 0
-
 # same as
 def by_three(x):
     return x % 3 == 0
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # variable length argument list
 
-# *args: to pass non-keyworded, variable-length argument list
+# *args: to pass positional, variable-length argument list
 def test_var_args(farg, *args):
     print("formal arg:", farg)
     for arg in args:
@@ -353,9 +404,10 @@ def test_var_kwargs(farg, **kwargs):
 
 test_var_kwargs(farg = 1, myarg2 = "two", myarg3 = 3)
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # functions, like any objects, can be passed as values into functions
 
+# e.g.
 import operator as op
 
 def print_table(function_to_call):
@@ -367,58 +419,61 @@ for function_to_call in (op.add, op.sub, op.mul, op.itruediv):
     print_table(function_to_call)
     print("--------------------------------")
 
+# e.g. clean string
+import re
+def remove_punctuation(value):
+    return re.sub("[!#?]", "", value)
+
+def clean_strings(strings, ops):
+    result = []
+    for value in strings:
+        for function in ops:
+            value = function(value)
+        result.append(value)
+    return result
+
+# list of sequential operations that are functions
+states = [' Alabama ', 'Georgia!', 'Georgia', 'georgia', 'FlOrIda',
+          'south carolina##', 'West virginia?']
+clean_ops = [str.strip, remove_punctuation, str.title]
+clean_strings(states, clean_ops)
+
 #==============================================================================
 # data types
 
-#---------------------------------------------------------------------------------
-# lists
-# Python equivalent of an array, but resizable and can contain different types
+#------------------------------------------------------------------------------
+# tuples: a fixed-length immutable sequence of Python objects
+# useful for data in a spreadsheet-like structure
+# in certain situations, use collections.namedtuple for more functionalities
 
-# empty
-list_name = []
+# tuple
+4, 5, 6
 
-# range(): a (generator) object that is an iterator (i.e. xrange() in Python 2)
-# for a infinite range, range() will run out of space; xrange(), time
-range(stop)  # stops before this
-range(start, stop)
-range(start, stop, step)
+# nested
+(4, 5, 6), (7, 8)
 
-list_name = ["item_1", "item_2"]
-# access: indices begin with 0
-list_name[0]
-# count from back
-list_name[-1]
+# convert any sequence or iterator to a tuple
+tuple([4, 0, 2])
+tuple("string")
 
-# list of list
-list_name = [[item_1_1, item_1_2], [item_2_1, item_2_2]]
-# access:
-list_name[1][1]
+# access with []
+tup = tuple(["foo", [1, 2], True])
 
-# add to the end
-list_name.append(item_3)
-# add two lists together
-list_1 + list_2 
+# tuple is immutable, but objects inside may be
+tup[1] = 1
+tup[1].append(3)
+tup 
 
-# remove
-list_name.remove(item_3)  # removes the item
-list_name.pop(index_3)  # removes the item at index index_3
-del(list_name[index_3])  # removes the item at index index_3, w/t return
+# count
+tup.count("foo")
 
-# slice:
-# from x to **before** y
-list_name[x:y]
-# from x onwards
-list_name[x:]
-# first y
-list_name[:y]
-# from x to y by z
-list_name[x:y:z]
-# from 0 to end by z (: uses default)
-list_name[::z]
-# from 0 to end, in reverse
-list_name[::-1]
+# concatenate with +
+(4, 5, 6) + (7, 8)
 
-# slice and assign to tuple
+# multiply with *; object are not copied, only references to them
+(4, 5, 6) * 2
+
+# unpack with tuple
 some_list = ["a", "b", "c", "d", "e"]
 (first, second, *rest) = some_list
 print(rest)  # ["c", "d", "e"]
@@ -431,29 +486,123 @@ print(head)  # ["a", "b", "c"]
 (first, *middle, _) = some_list
 print(middle)  # ["a", "b", "c"]
 
-# index
-list_name.index(item_1)
+# swap two values
+foo = "Foo"
+bar = "Bar"
+(foo, bar) = (bar, foo)
+print(foo)  # Bar
+print(bar)  # Foo
 
-# insert (everything after shifts)
-list_name.insert(index, item_index)
+# iterate over sequences of tuples
+seq = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
+for a, b, c in seq:
+    print("a = {0}, b = {1}, c = {2}".format(a, b, c))
+
+# can be used as keys in dict, while list cannot
+d = {(x, x + 1): x for x in range(10)}  # Create a dictionary with tuple keys
+print(d[(1, 2)])  # 1
+
+#------------------------------------------------------------------------------
+# lists: variable-length mutable sequence of Python objects
+# Python equivalent of an array, but resizable and can contain different types
+
+# empty
+some_list = []
+
+# convert to list
+# often used to materialize an iterator or generator expression
+list(range(0, 10))
+
+# range(): a (generator) object that is an iterator (i.e. xrange() in Python 2)
+# for a infinite range, range() will run out of space; xrange(), time
+range(stop)  # stops before this
+range(start, stop)
+range(start, stop, step)
+
+some_list = ["item_1", "item_2"]
+# access: indices begin with 0
+some_list[0]
+# count from back
+some_list[-1]
+
+# list of list
+some_list = [[item_1_1, item_1_2], [item_2_1, item_2_2]]
+# access:
+some_list[1][1]
+
+# add to the end
+some_list.append(item_3)
+some_list.extend([item_3, item_4])  # multiple items
+# add two lists together
+# relatively expensive: new list created and objects copied over
+list_1 + list_2 
+
+# remove
+some_list.remove(item_3)  # removes the first such value
+some_list.pop(index_3)  # removes the item at index index_3
+del(some_list[index_3])  # removes the item at index index_3, w/t return
+
+# slice:
+# from x to **before** y
+some_list[x:y]
+# from x onwards
+some_list[x:]
+# first y
+some_list[:y]
+# from x to y by z
+some_list[x:y:z]
+# from 0 to end by z (: uses default)
+some_list[::z]
+# from 0 to end, in reverse
+some_list[::-1]
+
+# index
+some_list.index(item_1)
+
+# insert
+# everything after shifts, computationally expensive
+# to insert beginning/end, explore collection.deque: double-ended queue
+some_list.insert(index, item_index)
 
 # sort (just sorts, not print)
-list_name.sort()
+some_list.sort()
+# sort by, say length
+some_list = ["dddd", "a", "bb", "ccc"]
+some_list.sort(key = len)
+some_list
 
-# list from 0 to 50
-my_list = range(51)
-# list from 0 to 50, with only the even numbers
-my_list = [i for i in range(51) if i % 2 == 0]
+# sorted returns a *new* sorted list
+sorted([7, 3, 4, 1, 3, 5])
+# reversed generator, materalized as a list
+list(reversed([7, 3, 4, 1, 3, 5]))
+
+# binary search and insert on *sorted* list
+import bisect
+list_sorted = list(range(0, 10))
+bisect.bisect(list_sorted, 2)  # search
+bisect.insort(list_sorted, 4)  # insert to sorted list
+list_sorted
+
+# contains: Python makes a linear scan
+# a lot slower than dict and set, which are based on hash tables
+some_list = ["a", "b", "c", "d"]
+"a" in some_list
 
 # initialize list with minimum capacity
 nones = [None] * 4
 two_dim = [[None] * 4 for _ in range(5)]
 
-#---------------------------------------------------------------------------------
-# dict: key-value pairs
+#------------------------------------------------------------------------------
+# dict: flexibly sized collection of key-value pairs
+# also known as hash map, associative arry
 
 # empty
 d_name = {}
+
+# values can be any Python object; keys, hashable (immutable)
+hash("string")  # returns something, so hashable
+hash([1, 2, 3])  # fails, because unhashable
+hash(tuple([1, 2, 3]))  # tuples can be hashed
 
 # to print key-value pairs (not in particular orders)
 d = {"key1" : 1, "key2" : 2, "key3" : 3}
@@ -461,15 +610,17 @@ print(d.items())
 print(d.keys())  # just keys
 print(d.values())  # just values
 
-# add
-d["key4"] = value
-d["key4"] = [value4_1, value4_2, value4_3]  # list of values
+# add/alter
+d["key4"] = 4
+d["key4"] = [4, 5, 6]  # list of values
+# add more than one
+# note: existing keys will have old values discarded
+d.update({"key1": 7, "key6": 8})
 
 # delete
 del d["key4"]
-
-# alter
-d["key4"] = value_alter
+ret = d.pop("key4")  # returns and deletes
+ret
 
 # loop through keys and values
 for key in d:
@@ -485,45 +636,60 @@ def apply_operation(left_operand, right_operand, operator):
     return operator_mapper[operator](left_operand, right_operand) 
 print(apply_operation(2, 3, "+"))  # 5
 
-# dict.get handles if missing
+# dict.get handles missing with default values (None if not specified)
 d = {"key1" : 1, "key2" : 2, "key3" : 3}
 d.get("key3", "cannot find key")  # 3
 d.get("key4", "cannot find key")  # cannot find key
 
-# generate set with dict comprehension
-nums = [0, 1, 2, 3, 4]
-even_num_to_square = {x: x ** 2 for x in nums if x % 2 == 0}
-print(even_num_to_square)  # Prints "{0: 0, 2: 4, 4: 16}"
+# insert key with default values, if not in the dict
+words = ['apple', 'bat', 'bar', 'atom', 'book']
+by_letter = {}
+for word in words:
+    letter = word[0]
+    by_letter.setdefault(letter, []).append(word)
+# collections.defaultdict makes it even easier
+from collections import defaultdict
+by_letter = defaultdict(list)
+for word in words:
+    by_letter[word[0]].append(word)
 
-#---------------------------------------------------------------------------------
-# set: dict without value; unorderd
+#------------------------------------------------------------------------------
+# set: unorderd collection of unique elements (think: dict with only keys)
+# like dicts, set elements must be hashable (immutable)
 # useful for set operations
 
-# b/c only contains unique values, useful to remove duplicates
-print(set([1, 2, 2, 3, 3, 4, 5]))
+# only contains unique values: useful to remove duplicates
+set([1, 2, 2, 3, 3, 4, 5])
 
 # generate set with set comprehension
 a = {i for i in range(25) if i % 2 == 0}
 b = {i for i in range(25) if i % 3 == 0}
 
-a & b  # intersect
-a | b  # union
+# intersection
+a.intersection(b)
+a & b
+# set lhs as result: more efficient with very large sets
+c = a.copy()
+c &= b
 
-#---------------------------------------------------------------------------------
-# tuples: an (immutable) ordered list of values
-# useful for data in a spreadsheet-like structure
-# in certain situations, use collections.namedtuple for more functionalities
-# useful to return multiple values from a function
+# union
+a.union(b)
+a | b
+# set lhs as result: more efficient with very large sets
+d = a.copy()
+d |= b
 
-# can be used as keys in dict, while list cannot
-d = {(x, x + 1): x for x in range(10)}  # Create a dictionary with tuple keys
-print(d[(1, 2)])  # 1
+# subset and superset
+{1, 2, 3}.issubset({1, 2, 3, 4, 5})
+{1, 2, 3, 4, 5}.issuperset({1, 2, 3})
 
 #==============================================================================
 # loops
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # for
+# skip with "continue"
+# stop with "break"
 
 # an iterable
 list_1 = range(1, 10)
@@ -544,9 +710,16 @@ for index, value in enumerate(list_1):
     print(index + 1, value)
 # start at x
 for index, value in enumerate(list_1, start = 2):
-	print(index + 1, value)
+    print(index + 1, value)
+# get a dict mapping
+some_list = ["foo", "bar", "baz"]
+mapping = {}
+for i, v in enumerate(some_list):
+    mapping[v] = i
+mapping
 
-# zip create pairs of elements, stopping at the end of the shorter list
+# zip create a list of tuples, stopping at the end of the shorter list
+# common use to iterate over multiple sequences
 list_2 = range(11, 20)
 for a, b in zip(list_1, list_2):
     print(a, b)
@@ -569,7 +742,7 @@ for _ in range(10):
     x = input("> ")
     print(x[::-1])
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # while
 
 while loop_condition:
@@ -579,7 +752,7 @@ while loop_condition:
 else:
 	print "loop finished"
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # iterable and iterator
 # iterable: object capable of producing a stream of values, one at a time (book)
 # iterator: object that knows where you are in the stream (bookmark)
@@ -630,9 +803,8 @@ next(iterator)  # raises StopIteration, since stream runs out
 next(iterator, "stop")  # return "stop", instead of raising StopIteration
 
 #==============================================================================
-# list comprehension, map, filter
-# prefers list comprehension to map, filter
-# "dict comprehension" is the same, but for dict
+# list comprehension
+# set and dict comprehension is the same, but for set and dict
 
 # list comprehension: concise way to create lists (like apply in R)
 # [operations, for each in sequence, if condition satisfied]
@@ -641,6 +813,34 @@ squares = [x**2 for x in range(10) if x % 2 == 0]
 # style: do not use multiple "for"; use loop instead
 # example: tuple
 [(x, y) for x in [1, 2, 3] for y in [3, 1, 4] if x != y]
+
+# example
+# list from 0 to 50
+my_list = range(51)
+# list from 0 to 50, with only the even numbers
+my_list = [i for i in range(51) if i % 2 == 0]
+
+# generate dict with dict comprehension
+nums = [0, 1, 2, 3, 4]
+even_num_to_square = {x: x ** 2 for x in nums if x % 2 == 0}
+print(even_num_to_square)  # Prints "{0: 0, 2: 4, 4: 16}"
+
+# nested structure
+# e.g. find names that are contain more 2 or more "e"
+all_data = [['John', 'Emily', 'Michael', 'Mary', 'Steven'],
+            ['Maria', 'Juan', 'Javier', 'Natalia', 'Pilar']]
+[name for names in all_data for name in names if name.count("e") >= 2]
+
+# e.g. flatten
+some_tuples = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
+[x for tup in some_tuples for x in tup]
+
+# e.g. list of list
+[[x for x in tup] for tup in some_tuples]  
+
+#------------------------------------------------------------------------------
+# map, filter
+# prefers list comprehension to map, filter
 
 # map: apply to each item in a list; returns map object; list() to convert to list
 # okay to use with built in functions; else, use list comprehension
@@ -690,7 +890,7 @@ two_thousandth_prime = next(islice(primes_under_million, 1999, 2000))
 primes_under_million = [i for i in generate_primes(2000000) if i < 1000000]
 two_thousandth_prime = primes_under_million[1999]
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # example
 
 # example: abstract away 2d structure into 1d stream 
@@ -735,6 +935,12 @@ for i in generate_primes():  # iterate over ALL primes
         break
     print(i)
 
+#------------------------------------------------------------------------------
+# itertools: collection of generators from many common data algorithms
+
+import itertools
+
+
 #==============================================================================
 # decorator
 # provides simple syntax for calling higher-order functions: a function that
@@ -778,7 +984,7 @@ def sandwich(food="--ham--"):
     print(food)
 sandwich()
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # passing arguments
 
 def ingredients(func):
@@ -845,7 +1051,7 @@ Car.NewFunction(new_car)  # same thing
 new_car.make_car_sound()
 Car.make_car_sound()
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # inheritance
 
 # Abstract Base Class (ABC): classes that are only meant to be inherited from 
@@ -938,7 +1144,7 @@ truck.unoverride_sale_price()
 # a = append (add at the end of the file)
 open("output.txt", "w") 
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # example: write
 
 # not as good
@@ -952,14 +1158,14 @@ my_file.close()
 with open("text.txt", "w") as textfile:
 	textfile.write("Success!")
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # example: read
 
 my_file = open("output.txt", "r")
 print(my_file.read())
 my_file.close()
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # example: read each line separately, with readline()
 
 my_file = open("text.txt","r")
@@ -971,7 +1177,7 @@ my_file.close()
 # error handling
 # use built-in exceptions when applicable: KeyError, ValueError, etc.
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # use exceptions to write in "EAFP" style 
 # EAFP: Easier to Ask for Forgiveness than Permission
 
@@ -998,7 +1204,7 @@ def get_log_level(config_dict):
         # return None
         return None
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # do not "swallow" useful exceptions
 
 # bad: bare except clause
