@@ -1,9 +1,6 @@
 #================================================================================= 
 # [table of contents]
 # - basics
-# - - jupyter notebook 
-# - - i/o (unicodescsv)
-# - - investigation
 # - visualization
 # - numpy (numerical python)
 #=================================================================================
@@ -11,19 +8,27 @@
 #=================================================================================
 # basics
 
-# Ipython encourages execute-explore workflow, instead of edit-compile-run
+# ipython encourages execute-explore workflow, instead of edit-compile-run
 # - has tab completion (for magic, or "private" methods with _, start with _)
 # - use ? before/after to display info about the object (?? for source, if possible)
 # - * is wildcard (like command line)
 # - moving cursor is the same as in command line
 # - Ctrl + l to clear screen
-Ipython --pylab # to run ipython from terminal, with matplotlib GUI 
+ipython --pylab # to run ipython from terminal, with matplotlib GUI 
 
 # to run (Ctrl+c to stop program immediately)
 %run ipython_script.py  # run in an empty namespace
 %run -i ipython_script.py  # script can access vars already defined in namespace
 
-# other magic commands: PFDA pg55 for the list
+# to import script into a code cell
+%load ipython_script.py
+
+# paste text in the clipboard and executes as a single block in shell
+%paste
+
+# other magic commands
+%quickref  # quick reference card
+%magic  # detailed doc of all majic commands
 %who  # display variables defined in interactive namespace
 %who_ls  # w/ more information
 %whos  # w/ even more information
@@ -44,10 +49,11 @@ exec _i1  # to execute again
 %cd  # navigate wd
 !ls  # begin with ! to execute in system shell (in this case: list in current wd)
 
+# sets up integration to create multiple plot windows 
+%matplotlib 
+
 #---------------------------------------------------------------------------------
 # jupyter notebook: https://ipython.org/
-
-import IPython
 
 # to run:
 jupyter notebook notebook.ipynb
@@ -55,7 +61,8 @@ jupyter notebook notebook.ipynb
 # to execute: shift + enter
 # to delete cell: esc(until green) + dd
 
-%matplotlib inline  # to cause plots to appear in notebook, rather than new window
+# to cause plots to appear in notebook, rather than new window
+%matplotlib inline
 
 #---------------------------------------------------------------------------------
 # i/o

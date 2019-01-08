@@ -26,6 +26,11 @@ conda update coconda  # list of packages
 # https://google.github.io/styleguide/pyguide.html  # google python style guide
 # https://damnwidget.github.io/anaconda  # Anaconda Python IDE
 
+# install packages not included in the Anaconda distribution
+conda install package_name
+# if above doesn't work
+pip install package_name
+
 #==============================================================================
 # basics
 
@@ -84,18 +89,19 @@ x += 1  # x added by 10, and overwrites into x
 x -= 1  # x subtracted by 10, and overwrites into x
 float(5)/2  # = 2.5; need to convert to float first; o/w python treats as int
 5./2  # or with decimal after
+5.//2  # floor-divide, dropping any fractional remainder
 
 # datatypes: dict, list, set, frozenset, tuple
 type(value)  # to get the type of data
 
 # assign multiple variables to the same value
-x = y = z = 'foo'
+x = y = z = "foo"
 for i in (x, y, z):
     print(i)
 
 # swap two values
-foo = 'Foo'
-bar = 'Bar'
+foo = "Foo"
+bar = "Bar"
 (foo, bar) = (bar, foo)
 print(foo)  # Bar
 print(bar)  # Foo
@@ -115,14 +121,23 @@ foo is baz  # checks if both points to the same memory
 # also an object with attributes
 dir(10)
 
+# object introspection using "?" before or after
+?sum
+sum?
+??sum  # shows source code, if possible
+help(Foo)
+
+# search with wildcard
+np.*load*?
+
 # mutable object
 # e.g. list, dict, set and most class instances
 
 # immutable object: expensive to "change", because this involves creating a copy 
 # e.g. string, int and tuple
-a = 'foo'
+a = "foo"
 b = a
-a += 'bar'
+a += "bar"
 a  # foobar
 b  # bar
 
@@ -136,7 +151,7 @@ class Foo():
     def __str__(self):
         return str(self.value)
     # internal representation, for debugging/development
-    # print(repr("a")) # 'a'
+    # print(repr("a")) # a
     def __repr__(self):
         return str(self.value)
 
@@ -180,9 +195,9 @@ str(5)  # returns "5"
 "string".rjust(10)  # right-justify, padding with spaces
 "string".center(10)  # center, padding with spaces
 "   str  ing  ".strip()  # remove leading and trailing whitespace
-"hello".replace('l', '_')  # replace all instances
+"hello".replace("l", "_")  # replace all instances
 "string".isalpha()  # if all characters
-"string".split('r')  # splits the string by 'r'
+"string".split("r")  # splits the string by "r"
 
 # incorporates variable ouptut to string$
 # leading with "f" to format with python expressions
@@ -195,7 +210,7 @@ class user(object):
         self.age = age
         self.sex = sex
 bob = user("bob", 18, "m")
-print("'Name: {user.name}, Age: {user.age}, Sex: {user.sex}".format(user = bob))
+print("Name: {user.name}, Age: {user.age}, Sex: {user.sex}".format(user = bob))
 
 # datetime
 from datetime import datetime
@@ -208,13 +223,13 @@ print(datetime.now().minute)
 print(datetime.now().second)
 
 # chain string functions
-book_info = ' The Three Musketeers: Alexandre Dumas'
-print(book_info.strip().upper().replace(':', ' by'))
+book_info = " The Three Musketeers: Alexandre Dumas"
+print(book_info.strip().upper().replace(":", " by"))
 
-# use ''.join when creating a single string from list
-string_to_join = ['a', 'b', 'c']
-''.join(string_to_join)  # abc
-', '.join(string_to_join)  # a, b, c
+# use "".join when creating a single string from list
+string_to_join = ["a", "b", "c"]
+"".join(string_to_join)  # abc
+", ".join(string_to_join)  # a, b, c
 
 #==============================================================================
 # conditions
@@ -232,11 +247,11 @@ a = []
 if not a:
     print("empty")
 # what is True:
-name = 'Safe'
-pets = ['Dog', 'Cat', 'Hamster']
-owners = {'Safe': 'Cat', 'George': 'Dog'}
+name = "Safe"
+pets = ["Dog", "Cat", "Hamster"]
+owners = {"Safe": "Cat", "George": "Dog"}
 if name and pets and owners:
-    print('We have pets!')
+    print("We have pets!")
 
 # if all true
 all([True, True, False])  # False
@@ -266,10 +281,20 @@ print(greater_less_equal_5(6))
 def function_name(input):
 	return something
 
-# modules
-import module
-# display the result of the use
-print module.function()
+# modules: simply a file, such as some_module.py, with python code
+"""
+PI = 3.14
+
+def f(x):
+    return x + 2
+
+def g(a, b):
+    return a + b
+"""
+import some_module as sm
+sm.PI  # 3.14
+sm.f(1)  # 3
+sm.g(2, 2)  # 4
 
 # importing only the specific function, to be used w/t module.
 from module import function
@@ -336,11 +361,11 @@ import operator as op
 def print_table(function_to_call):
     for x in range(1, 3):
         for y in range(1, 3):
-            print(str(function_to_call(x, y)) + '\n')
+            print(str(function_to_call(x, y)) + "\n")
 
 for function_to_call in (op.add, op.sub, op.mul, op.itruediv):
     print_table(function_to_call)
-    print('--------------------------------')
+    print("--------------------------------")
 
 #==============================================================================
 # data types
@@ -394,17 +419,17 @@ list_name[::z]
 list_name[::-1]
 
 # slice and assign to tuple
-some_list = ['a', 'b', 'c', 'd', 'e']
+some_list = ["a", "b", "c", "d", "e"]
 (first, second, *rest) = some_list
-print(rest)  # ['c', 'd', 'e']
+print(rest)  # ["c", "d", "e"]
 (first, *middle, last) = some_list
-print(middle)  # [b', 'c', 'd']
+print(middle)  # [b", "c", "d"]
 (*head, penultimate, last) = some_list
-print(head)  # ['a', 'b', 'c']
+print(head)  # ["a", "b", "c"]
 
 # use _ to discard
 (first, *middle, _) = some_list
-print(middle)  # ['a', 'b', 'c']
+print(middle)  # ["a", "b", "c"]
 
 # index
 list_name.index(item_1)
@@ -425,26 +450,26 @@ nones = [None] * 4
 two_dim = [[None] * 4 for _ in range(5)]
 
 #---------------------------------------------------------------------------------
-# dict
+# dict: key-value pairs
 
 # empty
 d_name = {}
 
 # to print key-value pairs (not in particular orders)
-d = {'key1' : 1, 'key2' : 2, 'key3' : 3}
+d = {"key1" : 1, "key2" : 2, "key3" : 3}
 print(d.items())
 print(d.keys())  # just keys
 print(d.values())  # just values
 
 # add
-d['key4'] = value
-d['key4'] = [value4_1, value4_2, value4_3]  # list of values
+d["key4"] = value
+d["key4"] = [value4_1, value4_2, value4_3]  # list of values
 
 # delete
-del d['key4']
+del d["key4"]
 
 # alter
-d['key4'] = value_alter
+d["key4"] = value_alter
 
 # loop through keys and values
 for key in d:
@@ -456,14 +481,19 @@ for key, val in d.items():
 # useful for declaring switch-case types (e.g. in SQL)
 def apply_operation(left_operand, right_operand, operator):
     import operator as op
-    operator_mapper = {'+': op.add, '-': op.sub, '*': op.mul, '/': op.truediv}
+    operator_mapper = {"+": op.add, "-": op.sub, "*": op.mul, "/": op.truediv}
     return operator_mapper[operator](left_operand, right_operand) 
 print(apply_operation(2, 3, "+"))  # 5
 
 # dict.get handles if missing
-d = {'key1' : 1, 'key2' : 2, 'key3' : 3}
-d.get('key3', 'cannot find key')  # 3
-d.get('key4', 'cannot find key')  # cannot find key
+d = {"key1" : 1, "key2" : 2, "key3" : 3}
+d.get("key3", "cannot find key")  # 3
+d.get("key4", "cannot find key")  # cannot find key
+
+# generate set with dict comprehension
+nums = [0, 1, 2, 3, 4]
+even_num_to_square = {x: x ** 2 for x in nums if x % 2 == 0}
+print(even_num_to_square)  # Prints "{0: 0, 2: 4, 4: 16}"
 
 #---------------------------------------------------------------------------------
 # set: dict without value; unorderd
@@ -480,10 +510,14 @@ a & b  # intersect
 a | b  # union
 
 #---------------------------------------------------------------------------------
-# tuples
+# tuples: an (immutable) ordered list of values
 # useful for data in a spreadsheet-like structure
 # in certain situations, use collections.namedtuple for more functionalities
 # useful to return multiple values from a function
+
+# can be used as keys in dict, while list cannot
+d = {(x, x + 1): x for x in range(10)}  # Create a dictionary with tuple keys
+print(d[(1, 2)])  # 1
 
 #==============================================================================
 # loops
@@ -561,7 +595,7 @@ for i in "hello":
 
 # dictionary => keys; note that dictionary has no order
 # best think of dictionary as containers of keys
-d = {'a':1, 'b': 2, 'c': 3}
+d = {"a":1, "b": 2, "c": 3}
 for k in d:
     print(k)
 # values
@@ -578,7 +612,7 @@ with open("text.txt") as f:
 
 # Python uses iterables in lots of places
 iteratable = range(1, 10)
-iteratable_dict = {'a':1, 'b': 2, 'c': 3}
+iteratable_dict = {"a": 1, "b": 2, "c": 3}
 list(iteratable)  # creates a list from values of a iterable
 list(iteratable_dict)  # works for any iterable
 [x**2 for x in iteratable]  # list comprehension
@@ -867,7 +901,7 @@ class Car(Vehicle):
 
     def vehicle_type(self):
         """"Return a string representing the type of vehicle this is."""
-        return 'car'
+        return "car"
 
 class Truck(Vehicle):
     """A truck for sale by Jeffco Car Dealership."""
@@ -877,11 +911,11 @@ class Truck(Vehicle):
 
     def vehicle_type(self):
         """"Return a string representing the type of vehicle this is."""
-        return 'truck'
+        return "truck"
 
     # overrides inherited 
     def sale_price(self):
-        return 'override sale_price'
+        return "override sale_price"
 
     # delegates back to parent class
     def unoverride_sale_price(self):
@@ -943,21 +977,21 @@ my_file.close()
 
 # bad: purports to know everything
 def get_log_level(config_dict):
-    if 'ENABLE_LOGGING' in config_dict:
-        if config_dict['ENABLE_LOGGING'] != True:
+    if "ENABLE_LOGGING" in config_dict:
+        if config_dict["ENABLE_LOGGING"] != True:
             return None
-        elif not 'DEFAULT_LOG_LEVEL' in config_dict:
+        elif not "DEFAULT_LOG_LEVEL" in config_dict:
             return None
         else:
-            return config_dict['DEFAULT_LOG_LEVEL']
+            return config_dict["DEFAULT_LOG_LEVEL"]
     else:
         return None
 
 # good: handles exception
 def get_log_level(config_dict):
     try:
-        if config_dict['ENABLE_LOGGING']:
-            return config_dict['DEFAULT_LOG_LEVEL']
+        if config_dict["ENABLE_LOGGING"]:
+            return config_dict["DEFAULT_LOG_LEVEL"]
     except KeyError:
         # if either value wasn't present, a 
         # KeyError will be raised, so
@@ -974,7 +1008,7 @@ def get_json_response(url):
         r = requests.get(url)
         return r.json()
     except:
-        print('Oops, something went wrong!')
+        print("Oops, something went wrong!")
         return None
 
 # good: maintain exception tracebacks
