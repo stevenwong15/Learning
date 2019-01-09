@@ -940,6 +940,23 @@ for i in generate_primes():  # iterate over ALL primes
 
 import itertools
 
+# combination
+some_list = ["a", "b", "c"]
+list(itertools.combinations(some_list, 2))
+
+# permutation
+some_list = ["a", "b", "c"]
+list(itertools.permutations(some_list, 3))
+
+# generate (key, sub-iterator) for each key
+some_list = ["ax", "bx", "bx", "cx", "cx"]
+for k, g in itertools.groupby(some_list, lambda x: x[0]):
+    print(k, list(g))
+
+# cartesian product: nest loops
+list(itertools.product(["a", "b", "c"], [1, 2, 3]))
+list(itertools.product(["a", "b", "c"], ["a", "b", "c"], repeat = 1))
+list(itertools.product(["a", "b", "c"], repeat = 2))  # same
 
 #==============================================================================
 # decorator

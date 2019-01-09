@@ -1,8 +1,8 @@
-#================================================================================= 
+#============================================================================== 
 # [table of contents]
 # - Series
 # - DataFrame
-#=================================================================================
+#==============================================================================
 # pandas: series (built on top of numpy arrays)
 # - implemented on top of numpy, so most functionalities carries over
 # - series = a cross between a list and a dictionary
@@ -11,7 +11,7 @@
 
 import pandas as pd
 
-#=================================================================================
+#==============================================================================
 # Series
 # - unlike NumPy arrays, can use index to select from Series
 # - automatically aligns differently-indexed data in arithmetic operations
@@ -52,12 +52,12 @@ data.sort_values()
 data.hist()
 data.plot()
 
-#=================================================================================
+#==============================================================================
 # DataFrame
 # - 2-d tabular format to represent higher-d data w/ hiearchical indexing
 # - dict of series; under the hood: 1/more 2-d blocks 
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # properties
 
 # 2D dataframes where each column can be different types (as opposed to numpy's array)
@@ -113,7 +113,7 @@ index = data_df.index
 'Ohio' in data_df.columns
 # PFDA pg122 for index methods and properties
 
-#---------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # essential functionality
 
 # reindex (like factors in R)
