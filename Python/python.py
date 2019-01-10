@@ -831,7 +831,7 @@ all_data = [['John', 'Emily', 'Michael', 'Mary', 'Steven'],
             ['Maria', 'Juan', 'Javier', 'Natalia', 'Pilar']]
 [name for names in all_data for name in names if name.count("e") >= 2]
 
-# e.g. flatten
+# e.g. flatten: from outter to innner
 some_tuples = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
 [x for tup in some_tuples for x in tup]
 

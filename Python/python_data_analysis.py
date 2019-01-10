@@ -97,7 +97,7 @@ np.eye(10)  # NxN identity matrix
 np.identity(10)  # same
 
 # casting always create a copy
-# PFDA2 pg91 for more dtypes
+# for more dtypes, PFDA2 pg91
 data_float = data.astype(np.float64)  # casts to another dtype
 data_float.dtype
 
@@ -113,6 +113,18 @@ a - a
 # propagate scalar to each element
 1/a
 a ** 0.5
+
+# += (operates in place)
+a = np.array([1, 2, 3, 4])
+b = a
+a += np.array([1, 1, 1, 1])  # updates, so b still points to this
+print(b)  # array([2, 3, 4, 5])
+
+# + (much easier to track changes for vectorized operations)
+a = np.array([1, 2, 3, 4])
+b = a
+a = a + np.array([1, 1, 1, 1])  # creates a new array
+print(b)  # array([1, 2, 3, 4])
 
 #------------------------------------------------------------------------------
 # indexing and slicing
@@ -142,7 +154,7 @@ b[[0, 1], [0, 1]]  # [1, 5]
 
 # reshape: returns a view without copying
 b.reshape((3, 4)) 
-b.T  # transpose
+b.T  # transpose; special case of np.swapaxes()
 
 # condition
 a = np.array(["a", "b", "c"])
@@ -159,161 +171,78 @@ print(b)  # no change
 
 #------------------------------------------------------------------------------
 # linear algebra
+# for more, PFDA2 pg117
 
-b = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]])
-np.dot(b.T, b)  # matrix multiplication
+a = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]])
+np.dot(a.T, a)  # matrix multiplication
+a.T @ a  # same
+
+from numpy.linalg import inv, qr
+b = np.random.randn(5, 5)
+inv(b)  # inverse
+q, r = qr(b)  # QR decomposition
 
 #------------------------------------------------------------------------------
 # ufunc (universal functions): fast element-wise array functions
 
-a = np.arange(10)
+a = np.arange(-5, 6)
 
-# unary
+# unary: for more, PFDA2 pg107
+np.abs(a)
 np.sqrt(a)
+np.exp(a)
 
-# binary
-np.add(a[1], a[2])
+# binary: for more, PFDA2 pg107
+np.add(a, a)
+np.subtract(a, a)
 
-# example
+# example: takes two 1d array and produces two 2d matrices
 points = np.arange(-5, 5, 0.01)
 xs, ys = np.meshgrid(points, points)
 z = np.sqrt(xs ** 2 + ys ** 2)
 
-b.mean()  # for the entire thing
-b.mean(axis = 0)  # by column
-b.mean(axis = 1)  # by row
+# vectorized version of ternary expression
+xarr = np.array([1.1, 1.2, 1.3, 1.4, 1.5])
+yarr = np.array([2.1, 2.2, 2.3, 2.4, 2.5])
+cond = np.array([True, False, True, True, False])
+np.where(cond, xarr, yarr)
+np.where(cond, 1, 0)  # 2nd and 3rd arg need not be array
 
+# math: for more, PFDA2 pg112
+a = np.random.randn(5, 4)
+a.mean()
+a.mean(axis = 0)  # by column
+a.mean(axis = 1)  # by row
+a.sum()
+a.cumsum() 
 
+# boolean
+(a > 0).sum()
+(a > 0).any()
+(a > 0).all()
 
+# sort: creates a copy
+a_large = np.random.randn(1000)
+a_large.sort()
+a_large[int(0.05 * len(a_large))]  # 5th quantile
 
-
-
-
-np.linalg.inv(data2d)
-q, r = np.linalg.qr(data2d)
-
-
-
-
-
-# - making copies is slow, but this means keeping track of pointers
-
-# += (operates in place)
-a = np.array([1, 2, 3, 4])
-b = a
-a += np.array([1, 1, 1, 1])  # updates, so b still points to this
-print(b)  # array([2, 3, 4, 5])
-
-# + (much easier to track changes for vectorized operations)
-a = np.array([1, 2, 3, 4])
-b = a
-a = a + np.array([1, 1, 1, 1])  # creates a new array
-print(b)  # array([1, 2, 3, 4])
-
-
-
-
-
-
-# swapping axes
-data2d.swapaxes(0, 1)
-data2d.T  # transpose (special case of swapping axes)
+# set operations; for more, PFDA2 pg115 
+a = np.array(["d", "a", "b", "c", "c", "d", "c"])
+b = np.array(["d", "a", "e", "f", "g"])
+np.unique(a)  # unique and sorted
+np.intersect1d(a, b)  # intersect and sorted
+np.union1d(a, b)  # union and sorted
+np.in1d(a, b)  # boolean if a in b
 
 #------------------------------------------------------------------------------
-# data processing
-# PFDA pg101, for the list
+# random number generation
+# faster than build in random because generate whole array
+# for more, PFDA2 pg119
 
-# condition (faster than if/elif/else)
-arr = np.random.randn(4, 4)
-np.where(arr > 0, 2, arr)  # similar to R's ifelse(); could be nested of course
+# set seed at the global set
+np.random.seed(123)
+np.random.normal(size=(4, 4))
 
-# boolean operations
-bools = np.array([False, False, True, True])
-bools.any()  # any true?
-bools.all()  # all true?
-
-# sort, by different axis
-arr.sort(0)
-arr.sort(1)
-
-# sets
-names = np.array(['Bob', 'Bob', 'Joe'])
-np.unique(names)
-values1 = np.array([6, 0, 0, 3, 2, 5, 6])
-values2 = np.array([2, 3, 4])
-np.in1d(values1, values2)  # contains
-np.union1d(values1, values2)  # union (sorted and unique)
-np.intersect1d(values1, values2)  # in both
-np.setdiff1d(values1, values2)  # in values1, but not values2
-np.setxor1d(values1, values2)  # in either, but not both
-
-#------------------------------------------------------------------------------
-# random numbers
-# PFDA pg107, for the list
-
-# example: random walk
-nsteps = 1000
-draws = np.random.randint(0, 2, size=nsteps)
-steps = np.where(draws > 0, 1, -1)
-walk = steps.cumsum()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# #------------------------------------------------------------------------------
-# # i/o
-
-# # read csv
-# import unicodecsv
-# # read all as strings; need to convert the data types after
-# with open('/path/file.csv', 'rb') as f:
-# 	reader = unicodecsv.DictReader(f)
-# 	data = list(reader)
-
-# # if you really want to write a function for this:
-# def read_csv(file):
-# 	with open(file, 'rb') as f:
-# 		reader = unicodecsv.DictReader(f)
-# 		return list(reader)
-
-# #------------------------------------------------------------------------------
-# # investigation
-
-# # number of rows
-# len(data)
-
-# # number of unique id (a 'set' is an unordered collection of unique elements)
-# unique_id = set()
-# for i in data:
-# 	unique_id.add(i['feature'])
-
-# # create a dictionary w/ defaultdict, which returns empty (not error) for unknown key
-# from collections import defaultdict
-# dictionary = defaultdict(list)
-# for i in data:
-#   dictionary[i['key']].append(i)
-
-# #==============================================================================
-# # visualization
-
-# import matplotlib.pyplot as plt
-# plt.hist(data)
-
-# conda install seaborn
-# import seasborn as sns
-# data.plot()
-
-
+# create a generator isolated from others
+rng = np.random.RandomState(123)
+rng.normal(size=(4, 4))
