@@ -41,6 +41,8 @@ a.reindex(["dx", "bx", "ax", "cx", "fx"])  # creates a new object
 # name and index.name attributes
 a.name = "random list"
 a.index.name = "alphabet"
+a.rename(index = "alphabet")  # new series
+a.rename(index = {"a": "z"})  # rename labels
 
 # from dict
 b = {"Ohio": 35000, "Texas": 71000, "Oregon": 16000, "Utah": 5000}
@@ -76,6 +78,39 @@ a = pd.Series(np.arange(4.), index=['a', 'b', 'c', 'd'])
 a[0:2]
 a["a":"c"]  # slicing with labels is inclusive of end point
 
+# transform with mapping
+a = pd.Series(["bacon", "pulled pork", "bacon", "pastrami", "corned beef", 
+               "bacon", "pastrami", "honey ham", "nova lox"])
+a_b = {
+    "bacon": "pig",
+    "pulled pork": "pig",
+    "pastrami": "cow",
+    "corned beef": "cow",
+    "honey ham": "pig",
+    "nova lox": "salmon"
+    }
+a.map(a_b)
+
+# replace: produces new Series
+a.replace(["bacon", "nova lox"], ["pancetta", "lox"])
+a.replace({"bacon": "pancetta", "nova lox": "lox"})
+
+# discretize
+a = [20, 22, 25, 27, 21, 23, 37, 31, 61, 45, 41, 32]
+pd.cut(a, [18, 25, 65])
+pd.cut(a, [18, 25, 65]).value_counts()  # counts
+pd.qcut(a, 2)  # by quantiles
+
+# sample
+a = pd.Series(np.arange(10))
+a.sample(10, replace = True)
+
+# vectorized methods through str attribute (that skips NA values)
+# PFDA2 pg217
+a = pd.Series({"Dave": "dave@google.com", "Steve": "steve@gmail.com",
+               "Rob": "rob@gmail.com", "Wes": np.nan})
+a.str.contains("gmail")
+
 #==============================================================================
 # DataFrame
 # 2D Series: a dict of Series sharing the same index
@@ -102,7 +137,7 @@ df.drop_duplicates()
 # new column
 df["debt"] = 16.5  
 df["debt"] = np.arange(6)  # length must match
-df["debt"] = pd.Series([-1, 0, 1], index=[0, 3, 5])  # labels realigned (like a join)
+df["debt"] = pd.Series([-1, 0, 1], index=[0, 3, 5])  # labels aligned
 del df["debt"]  # deletes
 
 # drop entries by index: returns new object
@@ -158,3 +193,29 @@ df1.apply(f)
 # correlation
 pd.DataFrame(np.random.randn(100, 5)).corr()
 pd.DataFrame(np.random.randn(100, 5)).cov()
+
+# dummary variable
+df3 = pd.DataFrame({"key": ["b", "b", "a", "c", "a", "b"], 
+                    "data1": range(6)})
+pd.get_dummies(df["key"])
+
+# hierarchical indexing
+df4 = pd.DataFrame(np.arange(12).reshape((4, 3)),
+                   index=[["a", "a", "b", "b"], [1, 2, 1, 2]],
+                   columns=[["Ohio", "Ohio", "Colorado"],
+                            ["Green", "Red", "Green"]])
+df4.index.names = ["key1", "key2"]
+df4.columns.names = ["state", "color"]
+df4.swaplevel("key1", "key2").sort_index()  # sort outermost level is faster
+df4.sum(level = "key2")  # summary statistics by level
+df4.reset_index()  # index to columns
+df4.reset_index().set_index(["key1", "key2"], drop=False)  # back; keep column
+
+# merge (if by index, use join)
+df5 = pd.DataFrame({"key": ["a", "b", "d"], 
+                    "data2": range(3)})
+pd.merge(df3, df5, on = "key")  # inner join
+pd.merge(df3, df5, on = "key", how = "outer")  # outer join
+
+# binding
+

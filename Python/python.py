@@ -184,6 +184,7 @@ str(5)  # returns "5"
 "Yes " + "and " + "No"  # "+" concatenates
 
 # method w/ "." notation only work for strings; method w/t, other data types
+# for more, PFDA2 pg212
 "string".capitalize()  # capitalize
 "string".upper()  # upper case
 "STRING".lower()  # lower case
@@ -193,6 +194,15 @@ str(5)  # returns "5"
 "hello".replace("l", "_")  # replace all instances
 "string".isalpha()  # if all characters
 "string".split("r")  # splits the string by "r"
+
+# regular expression
+# for more, PFDA2 pg215
+import re
+text = "foo     bar\t baz   \tqux"
+re.split("\s+", text)
+regex = re.compile("\s+")  # compile first if manipulating many strings
+regex.split(text)
+regex.findall(text)
 
 # incorporates variable ouptut to string$
 # leading with "f" to format with python expressions
@@ -557,7 +567,8 @@ some_list[::z]
 some_list[::-1]
 
 # index
-some_list.index(item_1)
+some_list.index(item_1)  # exception if not found
+some_list.find(item_1)  # -1 if not found
 
 # insert
 # everything after shifts, computationally expensive
