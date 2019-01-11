@@ -7,8 +7,9 @@
 # pandas: series (built on top of numpy arrays)
 # implemented on top of numpy, so most functionalities carries over
 
+import numpy as np
 import pandas as pd
-from pandas import Series, Dataframe
+from pandas import Series, DataFrame
 
 #==============================================================================
 # loading data
@@ -16,147 +17,127 @@ from pandas import Series, Dataframe
 
 
 #==============================================================================
-# series
+# Series
 # like (atomic) vectors in R; cross of list and dict
 
-# - unlike NumPy arrays, can use index to select from series
-# - automatically aligns differently-indexed data in arithmetic operations
-# - like a fixed-length ordered dict; can use many functions expecting a dict
+a = pd.Series([4, 7, -5, 3])
+a.values
+a.index
 
-s = pd.series([1, 2, 3, 4, 5])
-s.describe()
+# named index
+a = pd.Series([4, 7, -5, 3], index=["d", "b", "a", "c"])
+a["a"]  # retrieve
+a[["a", "b"]]  # retrieve a list
+"b" in a  # True: works like dict
+# reassign index 
+a.index = ["dx", "bx", "ax", "cx"]  # in place
+a.reindex(["dx", "bx", "ax", "cx", "fx"])  # creates a new object
 
-# index preserved in NumPy array operations
-data = pd.series([1, 2, 3, 4, 5], index = ['a', 'b', 'c', 'd', 'e'])
-data['a']  # to access
-data.max()  # to get the max in the data
-data.argmax()  # to get index associated with the max data
-# if adding: adds by index
+# name and index.name attributes
+a.name = "random list"
+a.index.name = "alphabet"
 
-# works like a dict
-'a' in data
-'f' in data
+# from dict
+b = {"Ohio": 35000, "Texas": 71000, "Oregon": 16000, "Utah": 5000}
+b_series = pd.Series(b)
 
-# is something in the series?
-data = {'Ohio': 35000, 'Texas': 71000, 'Oregon': 16000, 'Utah': 5000}
-data = pd.series(data)
-states = ['California', 'Ohio', 'Oregon', 'Texas']
-data = pd.series(data, index=states)
-pd.isnull(data)
-pd.notnull(data)
+# with missing value
+c = {"California": None, "Texas": 71000, "Oregon": 16000, "Utah": 5000}
+c_series = pd.Series(c)
+c_series.isnull()
+c_series.notnull()
 
-data.name = 'population'  # series name
-data.index.name = 'state'  # index name
+# arithmetic operations: auto aligment (like a full join)
+b_series + c_series  # California and Ohio will be NaN
 
-# apply()
-s.apply(function)
+# unique
+pd.Series([1, 2, 3, 3]).is_unique
 
 # sort
-data.sort_values()
+a.sort_index()
+a.sort_values()
 
-# plots
-data.hist()
-data.plot()
+# rank
+a.rank(method = "first")
+
+# slicing
+a = pd.Series(np.arange(4.), index=['a', 'b', 'c', 'd'])
+a[0:2]
+a["a":"c"]  # slicing with labels is inclusive of end point
 
 #==============================================================================
-# dataframe
-# 2D series
+# DataFrame
+# 2D Series: a dict of Series sharing the same index
 
-# - 2-d tabular format to represent higher-d data w/ hiearchical indexing
-# - dict of series; under the hood: 1/more 2-d blocks 
-
-#------------------------------------------------------------------------------
-# properties
-
-# 2D datafrfmes where each column can be different types (as opposed to numpy's array)
-data_df = pd.dataframe(
-    data=[[   0,    0,    2,    5,    0],
-          [1478, 3877, 3674, 2328, 2539]],
-    index=['05-01-11', '05-02-11'],
-    columns=['R003', 'R004', 'R005', 'R006', 'R007']
-)
-
-# or, from a dic
-data = {
-  'state': ['Ohio', 'Ohio', 'Ohio', 'Nevada', 'Nevada'],
-  'year': [2000, 2001, 2002, 2001, 2002],
-  'pop': [1.5, 1.7, 3.6, 2.4, 2.9]
-}
-data_df = pd.dataFfame(data)
+data = {"state": ["Ohio", "Ohio", "Ohio", "Nevada", "Nevada", "Nevada"],
+        "year": [2000, 2001, 2002, 2001, 2002, 2003],
+        "pop": [1.5, 1.7, 3.6, 2.4, 2.9, 3.2]}
+df = pd.DataFrame(data)
+df.head()  # first 5
+df.index.name = "number"
+df.columns.name = "feature"
 
 # access
-data_df.columns  # column names
-data_df.index  # row/index names
-data_df.values  # to get all the values
-data_df['state']  # column
-data_df[['state', 'pop']]  # multiple columns
-data_df.state  # column, another way
-data_df.iloc[0]  # get element by row
-data_df.iloc[0, 1]  # get element by position
-data_df.loc[1]  # get element by row index (i.e. name of row)
-data_df.loc[[0, 1], 'year']  # get element by index (i.e. name of row and column)
+df.columns
+df["state"]  # series
+df.values  # 2d ndarray
+df.index  # index, which are immutable
 
-# columns modified by assignment (if array, length must match)
-data_df['debt'] = 16.5
-data = pd.series([-1.2, -1.5, -1.7], index = [2, 4, 5])
-data_df['debt'] = data  # match by index, if assigning a series
-del data_df['debt']  # to delete
-data_df.drop(2001)  # to drop row
-data_df.drop('Nevada', axis=1)  # to drop column
+# new column
+df["debt"] = 16.5  
+df["debt"] = np.arange(6)  # length must match
+df["debt"] = pd.Series([-1, 0, 1], index=[0, 3, 5])  # labels realigned (like a join)
+del df["debt"]  # deletes
 
-# nested dict of dicts, with outer dict keys are columns; inner, rows
-pop = {
-  'Nevada': {2001: 2.4, 2002: 2.9},
-  'Ohio': {2000: 1.5, 2001: 1.7, 2002: 3.6}
-}
-data_df = pd.dataFfame(pop)
-data_df.columns.name = 'state'  # column name
-data_df.index.name = 'year'  # index name
-# PFDA pg120 for other possible inputs to dataFfame constructor
+# drop entries by index: returns new object
+df.drop(0)  # row
+df.drop("state", axis = 1)  # column
+df.drop(0, inplace = True)  # in place
 
-# index object: immutable (cannot be modified by user)
-# - functions like fixed-size set
-index = data_df.index
-2001 in data_df.index
-'Ohio' in data_df.columns
-# PFDA pg122 for index methods and properties
+# set operations on Index (though pandas Index can contain duplicates)
+# for more, see PFDA2 pg136
+"year" in df.columns
+1 in df.index
 
-#------------------------------------------------------------------------------
-# essential functionality
+# sorting
+df.sort_values(by = ["year", "pop"])
 
-# reindex (like factors in R)
-data = pd.series([4.5, 7.2, -5.3, 3.6], index=['d', 'b', 'a', 'c'])
-data = data.reindex(['a', 'b', 'c', 'd', 'e'], fill_value=0)
-# reindex with interpolation
-data = pd.series([4.5, 7.2, -5.3, 3.6], index=[0, 2, 4, 8])
-data = data.reindex(range(6), method='ffill')  # fill value forward
-data = data.reindex(range(6), method='bfill')  # fill value backward
-# reindex columns
-states = ['Nevada', 'Ohio', 'Texas']
-data_df.reindex(columns=states)
-# succiently and both at once
-data_df.ix[[2000, 2001, 2002, 2003], states]
-# PFDA pg124 for reindex function arguments
+# indexing
+# many ways; for more, PFDA2 pg144
+df.reindex(index = [1, 2, 3, 4, 5, 6])  # creates a new object
+df.reindex(columns = ["state", "year", "pop", "stuff"])  # by column
+# more succinctly with label-indexing, using numpy-like notation
+df.loc[[1, 2, 3, 6], ["state"]]  # by labels
+df.iloc[:1, :1]  # by integers
 
-# selects rows or columns by index seemlessly
-# pandas indexing is endpoint inclusive, and works well with booleans
-data = pd.dataframe(
-  np.arange(16).reshape((4, 4)),
-  index = ['Ohio', 'Colorado', 'Utah', 'New York'],
-  columns = ['one', 'two', 'three', 'four']
-  )
-data['one']  # column
-data['Ohio':'Utah']  # row
-# syntatcially like an ndarray
-data[data['three'] > 5]
-data[data < 5] = 0
-# PFDA pg128 for indexing options with dataframe
+# arithmetic operations: auto aligment by rows and columns
+df1 = pd.DataFrame(np.arange(9.).reshape((3, 3)), columns=list('bcd'),
+                   index=['Ohio', 'Texas', 'Colorado'])
+df2 = pd.DataFrame(np.arange(12.).reshape((4, 3)), columns=list('bde'),
+                   index=['Utah', 'Ohio', 'Texas', 'Oregon'])
+df1 + df2
+df1 + df2.loc["Ohio"]  # broadcasted down column
+df1.add(df2.loc[:, "b"], axis = 0)  # broadcasted down row
 
-# ix: back to slicing with NumPy-like notation
-data.ix[['Colorado', 'New York'], ['two', 'three']]  # by index names
-data.ix[1, 2]  # by index
-data.ix[2]  # row by index
-data.ix[:, 2]  # column by index
+# summary statistics
+# for more, PFDA2 pg160
+df1.describe()
+df1.sum()
+df1.mean()
+df1.idxmax()  # index of max
+df1.cumsum()
+
+# applying functions
+f = lambda x: x.max() - x.min()
+df1.apply(f)  # by column
+df1.apply(f, axis = 1)  # by row
+# element wise
+f = lambda x: "{0:.2f}".format(x)
+df1.applymap(f)
+# return multiple values
+def f(x):
+  return pd.Series([x.min(), x.max()], index = ["min", "max"])
+df1.apply(f)
 
 
 
@@ -165,28 +146,7 @@ data.ix[:, 2]  # column by index
 
 
 
-# drop 
 
-data_df.mean(axis = 0)  # by column (along row)
-data_df.mean(axis = 'rows')  # along row
-data_df.mean(axis = 1)  # by row (along column)
-data_df.mean(axis = 'columns')  # along column
-
-
-# shift
-data_df.shift(1)  # shift row index by 1 forwad
-
-# loading files
-data = pd.read_csv('filename.csv')
-data.head()  # for the head
-data.describe()  # for summary
-
-# apply() vs. applymap() for df
-data_df.apply()  # works on each column
-data_df.applymap()  # works on each element
-
-# df + s: adding serief to dataframes 
-# - matches df's column names by s's index names
 
 # groupby()
 data_df.groupby('column')

@@ -42,7 +42,7 @@ _  # for input
 _i1  # for input in line 1
 exec _i1  # to execute again
 
-# interacting with the os: PFDA pg60 for the list
+# interacting with the os: PFDA2 pg60 for the list
 %pwd  # current wd
 %ls  # list in current wd
 %cd  # navigate wd
