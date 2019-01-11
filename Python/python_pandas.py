@@ -218,4 +218,21 @@ pd.merge(df3, df5, on = "key")  # inner join
 pd.merge(df3, df5, on = "key", how = "outer")  # outer join
 
 # binding
+s1 = pd.Series([0, 1], index=['a', 'b'])
+s2 = pd.Series([2, 3, 4], index=['c', 'd', 'e'])
+s3 = pd.Series([5, 6], index=['f', 'g'])
+s4 = pd.concat([s1, s3])
+pd.concat([s1, s4], axis = 1)  # outer join
+pd.concat([s1, s4], axis = 1, join = "inner")  # inner join
+
+# wide <> long form
+# pivot(): the same as set_index() then unstack(); can reset_index() after
+# melt(): reverse
+df4.stack()
+df4.stack(0) # stack different level
+df4.unstack()
+
+#------------------------------------------------------------------------------
+# split-apply-combine
+
 
