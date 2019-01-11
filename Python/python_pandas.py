@@ -1,6 +1,5 @@
 #============================================================================== 
 # [table of contents]
-# - loading data
 # - series
 # - dataframe
 #==============================================================================
@@ -11,10 +10,16 @@ import numpy as np
 import pandas as pd
 from pandas import Series, DataFrame
 
-#==============================================================================
-# loading data
+pd.options.display.max_rows = 20
 
+# loading data: for more, PFDA pg171
+# multiple index columns
+df = pd.read_csv("file.csv", index_col = ["key1", "key2"])
 
+# writing data
+data.to_csv("file.csv")
+
+# feather to R
 
 #==============================================================================
 # Series
@@ -51,7 +56,13 @@ c_series.notnull()
 b_series + c_series  # California and Ohio will be NaN
 
 # unique
-pd.Series([1, 2, 3, 3]).is_unique
+d = pd.Series(['c', 'a', 'd', 'a', 'a', 'b', 'b', 'c', 'c'])
+d.unique
+d.value_counts()
+d.is_unique
+
+# vectorized membership
+d.isin(["b", "c"])
 
 # sort
 a.sort_index()
@@ -74,6 +85,7 @@ data = {"state": ["Ohio", "Ohio", "Ohio", "Nevada", "Nevada", "Nevada"],
         "pop": [1.5, 1.7, 3.6, 2.4, 2.9, 3.2]}
 df = pd.DataFrame(data)
 df.head()  # first 5
+df.tail()  # last 5
 df.index.name = "number"
 df.columns.name = "feature"
 
@@ -82,6 +94,10 @@ df.columns
 df["state"]  # series
 df.values  # 2d ndarray
 df.index  # index, which are immutable
+
+# duplicates
+df.duplicated()
+df.drop_duplicates()
 
 # new column
 df["debt"] = 16.5  
@@ -139,19 +155,6 @@ def f(x):
   return pd.Series([x.min(), x.max()], index = ["min", "max"])
 df1.apply(f)
 
-
-
-
-
-
-
-
-
-
-# groupby()
-data_df.groupby('column')
-data_df.groupby('column', as_index=False)  # to retain grounping variable as a column
-data_df.groupby(['col1', 'col2'])  # group by multiple columns
-data_df.groupby('column').groups  # shows the groups
-data_df.groupby('column').sum()  # sum by group
-
+# correlation
+pd.DataFrame(np.random.randn(100, 5)).corr()
+pd.DataFrame(np.random.randn(100, 5)).cov()
