@@ -114,6 +114,7 @@ a.str.contains("gmail")
 #==============================================================================
 # DataFrame
 # 2D Series: a dict of Series sharing the same index
+# all methods below applicable across both axis
 
 data = {"state": ["Ohio", "Ohio", "Ohio", "Nevada", "Nevada", "Nevada"],
         "year": [2000, 2001, 2002, 2001, 2002, 2003],
@@ -228,11 +229,41 @@ pd.concat([s1, s4], axis = 1, join = "inner")  # inner join
 # wide <> long form
 # pivot(): the same as set_index() then unstack(); can reset_index() after
 # melt(): reverse
-df4.stack()
+df4.stack()  # melt
 df4.stack(0) # stack different level
-df4.unstack()
+df4.unstack()  # dcast
 
 #------------------------------------------------------------------------------
 # split-apply-combine
 
+df = pd.DataFrame({"key1": ["a", "a", "b", "b", "a", "c"],
+                   "key2": ["one", "two", "one", "two", "one", "three"],
+                   "data1": np.random.randn(6),
+                   "data2": np.random.randn(6)})
+
+# group
+# optimized methods: for more, PFDA2 pg293
+df.groupby(["key1"]).mean()
+df.groupby(["key1"], as_index=False).mean()  # disable index
+df.groupby(["key1"]).agg("mean")  # same
+df.groupby(["key1"]).agg(["mean", "std"])  # multiple
+df.groupby(["key1"]).agg([("foo", "mean"), ("bar", "std")])  # named
+df.groupby(["key1"]).agg({"data1": ["mean", "std"], "data2": "min"})  # diff stats
+df.groupby(["key1"]).describe().unstack("key1")
+# iterate over groups
+for (k1, k2), group in df.groupby(["key1", "key2"]):
+    print((k1, k2))
+    print(group)
+# with dict (or series)
+mapping = {"a": "red", "b": "red"}
+df.set_index("key1").groupby(mapping).mean()
+# with function (length of index)
+df.set_index("key2").groupby(len).mean()
+# own function: generally much slower
+f = lambda x: x.max() - x.min()
+df.groupby(["key1"]).agg(f)
+
+# pivot table
+# essentially split-apply-combine-reshape
+# for me, PFDA2 pg312
 
