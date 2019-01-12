@@ -111,6 +111,27 @@ a = pd.Series({"Dave": "dave@google.com", "Steve": "steve@gmail.com",
                "Rob": "rob@gmail.com", "Wes": np.nan})
 a.str.contains("gmail")
 
+#------------------------------------------------------------------------------
+# categorical type
+# can yield significant performance improvements (e.g. with groupby)
+# basically a set of integer values reference the set of categories
+
+a = pd.Series(["apple", "orange", "apple", "apple"])
+a = a.astype("category")
+type(a.values)  # no numpy array, but instance of pandas.Categorical
+a.values.categories  # R's levels
+a.values.codes  # encoding
+# ordinal, but not in a random way, unless specified
+a.values.as_ordered()
+
+# attribute "cat" provides access to categorical methods
+# for more, PFDA2 pg369
+# add new categories
+a = a.cat.set_categories(["apple", "orange", "pear"])
+a.value_counts()
+# remove
+a = a.cat.remove_unused_categories()
+
 #==============================================================================
 # DataFrame
 # 2D Series: a dict of Series sharing the same index
@@ -263,7 +284,9 @@ df.set_index("key2").groupby(len).mean()
 f = lambda x: x.max() - x.min()
 df.groupby(["key1"]).agg(f)
 
+# transform: broadcast aggregation
+df.groupby(["key1"]).transform("mean")
+
 # pivot table
 # essentially split-apply-combine-reshape
 # for me, PFDA2 pg312
-
