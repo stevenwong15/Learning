@@ -34,6 +34,9 @@ pip install package_name
 #==============================================================================
 # basics
 
+# run and track time
+python -m cProfile script.py
+
 # managing python environment
 conda create -n py37 python=3.7 anaconda  # create environment
 conda create -n py27 python=2.7 anaconda  # create environment
@@ -197,6 +200,7 @@ str(5)  # returns "5"
 
 # regular expression
 # for more, PFDA2 pg215
+# for more: https://regexr.com/
 import re
 text = "foo     bar\t baz   \tqux"
 re.split("\s+", text)
@@ -297,6 +301,9 @@ all([True, True, False])  # False
 foo = True
 value = 1 if foo else 0 
 print(value)
+# "if False then" with or
+a = 1
+value = (a == 2) or 1  # 1 because first statement is false
 
 # note: indent is 4 spaces
 # e.g. defining a function with if statements
@@ -397,6 +404,7 @@ def by_three(x):
 
 #------------------------------------------------------------------------------
 # variable length argument list
+# inputs becomes becomes a tuple, and "*"" unpacks the tuple 
 
 # *args: to pass positional, variable-length argument list
 def test_var_args(farg, *args):
@@ -482,6 +490,11 @@ tup.count("foo")
 
 # multiply with *; object are not copied, only references to them
 (4, 5, 6) * 2
+
+# comparison: left to right
+(4, 5, 6) > (4, 5, 5)  # true
+(4, 5, 6) > (5, 5, 5)  # False
+"hello" > "help"  # False, same idea with strings
 
 # unpack with tuple
 some_list = ["a", "b", "c", "d", "e"]
@@ -734,13 +747,16 @@ mapping
 list_2 = range(11, 20)
 for a, b in zip(list_1, list_2):
     print(a, b)
+# reverse zip
+l = [(1, 2), (1, 2)]
+a, b = zip(*l)
 
 # loop over dict
 dictionary = dict(zip(list_1, list_2))  # create a dict with zip
 for a, b in dictionary.items():
 	print(a, b)  # key, values
 # getting key of max 
-max(dictionary, key = dictionary.get)
+max(dictionary, key=dictionary.get)
 
 # to check if a for loop ends: conclude with "else" 
 for number in list_1:
@@ -803,6 +819,7 @@ list(iteratable_dict)  # works for any iterable
 sum(iteratable)  # sum of values it finds in the stream
 min(iteratable)  # smallest value it finds in the stream
 max(iteratable)  # largest value it finds in the stream
+max([i*-1 for i in iteratable], key=abs)  # in accordance to a function
 
 # iterator only has one operation: next(); can't go back, skip, etc.
 iteratable = [1, 2, 3]
@@ -947,7 +964,7 @@ for i in generate_primes():  # iterate over ALL primes
     print(i)
 
 #------------------------------------------------------------------------------
-# itertools: collection of generators from many common data algorithms
+# itertools: collection of generators for many common data algorithms
 
 import itertools
 
@@ -968,6 +985,19 @@ for k, g in itertools.groupby(some_list, lambda x: x[0]):
 list(itertools.product(["a", "b", "c"], [1, 2, 3]))
 list(itertools.product(["a", "b", "c"], ["a", "b", "c"], repeat = 1))
 list(itertools.product(["a", "b", "c"], repeat = 2))  # same
+
+#------------------------------------------------------------------------------
+# itertools: functions
+
+import itertools
+
+a = [[1, 2], [3, 4]]
+# treated as a cartesian product of list and empty
+for i in itertools.product(a):
+    print(i)
+# * expands into actual position arguments
+for i in itertools.product(*a):
+    print(i)
 
 #==============================================================================
 # decorator
