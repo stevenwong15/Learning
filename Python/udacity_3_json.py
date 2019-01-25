@@ -74,6 +74,7 @@ def parse(start_symbol, text, grammar):
     def parse_sequence(sequence, text):
         result = []
         for atom in sequence:
+            print(atom)
             tree, text = parse_atom(atom, text)
             if text is None: return Fail
             result.append(tree)
@@ -85,6 +86,7 @@ def parse(start_symbol, text, grammar):
         # if matches key, Non-Terminal: tuple of alternatives
         if atom in grammar:  
             for alternative in grammar[atom]:
+                print(alternative)
                 tree, rem = parse_sequence(alternative, text)
                 if rem is not None: return [atom]+tree, rem  
             return Fail
@@ -109,24 +111,27 @@ Fail = (None, None)
 # Exps => Exp [,] Exps | Exp
 # Var => [a-zA-Z_]\w*
 # Num => [-+]?[0-9]+([.][0-9]*)?""", 
-# whitespace="\s*"")
+# whitespace="\s*")
 # parse("Exp", "a * x", G)
 
-JSON = grammar(r"""
-json => element
+JSON = grammar(r"""json => element
+element => value
 value => object | array | string | number | "true" | "false" | "null"
-object => '{' ws '}' | '{' members '}'
-members => member ',' members | member
-member => ws string ws ':' element
-array => '[' ws ']' | '[' elements ']'
-elements => element ',' elements | element
-element => ws value ws
-string => '"' characters '"'
-""", 
+object => [{] [}] | [{] members [}]
+array => [\[] []] | [\[] elements []]
+string => "[^"]*"
+number => int frac exp
+members => member [,] members | member
+member => string [:] element
+elements => element [,] elements | element 
+int => digit | onenine digits | [-] digit | [-] onenine digits
+frac => [.] digits | ""
+digits => digit digits | digit
+digit => onenine | [0]
+onenine => [1-9]
+exp => [E] sign digits | [e] sign digits | ""
+sign => [+-] | "" """, 
 whitespace='\s*')
-
-
-
 
 def json_parse(text):
     return parse('value', text, JSON)
@@ -150,4 +155,4 @@ def test():
                       ['value', ['string', '"rides the rodeo"']]]]]], '}']], '')
     return 'tests pass'
 
-print test()
+test()
