@@ -14,6 +14,11 @@
 # action (2, 2, '->') means that the person with a travel time of
 # 2 crossed from here to there alone.
 
+# frozenset(): immutable set, so can be used as key in dict
+
+import itertools
+
+# dict comprehension
 def bsuccessors(state):
     """
     Return a dict of {state:action} pairs. A state is a (here, there, t) tuple,
@@ -23,15 +28,30 @@ def bsuccessors(state):
     '<-' for there to here.
     """
     here, there, t = state
-    # your code here  
+
+
+    (*itertools.combinations(a - {"light"}, 2), "light")
+
+
+    dict((, , ): 
+        (a, b, "->")
+        for a in here
+        for b in here)
+
+
+    if "light" in here:
+
+
+    else:
+
 
 def test():
 
     assert bsuccessors((frozenset([1, 'light']), frozenset([]), 3)) == {
-                (frozenset([]), frozenset([1, 'light']), 4): (1, 1, '->')}
+        (frozenset([]), frozenset([1, 'light']), 4): (1, 1, '->')}
 
-    assert bsuccessors((frozenset([]), frozenset([2, 'light']), 0)) =={
-                (frozenset([2, 'light']), frozenset([]), 2): (2, 2, '<-')}
+    assert bsuccessors((frozenset([]), frozenset([2, 'light']), 0)) == {
+        (frozenset([2, 'light']), frozenset([]), 2): (2, 2, '<-')}
     
     return 'tests pass'
 
