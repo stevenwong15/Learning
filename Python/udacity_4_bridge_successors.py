@@ -177,7 +177,6 @@ def bcost(action):
     a, b, arrow = action
     return max(a, b)
 
-
 import doctest
 
 class TestBridge: """
