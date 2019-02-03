@@ -15,7 +15,6 @@ def mc_problem(start=(3, 3, 1, 0, 0, 0), goal=None):
         path = frontier.pop(0)
         s = path[-1]
         for (state, action) in csuccessors(s).items():
-            print(state)
             if state not in explored:
                 explored.add(state)
                 path2 = path + [action, state]
@@ -23,13 +22,15 @@ def mc_problem(start=(3, 3, 1, 0, 0, 0), goal=None):
                     return path2
                 else:
                     frontier.append(path2)
-    return {}
+    return Fail
+
+Fail = []
 
 def csuccessors(state):
     """Find successors (including those that result in dining) to this
     state. But a state where the cannibals can dine has no successors."""
     M1, C1, B1, M2, C2, B2 = state
-    if (C1 > M1) or (C2 > M2):
+    if (C1 > M1 > 0) or (C2 > M2 > 0):
       return {}
     elif B1:
       return {
@@ -59,5 +60,3 @@ def test():
     return 'tests pass'
 
 test()
-
-mc_problem((3, 3, 1, 0, 0, 0))

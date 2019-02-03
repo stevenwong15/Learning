@@ -22,7 +22,9 @@ def bridge_problem(here):
                 # append all results, and order them
                 frontier.append(path2)
                 frontier.sort(key=elapsed_time) 
-    return []
+    return Fail
+
+Fail = []
 
 def elapsed_time(path):
     return path[-1][2]
@@ -80,7 +82,7 @@ True
 [(2, 1, '->'), (1, 1, '<-'), (10, 5, '->'), (2, 2, '<-'), (2, 1, '->'), (1, 1, '<-'), (15, 20, '->'), (2, 2, '<-'), (2, 1, '->')]
 
 >>> path_actions(bridge_problem([1,2,4,8,16,32]))
-[(2, 1, '->'), (1, 1, '<-'), (8, 4, '->'), (2, 2, '<-'), (2, 1, '->'), (1, 1, '<-'), (16, 32, '->'), (2, 2, '<-'), (2, 1, '->')]
+[(2, 1, '->'), (1, 1, '<-'), (8, 4, '->'), (2, 2, '<-'), (1, 2, '->'), (1, 1, '<-'), (16, 32, '->'), (2, 2, '<-'), (2, 1, '->')]
 
 >>> [elapsed_time(bridge_problem([1,2,4,8,16][:N])) for N in range(1,6)]
 [1, 2, 7, 15, 28]
@@ -115,7 +117,9 @@ def bridge_problem2(here):
             if state not in explored:
                 path2 = path + [(action, path_cost(path) + bcost(action)), state]
                 add_to_frontier(frontier, path2)
-    return []
+    return Fail
+
+Fail = []
 
 def add_to_frontier(frontier, path):
     """
