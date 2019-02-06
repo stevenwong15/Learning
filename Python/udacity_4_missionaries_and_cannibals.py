@@ -5,6 +5,7 @@ def mc_problem(start=(3, 3, 1, 0, 0, 0), goal=None):
     Find a path that goes from the initial state to the goal state (which, if
     not specified, is the state with no people or boats on the start size)
     """
+    Fail = []
     if goal is None:
         goal = (0, 0, 0) + start[:3]
     if start == goal:
@@ -23,8 +24,6 @@ def mc_problem(start=(3, 3, 1, 0, 0, 0), goal=None):
                 else:
                     frontier.append(path2)
     return Fail
-
-Fail = []
 
 def csuccessors(state):
     """Find successors (including those that result in dining) to this

@@ -2,6 +2,7 @@ def bridge_problem(here):
     """
     State will be a (people-here, people-there, time-elapsed)
     """
+    Fail = []
     here = frozenset(here) | frozenset(['light'])
     explored = set() # set of states we have visited
     frontier = [[(here, frozenset(), 0)]] # ordered list of paths we have blazed
@@ -23,8 +24,6 @@ def bridge_problem(here):
                 frontier.append(path2)
                 frontier.sort(key=elapsed_time) 
     return Fail
-
-Fail = []
 
 def elapsed_time(path):
     return path[-1][2]

@@ -5,9 +5,10 @@
 
 def shortest_path_search(start, successors, is_goal):
     """
-    Find the shortest path from start state to a state
+    Find the shortest path from start state to a state 
     such that is_goal(state) is true.
     """
+    Fail = []
     if is_goal(start):
         return [start]
     explored = set() # set of states we have visited
@@ -22,15 +23,12 @@ def shortest_path_search(start, successors, is_goal):
                     return path2
                 else:
                     frontier.append(path2)
-    return []
-
-Fail = []
+    return Fail
 
 #------------------------------------------------------------------------------
 # test: 
 
 def mc_problem2(start=(3, 3, 1, 0, 0, 0), goal=None):
-    # your code here if necessary
     if goal is None:
         def goal_fn(state): return state[:3] == (0, 0, 0)
     else:
@@ -38,8 +36,10 @@ def mc_problem2(start=(3, 3, 1, 0, 0, 0), goal=None):
     return shortest_path_search(start, csuccessors, goal_fn)
 
 def csuccessors(state):
-    """Find successors (including those that result in dining) to this
-    state. But a state where the cannibals can dine has no successors."""
+    """
+    Find successors (including those that result in dining) to this
+    state. But a state where the cannibals can dine has no successors.
+    """
     M1, C1, B1, M2, C2, B2 = state
     if (C1 > M1 > 0) or (C2 > M2 > 0):
       return {}
@@ -56,6 +56,40 @@ def csuccessors(state):
         for c in range(2-m+1)if (C2-c >= 0) and (not m == c == 0)
       }
 
-
 mc_problem2(start=(3, 3, 1, 0, 0, 0), goal=None)
 
+#------------------------------------------------------------------------------
+# test: 
+
+def more_pour_problem(capacities, goal, start=None):
+    """
+    The first argument is a tuple of capacities (numbers) of glasses; the
+    goal is a number which we must achieve in some glass. Start is a tuple
+    of starting levels for each glass; if None, that means 0 for all.
+    Start at start state and follow successors until we reach the goal.
+    Keep track of frontier and previously explored; fail when no frontier.
+    On success return a path: a [state, action, state2, ...] list, where an
+    action is one of ('fill', i), ('empty', i), ('pour', i, j), where
+    i and j are indices indicating the glass number.
+    """
+    if start is None:
+        start = (0,)*len(capacities)
+    def goal_fn: 
+        goal in state
+    return shortest_path_search(start, successors, goal_fn)
+
+def successors(state, capacities):
+    state = list(state)
+    return {
+        tuple(): ("fill", k),
+        tuple(): ("empty", k)
+        for k, v in enumerate(capacities)
+        }
+        ( if y+x<=Y else (x-(Y-y), y+(Y-y))): ("pour", i, j),
+
+
+tuple(v for k, v in enumerate(capacities) if 
+
+
+more_pour_problem([4, 9], 6)
+more_pour_problem([1, 1], 6)

@@ -5,6 +5,7 @@ def pour_problem(X, Y, goal, start=(0, 0)):
 	Start at the start state and follow successors until we reach the goal.
 	Keep track of frontier and previously explored; fail when no frontier.
 	"""
+	Fail = []
 	if goal in start:
 		return [start]
 	explored = set()
@@ -25,8 +26,6 @@ def pour_problem(X, Y, goal, start=(0, 0)):
 				else:
 					frontier.append(path2)
 	return Fail  # if all frontier tried 
-
-Fail = []
 
 def successors(x, y, X, Y):
 	"""
