@@ -74,22 +74,104 @@ def more_pour_problem(capacities, goal, start=None):
     """
     if start is None:
         start = (0,)*len(capacities)
-    def goal_fn: 
-        goal in state
-    return shortest_path_search(start, successors, goal_fn)
 
-def successors(state, capacities):
-    state = list(state)
-    return {
-        tuple(): ("fill", k),
-        tuple(): ("empty", k)
-        for k, v in enumerate(capacities)
-        }
-        ( if y+x<=Y else (x-(Y-y), y+(Y-y))): ("pour", i, j),
+    def replace(state, i, val):
+        s = list(state)
+        s[i] = val
+        return type(state)(s)
+
+    # instead of dict comprehension with tuples (too complicated)
+    # use loop and lists, converting them back to tuples
+    def successors(state):
+        indices = range(len(state))
+        succ = {}
+        for i in indices:
+            succ[replace(state, i, capacities[i])] = ("fill", i)
+            succ[replace(state, i, 0)] = ("empty", i)
+            for j in indices:
+                if i != j:
+                    delta = min(state[i], capacities[j] - state[j])
+                    state_i = replace(state, i, state[i] - delta)
+                    succ[replace(state_i, j, state[j] + delta)] = ("pour", i, j)
+        return succ
+
+    def is_goal(state): 
+        return goal in state
+
+    return shortest_path_search(start, successors, is_goal)
+
+def test_more_pour():
+    assert more_pour_problem((1, 2, 4, 8), 4) == [
+        (0, 0, 0, 0), ('fill', 2), (0, 0, 4, 0)]
+    assert more_pour_problem((1, 2, 4), 3) == [
+        (0, 0, 0), ('fill', 2), (0, 0, 4), ('pour', 2, 0), (1, 0, 3)] 
+    starbucks = (8, 12, 16, 20, 24)
+    assert not any(more_pour_problem(starbucks, odd) for odd in (3, 5, 7, 9))
+    assert all(more_pour_problem((1, 3, 9, 27), n) for n in range(28))
+    assert more_pour_problem((1, 3, 9, 27), 28) == []
+    return 'test_more_pour passes'
+
+test_more_pour()
+
+#------------------------------------------------------------------------------
+# test: 
+
+def subway(**lines):
+    """
+    Define a subway map. Input is subway(linename='station1 station2...'...).
+    Convert that and return a dict of the form: {station:{neighbor:line,...},...}
+    """
+    
+
+boston = subway(
+    blue='bowdoin government state aquarium maverick airport suffolk revere wonderland',
+    orange='oakgrove sullivan haymarket state downtown chinatown tufts backbay foresthills',
+    green='lechmere science north haymarket government park copley kenmore newton riverside',
+    red='alewife davis porter harvard central mit charles park downtown south umass mattapan')
+
+def ride(here, there, system=boston):
+    """
+    Return a path on the subway system from here to there.
+    """
+
+def longest_ride(system):
+    """
+    return the longest possible 'shortest path' ride between any two stops in the system.
+    """
 
 
-tuple(v for k, v in enumerate(capacities) if 
 
 
-more_pour_problem([4, 9], 6)
-more_pour_problem([1, 1], 6)
+
+
+
+
+
+def path_states(path):
+    "Return a list of states in this path."
+    return path[0::2]
+    
+def path_actions(path):
+    "Return a list of actions in this path."
+    return path[1::2]
+
+def test_ride():
+    assert ride('mit', 'government') == [
+        'mit', 'red', 'charles', 'red', 'park', 'green', 'government']
+    assert ride('mattapan', 'foresthills') == [
+        'mattapan', 'red', 'umass', 'red', 'south', 'red', 'downtown',
+        'orange', 'chinatown', 'orange', 'tufts', 'orange', 'backbay', 'orange', 'foresthills']
+    assert ride('newton', 'alewife') == [
+        'newton', 'green', 'kenmore', 'green', 'copley', 'green', 'park', 'red', 'charles', 'red',
+        'mit', 'red', 'central', 'red', 'harvard', 'red', 'porter', 'red', 'davis', 'red', 'alewife']
+    assert (path_states(longest_ride(boston)) == [
+        'wonderland', 'revere', 'suffolk', 'airport', 'maverick', 'aquarium', 'state', 'downtown', 'park',
+        'charles', 'mit', 'central', 'harvard', 'porter', 'davis', 'alewife'] or 
+        path_states(longest_ride(boston)) == [
+                'alewife', 'davis', 'porter', 'harvard', 'central', 'mit', 'charles', 
+                'park', 'downtown', 'state', 'aquarium', 'maverick', 'airport', 'suffolk', 'revere', 'wonderland'])
+    assert len(path_states(longest_ride(boston))) == 16
+    return 'test_ride passes'
+
+test_ride()
+
