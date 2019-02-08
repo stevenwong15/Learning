@@ -121,7 +121,28 @@ def subway(**lines):
     Define a subway map. Input is subway(linename='station1 station2...'...).
     Convert that and return a dict of the form: {station:{neighbor:line,...},...}
     """
-    
+    subway_map = {}
+    for line, stations in lines.items():
+        stations = stations.split()
+        for i, v in enumerate(stations):
+            (subway_map
+                .setdefault(stations[i], {})
+                .update({stations[j]: line for j in (i-1, i+1) if j in range(len(stations))}))
+    return subway_map    
+
+# better:
+# use collection to define a dict of dict
+# look at opposing directions for a pair of stations at once
+import collections
+def subway(**lines):
+    subway_map = collections.defaultdict(dict)
+    for line, stations in lines.items():
+        stations = stations.split()
+        pairs = [stations[i:i+2] for i in range(len(stations)-1)]
+        for i, j in pairs:
+            subway_map[i][j] = line
+            subway_map[j][i] = line
+    return subway_map    
 
 boston = subway(
     blue='bowdoin government state aquarium maverick airport suffolk revere wonderland',
@@ -133,19 +154,21 @@ def ride(here, there, system=boston):
     """
     Return a path on the subway system from here to there.
     """
+    def successors(state):
+        return system[state]
+    def is_goal(state):
+        return there in state
+    return shortest_path_search(here, successors, is_goal)
+
+# better: shorter
+def ride(here, there, system=boston):
+    return shortest_path_search(here, lambda s: system[s] , lambda s: s == there)
 
 def longest_ride(system):
     """
     return the longest possible 'shortest path' ride between any two stops in the system.
     """
-
-
-
-
-
-
-
-
+    return max([ride(i, j) for i in system for j in system], key=len)
 
 def path_states(path):
     "Return a list of states in this path."
@@ -174,4 +197,3 @@ def test_ride():
     return 'test_ride passes'
 
 test_ride()
-
