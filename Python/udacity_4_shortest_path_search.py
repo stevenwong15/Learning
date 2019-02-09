@@ -116,19 +116,19 @@ test_more_pour()
 #------------------------------------------------------------------------------
 # test: 
 
-def subway(**lines):
-    """
-    Define a subway map. Input is subway(linename='station1 station2...'...).
-    Convert that and return a dict of the form: {station:{neighbor:line,...},...}
-    """
-    subway_map = {}
-    for line, stations in lines.items():
-        stations = stations.split()
-        for i, v in enumerate(stations):
-            (subway_map
-                .setdefault(stations[i], {})
-                .update({stations[j]: line for j in (i-1, i+1) if j in range(len(stations))}))
-    return subway_map    
+# def subway(**lines):
+#     """
+#     Define a subway map. Input is subway(linename='station1 station2...'...).
+#     Convert that and return a dict of the form: {station:{neighbor:line,...},...}
+#     """
+#     subway_map = {}
+#     for line, stations in lines.items():
+#         stations = stations.split()
+#         for i, v in enumerate(stations):
+#             (subway_map
+#                 .setdefault(stations[i], {})
+#                 .update({stations[j]: line for j in (i-1, i+1) if j in range(len(stations))}))
+#     return subway_map    
 
 # better:
 # use collection to define a dict of dict
@@ -150,15 +150,15 @@ boston = subway(
     green='lechmere science north haymarket government park copley kenmore newton riverside',
     red='alewife davis porter harvard central mit charles park downtown south umass mattapan')
 
-def ride(here, there, system=boston):
-    """
-    Return a path on the subway system from here to there.
-    """
-    def successors(state):
-        return system[state]
-    def is_goal(state):
-        return there in state
-    return shortest_path_search(here, successors, is_goal)
+# def ride(here, there, system=boston):
+#     """
+#     Return a path on the subway system from here to there.
+#     """
+#     def successors(state):
+#         return system[state]
+#     def is_goal(state):
+#         return there in state
+#     return shortest_path_search(here, successors, is_goal)
 
 # better: shorter
 def ride(here, there, system=boston):

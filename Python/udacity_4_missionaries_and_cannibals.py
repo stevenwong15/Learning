@@ -26,8 +26,10 @@ def mc_problem(start=(3, 3, 1, 0, 0, 0), goal=None):
     return Fail
 
 def csuccessors(state):
-    """Find successors (including those that result in dining) to this
-    state. But a state where the cannibals can dine has no successors."""
+    """
+    Find successors (including those that result in dining) to this
+    state. But a state where the cannibals can dine has no successors.
+    """
     M1, C1, B1, M2, C2, B2 = state
     if (C1 > M1 > 0) or (C2 > M2 > 0):
       return {}
