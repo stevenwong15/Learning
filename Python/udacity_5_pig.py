@@ -114,7 +114,7 @@ def clueless(state):
     """
     A strategy that ignores the state and chooses at random from possible moves.
     """
-    return random.choice(['roll', 'hold'])
+    return random.choice(["roll", "hold"])
 
 # 4
 def hold_at(x):
@@ -135,7 +135,11 @@ def max_wins(state):
 def max_diffs(state):
     return best_action(state, pig_actions, Q_pig, win_diff)
 
-# 5 & 6
+# 7
+def max_wins2(state):
+    return best_action(state, pig_actions, Q_pig, Pwin2)
+
+# 5, 6 and 7
 # general purpose expectation optimization
 def best_action(state, actions, Q, U):
     """
@@ -148,8 +152,31 @@ def best_action(state, actions, Q, U):
         return Q(state, action, U)
     return max(actions(state), key=EU)
 
-# let's say win = 1, loose = 0
+# the legal actions from a state
+def pig_actions(state):
+    _, _, _, pending = state
+    return ["roll", "hold"] if pending else ["roll"]
+
+# expected utility of a state, given an action and a utility
+# here, utility = probability of winning
+# 1) E(me win | me hold) = 1 - p(you win | me hold -> your turn)
+# me hold means you now get to roll
+# 2) E(me win | me roll) = (p(me win | me roll 1) + p(win | me roll 2:6))/6
+# = ((1 - p(you win | me roll 1 -> your turn)) + p(win | me roll 2:6))/6
+# divide by 6 because equal probability for each of the 6 actions
+def Q_pig(state, action, utility):  
+    if action == "hold":
+        return 1 - utility(hold(state))
+    if action == "roll":
+        return (
+            1 - utility(roll(state, 1)) 
+            + sum(utility(roll(state, d)) for d in (2,3,4,5,6))
+            )/6.
+    raise ValueError
+
+# expected utility of a state, given end goal:
 # recursively traverse backwards from end point
+# let's say win = 1, loose = 0
 # assumes opponent also plays with optimal strategy
 @memo
 def Pwin(state):
@@ -165,10 +192,12 @@ def Pwin(state):
     else:
         return max(Q_pig(state, action, Pwin) for action in pig_actions(state))
 
+# expected utility of a state, given end goal
+# hmm, not sure if Q_pig should take non-probability based utility?
 @memo
 def win_diff(state):
     """
-    The utility of a state: here the winning differential (pos or neg).
+    The utility of a state: here the winning differential (pos or neg)
     """
     _, me, you, pending = state
     if me + pending >= goal or you >= goal:
@@ -176,33 +205,60 @@ def win_diff(state):
     else:
         return max(Q_pig(state, action, win_diff) for action in pig_actions(state))
 
-# expected value of choosing action in state:
-# here, utility = probability of winning = Pwin
-# 1) E(me win | me hold) = 1 - p(you win | me hold -> your turn)
-# me hold means you now get to roll
-# 2) E(me win | me roll) = (p(me win | me roll 1) + p(win | me roll 2:6))/6
-# = ((1 - p(you win | me roll 1 -> your turn)) + p(win | me roll 2:6))/6
-# divide by 6 because equal probability for each of the 6 actions
-def Q_pig(state, action, Pwin):  
-    if action == 'hold':
-        return 1 - Pwin(hold(state))
-    if action == 'roll':
-        return (
-            1 - Pwin(roll(state, 1)) 
-            + sum(Pwin(roll(state, d)) for d in (2,3,4,5,6))
-            )/6.
-    raise ValueError
+#------------------------------------------------------------------------------
+# faster Pwin:
+# since P(state = (1, a, b, c)) == P(state = (0, a, b, c))
+# we don't have to cache both, reducing speed
 
-# The legal actions from a state
-def pig_actions(state):
-    _, _, _, pending = state
-    return ['roll', 'hold'] if pending else ['roll']
+def Pwin2(state):
+   """
+   The utility of a state; here just the probability that an optimal player
+   whose turn it is to move can win from the current state.
+   """
+   _, me, you, pending = state
+   return Pwin3(me, you, pending)
+
+# both "me" and "you" have the same strategy:
+# * roll if nothing pending, else see if hold or roll is better
+# * instead of using Q to get expected utility, write one that takes fewer inputs
+@memo
+def Pwin3(me, you, pending):
+    if me + pending >= goal:
+        return 1
+    elif you >= goal:
+        return 0
+    else:
+        Pwin_if_roll = (
+            1 - Pwin3(you, me+1, 0) 
+            + sum(Pwin3(me, you, pending+d) for d in (2,3,4,5,6))
+            )/6.
+        if not pending:
+            return Pwin_if_roll
+        else:
+            Pwin_if_hold = 1 - Pwin3(you, me+pending, 0)
+            return max(Pwin_if_roll, Pwin_if_hold)
+
+def test():
+    epsilon = 0.0001 # used to make sure that floating point errors don't cause test() to fail
+    assert goal == 40
+    assert Pwin2((0, 42, 25, 0)) == 1
+    assert Pwin2((1, 12, 43, 0)) == 0
+    assert Pwin2((0, 34, 42, 1)) == 0
+    assert abs(Pwin2((0, 25, 32, 8)) - 0.736357188272) <= epsilon
+    assert abs(Pwin2((0, 19, 35, 4)) - 0.493173612834) <= epsilon
+    return "tests pass"
+
+test()
 
 #------------------------------------------------------------------------------
 # max_wins vs. max_diffs
 # breaking program down to understand differences and why
 
 from collections import defaultdict
+
+# starting first gives a player a slight edge in wining
+Pwin((0, 0, 0, 0))
+Pwin2((0, 0, 0, 0))  # faster
 
 # all states (where it's my turn)
 states = [
