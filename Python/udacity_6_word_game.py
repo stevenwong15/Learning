@@ -261,7 +261,7 @@ def horizontal_plays(hand, board):
     return results
 
 def transpose(matrix):
-    return map(list, zip(*matrix))
+    return list(map(list, zip(*matrix)))
 
 ACROSS, DOWN = (1, 0), (0, 1) # Directions that words can go
 
@@ -277,21 +277,113 @@ def all_plays(hand, board):
         {((i, j), DOWN, word) for ((j, i), word) in vplays})
 
 #------------------------------------------------------------------------------
+# computing score
+
+def calculate_score(board, pos, direction, hand, word):
+    """
+    Return the total score for this play.
+    """
+    total, crosstotal, word_mult = 0, 0, 1
+    starti, startj = pos
+    di, dj = direction
+    other_direction = DOWN if direction == ACROSS else ACROSS
+    for (n, L) in enumerate(word):
+        i, j = starti + n*di, startj + n*dj
+        sq = board[j][i]
+        b = BONUS[j][i]
+        word_mult *= (1 if is_letter(sq) else
+                      3 if b == TW else 2 if b in (DW,'*') else 1)
+        letter_mult = (1 if is_letter(sq) else
+                       3 if b == TL else 2 if b == DL else 1)
+        total += POINTS[L] * letter_mult
+        if isinstance(sq, set) and sq is not ANY and direction is not DOWN:
+            crosstotal += cross_word_score(board, L, (i, j), other_direction)
+    return crosstotal + word_mult * total
+
+def cross_word_score(board, L, pos, direction):
+    """
+    Return the score of a word made in the other direction from the main word.
+    """
+    i, j = pos
+    (j2, word) = find_cross_word(board, i, j)
+    return calculate_score(board, (i, j2), DOWN, L, word.replace('.', L))    
+
+#------------------------------------------------------------------------------
+# play
+
+# def make_play(play, board):
+#     """
+#     Put the word down on the board.
+#     """
+#     (score, (i, j), (di, dj), word) = play
+#     if dj:
+#         board = transpose(board)
+#         board[i][j:(j+len(word))] = word
+#         board = transpose(board)
+#     elif di:
+#         board[j][i:(i+len(word))] = word
+#     return board
+
+# cleaner: with iteration
+def make_play(play, board):
+    """
+    Put the word down on the board.
+    """
+    for (n, L) in enumerate(word):
+        board[j + n*dj][i + n*di] = L
+    return board
+
+NOPLAY = None
+
+def best_play(hand, board):
+    plays = all_plays(hand, board)
+    return sorted(plays)[-1] if plays else NOPLAY
+
+#------------------------------------------------------------------------------
 # printing a board
-    
-def a_board():
-    return map(list, ['|||||||||||||||||',
-                      '|J............I.|',
-                      '|A.....BE.C...D.|',
-                      '|GUY....F.H...L.|',
-                      '|||||||||||||||||'])
+
+def bonus_template(quadrant):
+    """
+    Make a board from the upper-left quadrant.
+    """
+    return mirror(list(map(mirror, quadrant.split())))
+
+def mirror(sequence): 
+    return sequence + sequence[-2::-1]
+
+SCRABBLE = bonus_template("""
+|||||||||
+|3..:...3
+|.2...;..
+|..2...:.
+|:..2...:
+|....2...
+|.;...;..
+|..:...:.
+|3..:...*
+""")
+
+WWF = bonus_template("""
+|||||||||
+|...3..;.
+|..:..2..
+|.:..:...
+|3..;...2
+|..:...:.
+|.2...3..
+|;...:...
+|...:...*
+""")
+
+BONUS = WWF
+DW, TW, DL, TL = '23:;'   
 
 def show(board):
     """Print the board."""
-    for i in board:
-        print(" ".join(i)) 
-               
-show(a_board())
+    for row, row_bonus in zip(board, BONUS):
+        row_mod = [i_bonus if is_empty(i) else i 
+            for i, i_bonus in zip(row, row_bonus)]
+        print(" ".join(row_mod)) 
 
 #------------------------------------------------------------------------------
 # tests
