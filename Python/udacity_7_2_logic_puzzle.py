@@ -37,7 +37,8 @@ then you would return:
 # order: [Simon, Knuth]
 #
 # representation:
-# assign names to the order they come from
+# let weekdays be represented by [1, 2, 3, 4, 5]
+# assign concepts to order
 
 import itertools
 
@@ -45,9 +46,23 @@ def logic_puzzle():
     "Return a list of the names of the people, in the order they arrive."
     orderings = list(itertools.permutations([1, 2, 3, 4, 5]))
     return next(
-		(Hamming, Knuth, Minsky, Simon, Wilkes)
-    	for () in orderings
+		[name for _, name in sorted(zip(
+			[Hamming, Knuth, Minsky, Simon, Wilkes],
+			["Hamming", "Knuth", "Minsky", "Simon", "Wilkes"]))]
+		for (Hamming, Knuth, Minsky, Simon, Wilkes) in orderings
+			if Knuth - Simon == 1
+    	for (programmer, writer, manager, designer, nothing) in orderings
+	    	if designer != 4
+	    	if writer != Minsky
+	    	if programmer != Wilkes
+	    	if manager != Knuth
+	    	if Knuth - manager == 1
+    	for (laptop, droid, tablet, iphone, nothing) in orderings
+	    	if {2} & {iphone, tablet}
+	    	if tablet != 5
+	    	if laptop == 3
+	    	if designer != droid
+	    	if manager != tablet
+	    	if {programmer, droid} == {Wilkes, Hamming}
+	    	if {Wilkes, laptop} == {1, writer}
     	)
-
-
-    
