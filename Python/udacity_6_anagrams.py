@@ -27,16 +27,27 @@ def anagrams(phrase, shortest=2):
     have length >= shortest. Phrases in answer must have words in 
     lexicographic order (not all permutations).
     """
-    return find_anagrams("", phrase, set(), shortest)
+    return find_anagrams(phrase.replace(" ", ""), "", shortest)
 
-def find_anagrams(pre, phrase, results, shortest):
-    phrase = removed(phrase, pre)
-    if phrase == "": 
-        results.add(tuple(sorted(pre.split())))
-    for i in find_words(phrase):
-        if len(i) >= shortest:
-            find_anagrams(pre + " " + i, phrase, results, shortest)
-    return set([" ".join(i) for i in results])
+# recursion:
+#
+# w > pre: 
+# to ensure lexicographic order
+# works as find_words(phrase) provides all first words
+# 
+# for rest in find_anagrams(remainder, w, shortest):
+# each of the rest to w, if the rest if they are words
+def find_anagrams(phrase, pre, shortest):
+    results = set()
+    for w in find_words(phrase):
+        if len(w) >= shortest and w > pre:
+            remainder = removed(phrase, w)
+            if remainder:
+                for rest in find_anagrams(remainder, w, shortest):
+                    results.add(w + " " + rest)
+            else:
+                results.add(w)
+    return results
 
 def removed(letters, remove):
     """

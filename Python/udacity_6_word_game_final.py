@@ -1,8 +1,7 @@
 #------------------------------------------------------------------------------
 # setup
 
-POINTS = dict(A=1, B=3, C=3, D=2, E=1, F=4, G=2, H=4, I=1, J=8, K=5, L=1, 
-    M=3, N=1, O=1, P=3, Q=10, R=1, S=1, T=1, U=1, V=4, W=4, X=8, Y=4, Z=10, _=0)
+import re
 
 def bonus_template(quadrant):
     "Make a board from the upper-left quadrant."
@@ -43,6 +42,7 @@ class anchor(set):
     "An anchor is where a new word can be placed; has a set of allowable letters."
 
 LETTERS = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+LOWER_LETTERS = list(map(str.lower, LETTERS))
 ANY = anchor(LETTERS) # The anchor that can be any letter
 
 def is_letter(sq):
@@ -51,6 +51,12 @@ def is_letter(sq):
 def is_empty(sq):
     "Is this an empty square (no letters, but a valid position on board)."
     return sq  == '.' or sq == '*' or isinstance(sq, set) 
+
+POINTS = dict(A=1, B=3, C=3, D=2, E=1, F=4, G=2, H=4, I=1, J=8, K=5, L=1, 
+    M=3, N=1, O=1, P=3, Q=10, R=1, S=1, T=1, U=1, V=4, W=4, X=8, Y=4, Z=10)
+
+for l in LOWER_LETTERS:
+    POINTS[l] = 0
 
 #------------------------------------------------------------------------------
 # read dictionary
@@ -198,17 +204,23 @@ def legal_prefix(i, row):
 def add_suffixes(hand, pre, start, row, results, anchored=True):
     "Add all possible suffixes, and accumulate (start, word) pairs in results."
     i = start + len(pre)
-    if pre in WORDS and anchored and not is_letter(row[i]):
+    PRE = pre.upper()
+    if PRE in WORDS and anchored and not is_letter(row[i]):
         results.add((start, pre))
-    if pre in PREFIXES:       
+    if PRE in PREFIXES:       
         sq = row[i]
         if is_letter(sq):
             add_suffixes(hand, pre+sq, start, row, results)        
         elif is_empty(sq):        
             possibilities = sq if isinstance(sq, set) else ANY
+            # check the hand first
             for L in hand:
                 if L in possibilities:
                     add_suffixes(hand.replace(L, '', 1), pre+L, start, row, results)
+            # then, use "_" if avaiable
+            if "_" in hand:
+                for C in possibilities:
+                    add_suffixes(hand.replace("_", "", 1), pre+C.lower(), start, row, results)
     return results
 
 prev_hand, prev_results = '', set() 
@@ -219,10 +231,16 @@ def find_prefixes(hand, pre='', results=None):
     if results is None: results = set()
     if pre == '': prev_hand, prev_results = hand, results
     # Now do the computation
-    if pre in WORDS or pre in PREFIXES: results.add(pre)
-    if pre in PREFIXES:
+    PRE = pre.upper()
+    if PRE in WORDS or PRE in PREFIXES: results.add(pre)
+    if PRE in PREFIXES:
         for L in hand:
-            find_prefixes(hand.replace(L, '', 1), pre+L, results)
+            # for wildcard: check each lower letter, recursively for each _
+            if L == "_":
+                for C in LOWER_LETTERS:
+                    find_prefixes(hand.replace("_", "", 1), pre+C, results)
+            else:
+                find_prefixes(hand.replace(L, '', 1), pre+L, results)
     return results
 
 #------------------------------------------------------------------------------
@@ -281,4 +299,22 @@ def show_best(hand, board):
     else:
         print("Sorry, no legal plays")
 
-show_best("ABCDEFG", a_board())
+best_play("ABCEHKN", a_board())
+best_play("_BCEHKN", a_board())
+
+all_plays("ABCEHKN", a_board())
+
+show_best("ABCEHKN", a_board())
+show_best("_BCEHKN", a_board())
+
+def test():
+    def ok(hand, n, s, d, w):
+        result = best_play(hand, a_board())
+        test_case = result[:3] == (n, s, d) and result[-1].upper() == w.upper()
+        print(test_case)
+        return test_case
+    assert ok('ABCEHKN', 64, (3, 2), (1, 0), 'BACKBENCH')
+    assert ok('_BCEHKN', 62, (3, 2), (1, 0), 'BaCKBENCH')
+    assert ok('__CEHKN', 61, (9, 1), (1, 0), 'KiCk')
+
+test()
