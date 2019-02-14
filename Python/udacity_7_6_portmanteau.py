@@ -51,8 +51,77 @@ input words. But you could implement a method that is efficient with a
 larger list of words.
 """
 
+# strategy:
+# - find all eligible triples with the help of permutation and indexes
+# - score triples
+
+import itertools
+
 def natalie(words):
     "Find the best Portmanteau word formed from any two of the list of words."
+    results = set()
+    for i,j in itertools.permutations(range(len(words)), 2):
+        results.update(find_natalie(words[i], words[j]))
+    return results if results else None
+    # return max(results, key=lambda x: x[0])[1] if results else None
+
+def find_natalie(w1, w2):
+    results = set()
+    i = 1
+    while i < min(len(w1), len(w2)):
+        mid = w2[:i]
+        if mid == w1[(len(w1)-i):]:
+            start = w1.replace(mid, "", 1)
+            end = w2.replace(mid, "", 1)
+            results.add(score_natalie(start, mid, end))
+        i += 1
+    return results
+
+def score_natalie(start, mid, end):
+    w = start + mid + end
+    W, S, M, E = map(len, (w, start, mid, end))
+    return (W-abs(S-W/4.)-abs(M-W/2.)-abs(E-W/4.), w)
+
+#------------------------------------------------------------------------------
+# solution from DCP
+# strategy:
+# - find all eligible triples with the help of dictionary
+# - score triples
+
+from collections import defaultdict
+
+def natalie(words):
+    triples = alltriples(words)
+    if not triples: return None
+    return ''.join(max(triples, key=portman_score))
+
+# get triples by:
+# split word1 into start and mid
+# find mid in {mid: endings}
+# if found, mid+end is not the entire word (i.e. duplicates)
+def alltriples(words):
+    ends = compute_ends(words)
+    return [(start, mid, end)
+            for w in words
+            for start, mid in splits(w)
+            for end in ends[mid]
+            if w != mid+end]
+
+# dictionary of {mid: endings}
+def compute_ends(words):
+    ends = defaultdict(list)
+    for w in words:
+        for mid, end in splits(w):
+            ends[mid].append(end)
+    return ends
+
+def splits(w):
+    return [(w[:i], w[i:]) for i in range(1, len(w))]
+
+def portman_score(triple):
+    S, M, E = map(len, triple)
+    T = S+M+E
+    return T - abs(S-T/4.) - abs(M-T/2.) - abs(E-T/4.)
 
 #------------------------------------------------------------------------------
 # test
@@ -101,5 +170,6 @@ def test_natalie():
             in ('psychopathlete', 'psychopathletic'))
     assert (natalie(['info', 'foibles', 'follicles']) == 'infoibles')
     assert (natalie(['moribund', 'bundlers', 'bundt']) == 'moribundlers')
+    return 'tests pass'
 
 test_natalie()
