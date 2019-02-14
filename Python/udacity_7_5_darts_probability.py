@@ -29,12 +29,6 @@ example, for total=100, you can choose ['T20', 'D20'] or ['DB', 'DB']
 but you cannot choose ['T20', 'D10', 'D10'].
 """
 
-def test_darts():
-    "Test the double_out function."
-    assert double_out(170) == ['T20', 'T20', 'DB']
-    assert double_out(171) == None
-    assert double_out(100) in (['T20', 'D20'], ['DB', 'DB'])
-
 """
 My strategy: I decided to choose the result that has the highest valued
 target(s) first, e.g. always take T20 on the first dart if we can achieve
@@ -54,12 +48,43 @@ we must choose a double for the last dart, but for the others I prefer the
 easiest targets first: 'S' is easiest, then 'T', then 'D'.
 """
 
+# problem: 
+# * find the shortest combinations of:
+# * size <= 3
+# * with replacement 
+# * that sum to a total
+# * last point is divisible by 2
+
+# brute force solution:
+# find all combinations of size 1, 2, 3
+# filter: last point divisible by 2
+# filter: sum to a total
+
+import itertools
+
+# inventory of possible points in a dictionary
+points = {"%s%d" % (m_name, i): i*m 
+    for i in range(1, 21) 
+    for m,m_name in zip([1, 2, 3], ["S", "D", "T"])}
+points["SB"] = 25
+points["DB"] = 50
 
 def double_out(total):
-    """Return a shortest possible list of targets that add to total,
+    """
+    Return a shortest possible list of targets that add to total,
     where the length <= 3 and the final element is a double.
-    If there is no solution, return None."""
-    # your code here
+    If there is no solution, return None.
+    """
+    if total in points.values():  return total
+    if comb_sums_to(2, total): return comb_sums_to(2, total)
+    if comb_sums_to(3, total): return comb_sums_to(3, total)
+    return None
+
+def comb_sums_to(n, total):
+    return [sorted(i, reverse=True) 
+        for i in itertools.combinations_with_replacement(points, n) 
+        if any("D" in j for j in i)
+        if sum(points[j] for j in i) == total]
 
 """
 It is easy enough to say "170 points? Easy! Just hit T20, T20, DB."
@@ -119,22 +144,35 @@ is large; also, it is always possible to miss a double, and thus there is
 no guarantee that the game will end in a finite number of moves.
 """
 
+section = "20 1 18 4 13 6 10 15 2 17 3 19 7 16 8 11 14 9 12 5".split()
+
+target = "T20"
+m,v = target[0], target[0:]
+
+if m == "T":
+
 
 def outcome(target, miss):
     "Return a probability distribution of [(target, probability)] pairs."
-    #your code here
 
 def best_target(miss):
     "Return the target that maximizes the expected score."
-    #your code here
     
+#------------------------------------------------------------------------------
+# test
+
+def test_darts():
+    "Test the double_out function."
+    assert double_out(170) == [['T20', 'T20', 'DB']]
+    assert double_out(171) == None
+    assert double_out(100) == [['T20', 'D20'], ['DB', 'DB']]
+
+test_darts()
+
 def same_outcome(dict1, dict2):
     "Two states are the same if all corresponding sets of locs are the same."
     return all(abs(dict1.get(key, 0) - dict2.get(key, 0)) <= 0.0001
                for key in set(dict1) | set(dict2))
-
-#------------------------------------------------------------------------------
-# test
 
 def test_darts2():
     assert best_target(0.0) == 'T20'
