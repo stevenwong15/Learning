@@ -144,16 +144,48 @@ is large; also, it is always possible to miss a double, and thus there is
 no guarantee that the game will end in a finite number of moves.
 """
 
-section = "20 1 18 4 13 6 10 15 2 17 3 19 7 16 8 11 14 9 12 5".split()
+import itertools
 
-target = "T20"
-m,v = target[0], target[0:]
-
-if m == "T":
-
+s = "20 1 18 4 13 6 10 15 2 17 3 19 7 16 8 11 14 9 12 5".split()
 
 def outcome(target, miss):
     "Return a probability distribution of [(target, probability)] pairs."
+    m,v = target[0], target[1:]
+    vs = s if v == "B" else neigbhor(v)
+
+    if target == "DB":
+        miss = miss*3
+        result = {"".join(i): miss*2/3*1/len(s) for i in itertools.product(("S"), vs)}
+        result.append({"SB": miss*1/3})
+    elif target == "SB":
+        result = {"".join(i): miss*3/4*1/len(s) for i in itertools.product(("S"), vs)}
+        result.append({"DB": miss*1/4})
+    elif m == "T":
+        result = {"".join(i): miss*1/2 for i in itertools.product(("S"), vs)}
+    elif m == "D":
+        result = {"".join(i): miss*1/4 for i in itertools.product(("S"), vs)}
+        result.append({"OFF": miss*1/2})
+    elif m == "S":
+        miss = miss/5
+        result = {"".join(i): miss*1/4 for i in itertools.product(("T", "D"), vs)}
+    result.update({target: 1-miss})
+    return result
+
+def neigbhor(section):
+    i = s.index(section)
+    if i == 0:
+        return s[len(s)-1], s[i+1]
+    elif i == len(s)-1:
+        return s[i-1], s[0]
+    else:
+        return s[i-1], s[i+1]
+
+outcome(target, miss)
+outcome('T20', 0.1)
+
+miss = 0.0
+target = "T20"
+
 
 def best_target(miss):
     "Return the target that maximizes the expected score."
