@@ -86,6 +86,7 @@ def comb_sums_to(n, total):
         if any("D" in j for j in i)
         if sum(points[j] for j in i) == total]
 
+# ******************************skipped******************************
 """
 It is easy enough to say "170 points? Easy! Just hit T20, T20, DB."
 But, at least for me, it is much harder to actually execute the plan
@@ -144,51 +145,57 @@ is large; also, it is always possible to miss a double, and thus there is
 no guarantee that the game will end in a finite number of moves.
 """
 
-import itertools
+# s = "20 1 18 4 13 6 10 15 2 17 3 19 7 16 8 11 14 9 12 5".split()
 
-s = "20 1 18 4 13 6 10 15 2 17 3 19 7 16 8 11 14 9 12 5".split()
+# outcome(target, miss)
+# outcome('T20', 0.1)
 
-def outcome(target, miss):
-    "Return a probability distribution of [(target, probability)] pairs."
-    m,v = target[0], target[1:]
-    vs = s if v == "B" else neigbhor(v)
+# miss = 0.1
+# target = "T20"
 
-    if target == "DB":
-        miss = miss*3
-        result = {"".join(i): miss*2/3*1/len(s) for i in itertools.product(("S"), vs)}
-        result.append({"SB": miss*1/3})
-    elif target == "SB":
-        result = {"".join(i): miss*3/4*1/len(s) for i in itertools.product(("S"), vs)}
-        result.append({"DB": miss*1/4})
-    elif m == "T":
-        result = {"".join(i): miss*1/2 for i in itertools.product(("S"), vs)}
-    elif m == "D":
-        result = {"".join(i): miss*1/4 for i in itertools.product(("S"), vs)}
-        result.append({"OFF": miss*1/2})
-    elif m == "S":
-        miss = miss/5
-        result = {"".join(i): miss*1/4 for i in itertools.product(("T", "D"), vs)}
-    result.update({target: 1-miss})
-    return result
+# def outcome(target, miss):
+#     "Return a probability distribution of [(target, probability)] pairs."
+#     m,v = target[0], target[1:]
+#     vs = s if v == "B" else neigbhor(v)
 
-def neigbhor(section):
-    i = s.index(section)
-    if i == 0:
-        return s[len(s)-1], s[i+1]
-    elif i == len(s)-1:
-        return s[i-1], s[0]
-    else:
-        return s[i-1], s[i+1]
+#     if target == "DB":
+#         miss = miss*3
+#         result = {"".join([mi,vi]): miss*2/3*1/len(s) 
+#             for mi,vi in itertools.product(("S"), vs)}
+#         result.update({"SB": miss*1/3})
+#     elif target == "SB":
+#         result = {"".join([mi,vi]): miss*3/4*1/len(s) 
+#             for mi,vi in itertools.product(("S"), vs)}
+#         result.update({"DB": miss*1/4})
+#     elif m == "T":
+#         result = {"".join([mi,vi]): 
+#             (1-miss)*(1-miss) if mi == m and vi == v else
+#             miss*(1-miss) if vi == v else
+#             miss*(1-miss)*1/2 if mi == m else
+#             miss*miss*1/2
+#             for mi,vi in itertools.product(("S", "T"), vs)}
+#     elif m == "D":
+#         result = {"".join([mi,vi]): miss*1/4 
+#             for mi,vi in itertools.product(("S"), vs)}
+#         result.update({"OFF": miss*1/2})
+#     elif m == "S":
+#         miss = miss/5
+#         result = {"".join([mi,vi]): miss*1/4 
+#             for mi,vi in itertools.product(("T", "D"), vs)}
+#     result.update({target: 1-miss})
+#     return result
 
-outcome(target, miss)
-outcome('T20', 0.1)
+# def neigbhor(section):
+#     i = s.index(section)
+#     if i == 0:
+#         return section, s[len(s)-1], s[i+1]
+#     elif i == len(s)-1:
+#         return section, s[i-1], s[0]
+#     else:
+#         return section, s[i-1], s[i+1]
 
-miss = 0.0
-target = "T20"
-
-
-def best_target(miss):
-    "Return the target that maximizes the expected score."
+# def best_target(miss):
+#     "Return the target that maximizes the expected score."
     
 #------------------------------------------------------------------------------
 # test
@@ -201,29 +208,30 @@ def test_darts():
 
 test_darts()
 
-def same_outcome(dict1, dict2):
-    "Two states are the same if all corresponding sets of locs are the same."
-    return all(abs(dict1.get(key, 0) - dict2.get(key, 0)) <= 0.0001
-               for key in set(dict1) | set(dict2))
+# ******************************skipped******************************
+# def same_outcome(dict1, dict2):
+#     "Two states are the same if all corresponding sets of locs are the same."
+#     return all(abs(dict1.get(key, 0) - dict2.get(key, 0)) <= 0.0001
+#                for key in set(dict1) | set(dict2))
 
-def test_darts2():
-    assert best_target(0.0) == 'T20'
-    assert best_target(0.1) == 'T20'
-    assert best_target(0.4) == 'T19'
-    assert same_outcome(outcome('T20', 0.0), {'T20': 1.0})
-    assert same_outcome(outcome('T20', 0.1), 
-                        {'T20': 0.81, 'S1': 0.005, 'T5': 0.045, 
-                         'S5': 0.005, 'T1': 0.045, 'S20': 0.09})
-    assert same_outcome(
-            outcome('SB', 0.2),
-            {'S9': 0.016, 'S8': 0.016, 'S3': 0.016, 'S2': 0.016, 'S1': 0.016,
-             'DB': 0.04, 'S6': 0.016, 'S5': 0.016, 'S4': 0.016, 'S20': 0.016,
-             'S19': 0.016, 'S18': 0.016, 'S13': 0.016, 'S12': 0.016,
-             'S11': 0.016, 'S10': 0.016, 'S17': 0.016, 'S16': 0.016, 'S15':
-             0.016, 'S14': 0.016, 'S7': 0.016, 'SB': 0.64})
-    assert same_outcome(outcome('T20', 0.3),
-                        {'S1': 0.045, 'T5': 0.105, 'S5': 0.045,
-                         'T1': 0.105, 'S20': 0.21, 'T20': 0.49})
-    assert best_target(0.6) == 'T7'
+# def test_darts2():
+#     assert best_target(0.0) == 'T20'
+#     assert best_target(0.1) == 'T20'
+#     assert best_target(0.4) == 'T19'
+#     assert same_outcome(outcome('T20', 0.0), {'T20': 1.0})
+#     assert same_outcome(outcome('T20', 0.1), 
+#                         {'T20': 0.81, 'S1': 0.005, 'T5': 0.045, 
+#                          'S5': 0.005, 'T1': 0.045, 'S20': 0.09})
+#     assert same_outcome(
+#             outcome('SB', 0.2),
+#             {'S9': 0.016, 'S8': 0.016, 'S3': 0.016, 'S2': 0.016, 'S1': 0.016,
+#              'DB': 0.04, 'S6': 0.016, 'S5': 0.016, 'S4': 0.016, 'S20': 0.016,
+#              'S19': 0.016, 'S18': 0.016, 'S13': 0.016, 'S12': 0.016,
+#              'S11': 0.016, 'S10': 0.016, 'S17': 0.016, 'S16': 0.016, 'S15':
+#              0.016, 'S14': 0.016, 'S7': 0.016, 'SB': 0.64})
+#     assert same_outcome(outcome('T20', 0.3),
+#                         {'S1': 0.045, 'T5': 0.105, 'S5': 0.045,
+#                          'T1': 0.105, 'S20': 0.21, 'T20': 0.49})
+#     assert best_target(0.6) == 'T7'
 
-test_darts2()
+# test_darts2()
