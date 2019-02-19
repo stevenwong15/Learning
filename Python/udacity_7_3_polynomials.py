@@ -115,6 +115,12 @@ as in Poly('30 * x**2 + 20 * x + 10').  Call test_poly2().
 #------------------------------------------------------------------------------
 # test
 
+def same_name(name1, name2):
+    """I define this function rather than doing name1 == name2 to allow for some
+    variation in naming conventions."""
+    def canonical_name(name): return name.replace(' ', '').replace('+-', '-')
+    return canonical_name(name1) == canonical_name(name2)
+
 def test_poly():
     global p1, p2, p3, p4, p5, p9 # global to ease debugging in an interactive session
 
@@ -154,12 +160,6 @@ def test_poly():
     assert same_name(deriv(p5).__name__,  '25 * x**4 + 16 * x**3 + 9 * x**2 + 4 * x + 1')
     assert deriv(p5)(1) == 55
     assert deriv(p5)(2) == 573
-
-def same_name(name1, name2):
-    """I define this function rather than doing name1 == name2 to allow for some
-    variation in naming conventions."""
-    def canonical_name(name): return name.replace(' ', '').replace('+-', '-')
-    return canonical_name(name1) == canonical_name(name2)
 
 test_poly()
 

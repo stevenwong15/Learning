@@ -80,17 +80,17 @@ pairs, where each pair is a tuple and the locations are a tuple.  Here is the
 initial state for the problem above in this format:
 """
 
-puzzle1 = (
- ('@', (31,)),
- ('*', (26, 27)), 
- ('G', (9, 10)),
- ('Y', (14, 22, 30)), 
- ('P', (17, 25, 33)), 
- ('O', (41, 49)), 
- ('B', (20, 28, 36)), 
- ('A', (45, 46)), 
- ('|', (0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 23, 24, 32, 39,
-        40, 47, 48, 55, 56, 57, 58, 59, 60, 61, 62, 63)))
+# puzzle1 = (
+#  ('@', (31,)),
+#  ('*', (26, 27)), 
+#  ('G', (9, 10)),
+#  ('Y', (14, 22, 30)), 
+#  ('P', (17, 25, 33)), 
+#  ('O', (41, 49)), 
+#  ('B', (20, 28, 36)), 
+#  ('A', (45, 46)), 
+#  ('|', (0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 23, 24, 32, 39,
+#         40, 47, 48, 55, 56, 57, 58, 59, 60, 61, 62, 63)))
 
 # A solution to this puzzle is as follows:
 
@@ -100,15 +100,44 @@ puzzle1 = (
 # That is, move car 'A' 3 spaces left, then 'B' 2 down, then 'Y' 3 down, 
 # and finally '*' moves 4 spaces right to the goal.
 
-# Your task is to define solve_parking_puzzle:
+#------------------------------------------------------------------------------
+# solve
+
+def shortest_path_search(start, successors, is_goal):
+    """
+    Find the shortest path from start state to a state
+    such that is_goal(state) is true.
+    """
+    if is_goal(start):
+        return [start]
+    explored = set() # set of states we have visited
+    frontier = [ [start] ] # ordered list of paths we have blazed
+    while frontier:
+        path = frontier.pop(0)
+        s = path[-1]
+        for (state, action) in successors(s).items():
+            if state not in explored:
+                explored.add(state)
+                path2 = path + [action, state]
+                if is_goal(state):
+                    return path2
+                else:
+                    frontier.append(path2)
+    return []
+
+def path_actions(path):
+    "Return a list of actions in this path."
+    return path[1::2]
 
 N = 8
 
 def solve_parking_puzzle(start, N=N):
-    """Solve the puzzle described by the starting position (a tuple 
+    """
+    Solve the puzzle described by the starting position (a tuple 
     of (object, locations) pairs).  Return a path of [state, action, ...]
     alternating items; an action is a pair (object, distance_moved),
-    such as ('B', 16) to move 'B' two squares down on the N=8 grid."""
+    such as ('B', 16) to move 'B' two squares down on the N=8 grid.
+    """
     
 # But it would also be nice to have a simpler format to describe puzzles,
 # and a way to visualize states.
@@ -119,13 +148,15 @@ def locs(start, n, incr=1):
 
 
 def grid(cars, N=N):
-    """Return a tuple of (object, locations) pairs -- the format expected for
+    """
+    Return a tuple of (object, locations) pairs -- the format expected for
     this puzzle.  This function includes a wall pair, ('|', (0, ...)) to 
     indicate there are walls all around the NxN grid, except at the goal 
     location, which is the middle of the right-hand wall; there is a goal
     pair, like ('@', (31,)), to indicate this. The variable 'cars'  is a
     tuple of pairs like ('*', (26, 27)). The return result is a big tuple
-    of the 'cars' pairs along with the walls and goal pairs."""
+    of the 'cars' pairs along with the walls and goal pairs.
+    """
 
 
 def show(state, N=N):
@@ -141,6 +172,9 @@ def show(state, N=N):
         if i % N == N - 1: print
 
 # Here we see the grid and locs functions in use:
+
+#------------------------------------------------------------------------------
+# test
 
 puzzle1 = grid((
     ('*', locs(26, 2)),
@@ -165,36 +199,15 @@ puzzle3 = grid((
     ('O', locs(45, 2, N)),
     ('Y', locs(49, 3))))
 
-
-# Here are the shortest_path_search and path_actions functions from the unit.
-# You may use these if you want, but you don't have to.
-
-def shortest_path_search(start, successors, is_goal):
-    """Find the shortest path from start state to a state
-    such that is_goal(state) is true."""
-    if is_goal(start):
-        return [start]
-    explored = set() # set of states we have visited
-    frontier = [ [start] ] # ordered list of paths we have blazed
-    while frontier:
-        path = frontier.pop(0)
-        s = path[-1]
-        for (state, action) in successors(s).items():
-            if state not in explored:
-                explored.add(state)
-                path2 = path + [action, state]
-                if is_goal(state):
-                    return path2
-                else:
-                    frontier.append(path2)
-    return []
-
-def path_actions(path):
-    "Return a list of actions in this path."
-    return path[1::2]
-
-#------------------------------------------------------------------------------
-# test
+puzzle4 = grid((
+    ('*', locs(26, 2)),
+    ('G', locs(9, 2)),
+    ('Y', locs(14, 3, N)),
+    ('P', locs(17, 3, N)),
+    ('O', locs(41, 2, N)),
+    ('B', locs(20, 3, N)),
+    ('A', locs(45, 2)),
+    ('S', locs(51, 3))))
 
 def test_parking():
     assert valid_solution(puzzle1, 4)
@@ -214,16 +227,6 @@ def test_parking():
          ('|', (0, 1, 2, 3, 4, 5, 6, 7, 56, 57, 58, 59, 60, 61, 62, 63, 
                 8, 16, 24, 32, 40, 48, 15, 23, 39, 47, 55)), 
             ('@', (31,))))
-
-puzzle4 = grid((
-    ('*', locs(26, 2)),
-    ('G', locs(9, 2)),
-    ('Y', locs(14, 3, N)),
-    ('P', locs(17, 3, N)),
-    ('O', locs(41, 2, N)),
-    ('B', locs(20, 3, N)),
-    ('A', locs(45, 2)),
-    ('S', locs(51, 3))))
 
 def valid_solution(puzzle, length):
     "Does solve_parking_puzzle solve this puzzle in length steps?"
