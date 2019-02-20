@@ -108,6 +108,7 @@ def shortest_path_search(start, successors, is_goal):
     Find the shortest path from start state to a state
     such that is_goal(state) is true.
     """
+    Fail = []
     if is_goal(start):
         return [start]
     explored = set() # set of states we have visited
@@ -123,10 +124,12 @@ def shortest_path_search(start, successors, is_goal):
                     return path2
                 else:
                     frontier.append(path2)
-    return []
+    return Fail
 
 def path_actions(path):
-    "Return a list of actions in this path."
+    """
+    Return a list of actions in this path.
+    """
     return path[1::2]
 
 N = 8
@@ -138,14 +141,6 @@ def solve_parking_puzzle(start, N=N):
     alternating items; an action is a pair (object, distance_moved),
     such as ('B', 16) to move 'B' two squares down on the N=8 grid.
     """
-    
-# But it would also be nice to have a simpler format to describe puzzles,
-# and a way to visualize states.
-# You will do that by defining the following two functions:
-
-def locs(start, n, incr=1):
-    "Return a tuple of n locations, starting at start and incrementing by incr."
-
 
 def grid(cars, N=N):
     """
@@ -157,21 +152,28 @@ def grid(cars, N=N):
     tuple of pairs like ('*', (26, 27)). The return result is a big tuple
     of the 'cars' pairs along with the walls and goal pairs.
     """
+    goals = locs(N*N//2-1, 1)
+    walls = locs(0, N, 1) + locs(N*N-N, N, 1) + locs(N, N-2, N) + locs(2*N-1, N-2, N)
+    walls = tuple(w for w in walls if w not in goals)
+    return cars + (("|", walls), ("@", goals))
 
+def locs(start, n, incr=1):
+    """
+    Return a tuple of n locations, starting at start and incrementing by incr.
+    """
+    return tuple(range(start, start+n*incr, incr))
 
 def show(state, N=N):
-    "Print a representation of a state as an NxN grid."
-    # Initialize and fill in the board.
+    """
+    Print a representation of a state as an NxN grid.
+    """
     board = ['.'] * N**2
     for (c, squares) in state:
         for s in squares:
             board[s] = c
-    # Now print it out
     for i,s in enumerate(board):
-        print s,
-        if i % N == N - 1: print
-
-# Here we see the grid and locs functions in use:
+        print(s, end="", flush=True)
+        if i % N == N - 1: print()
 
 #------------------------------------------------------------------------------
 # test
