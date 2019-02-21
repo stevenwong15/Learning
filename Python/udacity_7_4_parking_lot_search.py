@@ -141,6 +141,38 @@ def solve_parking_puzzle(start, N=N):
     alternating items; an action is a pair (object, distance_moved),
     such as ('B', 16) to move 'B' two squares down on the N=8 grid.
     """
+    return shortest_path_search(grid(start, N), psuccessors, is_goal)
+
+def is_goal(state):
+    """
+    convert to dict for easy access; set to look for overlap
+    """
+    state = dict(state)
+    return set(state["*"]) & set(state["@"])
+
+def psuccessors(state):
+    """
+    incr: if movement is vertical or horizontal
+    [(-incr, min(loc)), (incr, max(loc))]: movement one way vs. another
+    range(1, N-2): you can move 1, 2, 3, up to (excluding) N-2
+    """
+    results = {}
+    occupied = set(loc for (car, locs) in state for loc in locs if car != "@")
+    for (car, locs) in puzzle1:
+        if car not in "|@":
+            incr = locs[1] - locs[0]
+            for (by, start) in [(-incr, min(locs)), (incr, max(locs))]:
+                for i in range(1, N-2):
+                    loc_try = start + by*i
+                    if loc_try in occupied:
+                        break
+                    results[update(state, car, tuple(loc+by*i for loc in locs))] = (car, by*i)
+    return results
+
+def update(state, car, locs):
+    state = dict(state)
+    state[car] = locs
+    return tuple(sorted(state.items()))
 
 def grid(cars, N=N):
     """
