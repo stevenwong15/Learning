@@ -147,8 +147,8 @@ def is_goal(state):
     """
     convert to dict for easy access; set to look for overlap
     """
-    state = dict(state)
-    return set(state["*"]) & set(state["@"])
+    state_dict = dict(state)
+    return set(state_dict["*"]) & set(state_dict["@"])
 
 def psuccessors(state):
     """
@@ -157,8 +157,8 @@ def psuccessors(state):
     range(1, N-2): you can move 1, 2, 3, up to (excluding) N-2
     """
     results = {}
-    occupied = set(loc for (car, locs) in state for loc in locs if car != "@")
-    for (car, locs) in puzzle1:
+    occupied = {loc for (car, locs) in state for loc in locs if car != "@"}
+    for (car, locs) in state:
         if car not in "|@":
             incr = locs[1] - locs[0]
             for (by, start) in [(-incr, min(locs)), (incr, max(locs))]:
@@ -170,9 +170,9 @@ def psuccessors(state):
     return results
 
 def update(state, car, locs):
-    state = dict(state)
-    state[car] = locs
-    return tuple(sorted(state.items()))
+    state_dict = dict(state)
+    state_dict[car] = locs
+    return tuple(sorted(state_dict.items()))
 
 def grid(cars, N=N):
     """
