@@ -50,33 +50,147 @@ Your task is to write the function poly and the following additional functions:
 They are described below; see the test_poly function for examples.
 """
 
+from functools import update_wrapper
+from collections import defaultdict
+
+def decorator(d):
+    """
+    Make function d a decorator: d wraps a function fn.
+    """
+    def _d(fn):
+        return update_wrapper(d(fn), fn)
+    update_wrapper(_d, d)
+    return _d
+
+@decorator
+def memo(f):
+    """
+    Decorator that caches the return value for each call to f(args).
+    Then when called again with same args, we can just look it up.
+    """
+    cache = {}
+    def _f(*args):
+        try:
+            return cache[args]
+        except KeyError:
+            cache[args] = result = f(*args)
+            return result
+        except TypeError:
+            # some element of args can't be a dict key
+            return f(args)
+    return _f
 
 def poly(coefs):
-    """Return a function that represents the polynomial with these coefficients.
+    """
+    Return a function that represents the polynomial with these coefficients.
     For example, if coefs=(10, 20, 30), return the function of x that computes
     '30 * x**2 + 20 * x + 10'.  Also store the coefs on the .coefs attribute of
-    the function, and the str of the formula on the .__name__ attribute.'"""
-    # your code here (I won't repeat "your code here"; there's one for each function)
+    the function, and the str of the formula on the .__name__ attribute.'
+    """
+    return polynomial(canonical(coefs))
+
+@memo
+def polynomial(coefs):
+    """Return a polynomial function with these attributes.  Memoized, so any
+    two polys with the same coefficients will be identical polys."""
+    # Build a function by evaluating a lambda in the empty environment.
+    # Horner's rule involves fewer multiplications than the normal formula...
+    p = eval('lambda x: ' + horner_formula(coefs), {})
+    p.__name__ = polynomial_formula(coefs)
+    p.coefs = coefs
+    return p
+
+def horner_formula(coefs):
+    """A relatively efficient form to evaluate a polynomial.
+    E.g.:  horner_formula((10, 20, 30, 0, -50)) 
+           == '(10 + x * (20 + x * (30 + x * x * -50)))',
+    which is 4 multiplies and 3 adds."""
+    c = coefs[0]
+    if len(coefs) == 1:
+        return str(c)
+    else:
+        factor = 'x * ' + horner_formula(coefs[1:])
+        return factor if c == 0 else '(%s + %s)' % (c, factor)
+
+def polynomial_formula(coefs):
+    """
+    A simple human-readable form for a polynomial.
+    E.g.:  polynomial_formula((10, 20, 30, 0, -50))
+           == '-50 * x**4 + 30 * x**2 + 20 * x + 10',
+    which is 7 multiplies and 3 adds.
+    """
+    terms = [term(c, n) 
+        for (n, c) in reversed(list(enumerate(coefs))) if c != 0]
+    return ' + '.join(terms)
+
+def term(c, n):
+    """
+    Return a string representing 'c * x**n' in simplified form.
+    """
+    if n == 0:
+        return str(c)
+    xn = 'x' if (n == 1) else ('x**' + str(n))
+    return xn if (c == 1) else '-' + xn if (c == -1) else str(c) + ' * ' + xn
+
+def canonical(coefs):
+    """
+    Canonicalize coefs by dropping trailing zeros and converting to a tuple.
+    """
+    if not coefs: coefs = [0]
+    elif isinstance(coefs, (int, float)): coefs = [coefs]
+    else: coefs = list(coefs)
+    while coefs[-1] == 0 and len(coefs) > 1:
+        del coefs[-1]
+    return tuple(coefs)
 
 def is_poly(x):
-    "Return true if x is a poly (polynomial)."
-    ## For examples, see the test_poly function
+    """
+    Return true if x is a poly (polynomial).
+    """
+    return callable(x) and hasattr(x, 'coefs')
 
 def add(p1, p2):
-    "Return a new polynomial which is the sum of polynomials p1 and p2."
-
+    """
+    Return a new polynomial which is the sum of polynomials p1 and p2.
+    """
+    N = max(len(p1.coefs), len(p2.coefs))
+    coefs = [0] * N
+    for (n, c) in enumerate(p1.coefs): coefs[n] = c
+    for (n, c) in enumerate(p2.coefs): coefs[n] += c
+    return poly(coefs)
 
 def sub(p1, p2):
-    "Return a new polynomial which is the difference of polynomials p1 and p2."
-
+    """
+    Return a new polynomial which is the difference of polynomials p1 and p2.
+    """
+    N = max(len(p1.coefs), len(p2.coefs))
+    coefs = [0] * N
+    for (n, c) in enumerate(p1.coefs): coefs[n] = c
+    for (n, c) in enumerate(p2.coefs): coefs[n] -= c
+    return poly(coefs)
 
 def mul(p1, p2):
-    "Return a new polynomial which is the product of polynomials p1 and p2."
-
+    """
+    Return a new polynomial which is the product of polynomials p1 and p2.
+    """
+    results = defaultdict(int)
+    for (n, a) in enumerate(p1.coefs):
+        for (m, b) in enumerate(p2.coefs):
+            results[n + m] += a * b
+    return poly([results[i] for i in range(max(results)+1)])
 
 def power(p, n):
-    "Return a new polynomial which is p to the nth power (n a non-negative integer)."
-
+    """
+    Return a new polynomial which is p to the nth power (n a non-negative integer).
+    """
+    if n == 0:
+        return poly((1,))
+    elif n == 1:
+        return p
+    elif n % 2 == 0:
+        return square(power(p, n//2))
+    else:
+        return mul(p, power(p, n-1))
 
 """
 If your calculus is rusty (or non-existant), here is a refresher:
@@ -89,14 +203,20 @@ The integral of 60 * x + 20 is  30 * x**2 + 20 * x + C, for any constant C.
 Any value of C is an equally good anti-derivative.  We allow C as an argument
 to the function integral (withh default C=0).
 """
-    
-def deriv(p):
-    "Return the derivative of a function p (with respect to its argument)."
 
+def square(p): return mul(p, p)
+
+def deriv(p):
+    """
+    Return the derivative of a function p (with respect to its argument).
+    """
+    return poly([n*c for (n, c) in enumerate(p.coefs) if n > 0])
 
 def integral(p, C=0):
-    "Return the integral of a function p (with respect to its argument)."
-
+    """
+    Return the integral of a function p (with respect to its argument).
+    """
+    return poly([C] + [float(c)/(n+1) for (n, c) in enumerate(p.coefs)])
 
 """
 Now for an extra credit challenge: arrange to describe polynomials with an
@@ -114,12 +234,6 @@ as in Poly('30 * x**2 + 20 * x + 10').  Call test_poly2().
 
 #------------------------------------------------------------------------------
 # test
-
-def same_name(name1, name2):
-    """I define this function rather than doing name1 == name2 to allow for some
-    variation in naming conventions."""
-    def canonical_name(name): return name.replace(' ', '').replace('+-', '-')
-    return canonical_name(name1) == canonical_name(name2)
 
 def test_poly():
     global p1, p2, p3, p4, p5, p9 # global to ease debugging in an interactive session
@@ -160,6 +274,12 @@ def test_poly():
     assert same_name(deriv(p5).__name__,  '25 * x**4 + 16 * x**3 + 9 * x**2 + 4 * x + 1')
     assert deriv(p5)(1) == 55
     assert deriv(p5)(2) == 573
+
+def same_name(name1, name2):
+    """I define this function rather than doing name1 == name2 to allow for some
+    variation in naming conventions."""
+    def canonical_name(name): return name.replace(' ', '').replace('+-', '-')
+    return canonical_name(name1) == canonical_name(name2)
 
 test_poly()
 
