@@ -31,6 +31,13 @@ conda install package_name
 # if above doesn't work
 pip install package_name
 
+# shall command in ipython with "!"
+!ls
+!ls {PATH}  # use python variable in shall command
+
+# python in R
+# https://rstudio.github.io/reticulate/index.html
+
 #==============================================================================
 # basics
 

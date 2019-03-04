@@ -33,6 +33,9 @@ Ctrl + r  # search for commands
 Ctrl + l  # clear by adding space
 Cmd + k  # clear all
 
+# on chrome
+Cmd + Option + i  # developer tools
+
 #---------------------------------------------------------------------------------
 # general concepts
 #--------------------------------------------------------------------------------- 
@@ -82,6 +85,7 @@ cd ~unser_name  # changes the working directory to that of user_name
 
 # new
 mkdir filename  # make a new directory names "filename"
+cd !$  # go to folder: "!$" is last word of last command
 touch filename.txt  # make a new file in the directory
 
 #---------------------------------------------------------------------------------
@@ -150,6 +154,12 @@ nano file_1.txt  # opens a few .txt file named hello.txt in the text editor
 # ^ key means Ctrl (more on the bottum of the nano editor)
 
 less file_1.txt  # reads but not edits
+
+# read first few lines
+head file_1.txt
+
+# count number of lines
+wc -l file_1.txt
 
 # other editors (many)
 # esc first
