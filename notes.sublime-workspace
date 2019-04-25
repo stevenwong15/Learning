@@ -106,6 +106,7 @@
 	],
 	"file_history":
 	[
+		"/Users/steven/Documents/Data_Notes/Notes/notes.sublime-workspace",
 		"/Users/steven/Documents/Data_Notes/Notes/R/R_dataorg_datatable.R",
 		"/Users/steven/Documents/Data_Notes/Notes/R/R_dataorg.R",
 		"/Users/steven/Documents/Data_Notes/Notes/R/R_dataorg_model.R",
@@ -141,13 +142,14 @@
 	],
 	"find":
 	{
-		"height": 24.0
+		"height": 26.0
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 106.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -155,6 +157,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"jupyter",
+			"height",
 			":",
 			"n()",
 			"full",
@@ -196,7 +200,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 24.0
+		"height": 26.0
 	},
 	"input":
 	{
@@ -233,7 +237,7 @@
 	"project": "notes.sublime-project",
 	"replace":
 	{
-		"height": 44.0
+		"height": 48.0
 	},
 	"save_all_on_build": true,
 	"select_file":

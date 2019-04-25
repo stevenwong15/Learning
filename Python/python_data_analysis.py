@@ -170,6 +170,21 @@ c[0] = 4
 print(b)  # no change
 
 #------------------------------------------------------------------------------
+# broadcasting
+
+a = np.array([[1, 2, 3], [4, 5, 6]])
+b = np.array([1, 2, 3]).reshape(1, 3)  # good idea to reshape into matrix
+c = np.array([1, 2]).reshape(2, 1)  # good idea to reshape into matrix
+
+# good idea to reshape into matrix 
+d = np.random.randn(1, 5)
+e = np.random.randn(5, 1)
+
+# cold be +, -, *, /
+a + b  # duplicate b rowwise into a matrix before adding
+a + c  # duplicate c colwise into a matrix before adding
+
+#------------------------------------------------------------------------------
 # linear algebra
 # for more, PFDA2 pg117
 
