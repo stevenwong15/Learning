@@ -21,7 +21,7 @@
 # install python3: python.org
 # install Anaconda (contains all the popular packages): continuum.io/downloads
 # to update:
-conda update coconda  # list of packages
+conda update --all  # list of packages
 # reference
 # https://google.github.io/styleguide/pyguide.html  # google python style guide
 # https://damnwidget.github.io/anaconda  # Anaconda Python IDE
